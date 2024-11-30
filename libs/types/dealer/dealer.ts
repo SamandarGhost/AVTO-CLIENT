@@ -1,0 +1,76 @@
+import { DealerBrand, DealerLocation, DealerStatus } from "../../enums/dealer.enum";
+import { MeFollowed } from "../follow/follow";
+import { MeLiked } from "../like/like";
+import { Member, TotalCounter } from "../member/member";
+
+export interface Dealer {
+    _id: string;
+    dealerStatus: DealerStatus;
+    dealerTitle: string;
+    dealerBrand: DealerBrand;
+    dealerPassword?: string;
+    dealerLocation: DealerLocation;
+    dealerAddress: string;
+    dealerImage: string;
+    dealerImages?: string[];
+    dealerPhone: string;
+    dealerPhone2?: string;
+    dealerEmail: string;
+    dealerKakaoTalk?: string;
+    dealerYoutube?: string;
+    dealerInstagram?: string;
+    dealerFacebook?: string;
+    dealerTikTok?: string;
+    dealerNaverBlog?: string;
+    dealerXcom?: string;
+    dealerShortDesc: string;
+    dealerLongDesc?: string;
+    dealerOpenAt: string;
+    dealerCloseAt: string;
+    dealerOpenSunday?: string;
+    dealerCloseSunday?: string;
+    dealerOpenSaturday?: string;
+    dealerCloseSaturday?: string;
+    dealerPublicHolidays: boolean;
+    dealerCars: number;
+    dealerUsedCars: number;
+    dealerNewCars: number;
+    dealerFinancing: boolean;
+    dealerCarService: boolean;
+    dealerTradeIn: boolean;
+    dealerCustomization: boolean;
+    dealerWarranties: boolean;
+    dealerParts: boolean;
+    dealerAccessories: boolean;
+    dealerCarDetailing: boolean;
+    dealerCarWash: boolean;
+    dealerCarTestDrive: boolean;
+    dealerCarDelivery: boolean;
+    dealerPlusService?: string;
+    dealerComfort: number;
+    dealerPerformance: number;
+    dealerExterior: number;
+    dealerInterior: number;
+    dealerReliability: number;
+    dealerFast: number;
+    dealerPoints: number;
+    dealerFollowers: number;
+    dealerViews: number;
+    dealerLikes: number;
+    dealerComments: number;
+    dealerArticles: number;
+    dealerRank: number;
+    memberId?: string;
+    creatorData?: Member | Dealer;
+    accessToken?: string;
+    meLiked?: MeLiked[];
+    meFollowed?: MeFollowed[];
+    deletedAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface Dealers {
+    list: Dealer[];
+    metaCounter: TotalCounter[];
+}
