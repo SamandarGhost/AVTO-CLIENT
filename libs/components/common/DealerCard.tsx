@@ -31,7 +31,7 @@ const DealerCard = (props: AgentCardProps) => {
 			<Stack className="dealer-general-card">
 				<Link
 					href={{
-						pathname: '/dealer/detail',
+						pathname: '/dealers/detail',
 						query: { agentId: agent?._id },
 					}}
 				>
@@ -48,7 +48,7 @@ const DealerCard = (props: AgentCardProps) => {
 					<Box component={'div'} className={'agent-info'}>
 						<Link
 							href={{
-								pathname: '/dealer/detail',
+								pathname: '/dealers/detail',
 								query: { agentId: 'id' },
 							}}
 						>

@@ -186,7 +186,7 @@ const Top = () => {
 							<Link href={'/shop'}>
 								<div>{t('Shop')}</div>
 							</Link>
-							<Link href={'/property'}>
+							<Link href={'/service'}>
 								<div>{t('Service')}</div>
 							</Link>
 							<Link href={'/community?articleCategory=FREE'}>
