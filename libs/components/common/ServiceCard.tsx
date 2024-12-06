@@ -16,7 +16,7 @@ interface AgentCardProps {
 	likeMemberHandler: any;
 }
 
-const DealerCard = (props: AgentCardProps) => {
+const ServiceCard = (props: AgentCardProps) => {
 	const { agent, likeMemberHandler } = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
@@ -48,7 +48,7 @@ const DealerCard = (props: AgentCardProps) => {
 					<Box component={'div'} className={'agent-info'}>
 						<Link
 							href={{
-								pathname: '/dealers/detail',
+								pathname: '/service/detail',
 								query: { agentId: 'id' },
 							}}
 						>
@@ -62,4 +62,4 @@ const DealerCard = (props: AgentCardProps) => {
 	}
 };
 
-export default DealerCard;
+export default ServiceCard;

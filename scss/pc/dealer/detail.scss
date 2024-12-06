@@ -305,12 +305,10 @@
 					align-items: center;
 					border-radius: 1rem;
 
-					gap: 10px;
-
 					.main-image {
-						width: 80%;
+						width: 49.5%;
 						height: 600px;
-						background: #181a20;
+						background: #717171;
 						border-radius: 1rem;
 
 						img {
@@ -322,17 +320,21 @@
 					}
 
 					.sub-images {
-						width: 20%;
-						height: auto;
-						flex-direction: column;
+						width: 49.5%;
+						height: 600px;
+						display: flex;
+						flex-direction: row;
+						justify-content: space-between;
+						align-items: center;
+						flex-flow: row wrap;
 						gap: 10px;
 						max-height: 600px;
 
 						.sub-img-box {
-							width: 245px;
-							height: 180px;
-							background: #405FF2;
+							width: 49.2%;
+							height: 295px;
 							border-radius: 1rem;
+							background: #717171;
 							cursor: pointer;
 
 							img {
@@ -494,7 +496,7 @@
 								font-family: $font;
 								font-size: 30px;
 								font-style: normal;
-								font-weight: 400;
+								font-weight: 600;
 								line-height: normal;
 								letter-spacing: 5px;
 							}
@@ -502,16 +504,19 @@
 							.info-box {
 								width: 100%;
 								height: auto;
-								display: flex;
-								flex-direction: row;
-								justify-content: space-between;
 								align-items: center;
 
-								.left,
-								.middle,
 								.right {
+									width: auto;
+									height: auto;
+									display: flex;
+									flex-direction: row;
+									justify-content: flex-start;
+									align-items: center;
+									flex-flow: row wrap;
+
 									.info {
-										width: 250px;
+										width: 290px;
 										height: auto;
 										display: flex;
 										margin-bottom: 10px;
@@ -526,7 +531,7 @@
 
 										.data {
 											width: 100px;
-											color: #181a20;
+											color: #405FF2;
 											font-family: $font;
 											font-size: 14px;
 											font-style: normal;
@@ -539,262 +544,29 @@
 						}
 					}
 
-					.floor-plans-config {
-						width: 100%;
-						height: auto;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						gap: 30px;
-						padding: 30px 38px;
-						border-radius: 12px;
-
-						.title {
-							color: #181a20;
-							font-family: $font;
-							font-size: 32px;
-							font-style: normal;
-							font-weight: 600;
-							line-height: normal;
-							letter-spacing: 2px;
-						}
-
-						.image-box {
-							position: relative;
-							width: 600px;
-							height: 400px;
-							display: flex;
-							justify-content: center;
-							align-items: center;
-
-							.front-bumper {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 280px;
-								left: 80px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.rear-bumper {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 60px;
-								left: 430px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 20px;
-									height: 20px;
-								}
-							}
-
-							.bonnet {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 160px;
-								left: 170px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.tailgate {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 10px;
-								left: 450px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.rf-wing {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 110px;
-								left: 80px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 20px;
-									height: 20px;
-								}
-							}
-
-							.lf-wing {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 270px;
-								left: 300px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.rb-wing {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 10px;
-								left: 270px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 20px;
-									height: 20px;
-								}
-							}
-
-							.lb-wing {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 80px;
-								left: 480px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 20px;
-									height: 20px;
-								}
-							}
-
-							.roof {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 30px;
-								left: 330px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.rf-door {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 50px;
-								left: 130px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.lf-door {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 210px;
-								left: 420px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							.rb-door {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 50px;
-								left: 200px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 25px;
-									height: 25px;
-								}
-							}
-
-							.lb-door {
-								position: absolute;
-								width: 40px;
-								height: 40px;
-								top: 170px;
-								left: 482px;
-								display: flex;
-								justify-content: center;
-								align-items: center;
-
-								img {
-									width: 30px;
-									height: 30px;
-								}
-							}
-
-							img {
-								width: 100%;
-								height: 100%;
-								object-fit: cover;
-							}
-						}
-					}
 
 					.address-config {
 						width: 100%;
 						height: auto;
-						gap: 30px;
 						padding: 30px 38px;
 
 						.title {
+							margin-bottom: 5px;
 							color: #181a20;
 							font-family: $font;
-							font-size: 17px;
+							font-size: 24px;
 							font-style: normal;
 							font-weight: 600;
+							line-height: normal;
+						}
+
+						.address {
+							margin-bottom: 20px;
+							color: #181a20;
+							font-family: $font;
+							font-size: 14px;
+							font-style: normal;
+							font-weight: 400;
 							line-height: normal;
 						}
 
@@ -895,9 +667,9 @@
 											height: 65px;
 											align-items: center;
 											justify-content: center;
-											border-radius: 50%;
-											background: #f6f6f6;
-											border: 1px solid #b9b9b9;
+											border-radius: 1rem;
+											background: rgb(228, 239, 255);
+											border: 1px solid rgb(228, 239, 255);
 											object-fit: cover;
 										}
 
@@ -1102,21 +874,6 @@
 									align-items: center;
 									gap: 38px;
 
-									// &:hover {
-									// 	border-radius: 1rem;
-									// 	color: #fff;
-									// 	border: 1px solid #405FF4;
-									// 	background: #405FF2;
-
-									// 	.icons {
-									// 		color: #fff;
-									// 	}
-
-									// 	.data {
-									// 		color: #fff;
-									// 	}
-									// }
-
 									.icons {
 										width: 100px;
 										display: flex;
@@ -1136,6 +893,196 @@
 										font-weight: 400;
 										line-height: 35px;
 									}
+								}
+							}
+						}
+					}
+
+					.right-star {
+						width: 318px;
+						height: fit-content;
+						margin-top: 30px;
+						padding: 30px 25px;
+						gap: 20px;
+						border-radius: 12px;
+						border: 1px solid rgba(196, 196, 196, 0.79);
+						background: #fff;
+						box-shadow: 0px 1px 4px 0px rgba(24, 26, 32, 0.07);
+
+						.info-box {
+							position: relative;
+							width: 100%;
+							gap: 8px;
+
+							.main-title {
+								color: #181a20;
+								font-family: $font;
+								font-size: 17px;
+								font-style: normal;
+								font-weight: 600;
+								line-height: normal;
+								margin-bottom: 17px;
+							}
+
+							.sub-title {
+								color: #181a20;
+								font-family: $font;
+								font-size: 18px;
+								font-style: normal;
+								font-weight: 500;
+								line-height: normal;
+								letter-spacing: 2px;
+							}
+
+							.star-box {
+								width: 200px;
+								height: auto;
+								display: flex;
+								flex-direction: row;
+								justify-content: space-between;
+								align-items: center;
+								transition: transform 2s;
+
+								&:hover {
+									transform: scale(1.2);
+								}
+
+
+								.star {
+									color: #b9b9b9;
+
+									&:hover {
+										color: rgb(254, 238, 8);
+									}
+								}
+							}
+
+							textarea {
+								width: 100%;
+								height: 120px;
+								padding: 20px;
+								border-radius: 8px;
+								border: 1px solid rgb(228, 239, 255);
+								font-family: $font;
+								font-size: 14px;
+								font-style: normal;
+								font-weight: 400;
+								line-height: 26px;
+
+								&::placeholder {
+									color: #181a20;
+									font-family: $font;
+									font-size: 14px;
+									font-style: normal;
+									font-weight: 400;
+									line-height: 26px;
+								}
+
+								&:focus {
+									border: 1px solid #405FF2;
+									background: #fff;
+								}
+							}
+
+							.send-message {
+								display: flex;
+								width: 100%;
+								padding: 16px 30px;
+								justify-content: center;
+								align-items: center;
+								gap: 10px;
+								border-radius: 1rem;
+								background: rgb(253, 230, 86);
+
+								.title {
+									color: #181a20;
+									font-family: $font;
+									font-size: 15px;
+									font-style: normal;
+									font-weight: 500;
+									line-height: normal;
+								}
+							}
+						}
+
+						.right {
+
+							.main-title {
+								width: 121px;
+								color: #181a20;
+								font-family: $font;
+								font-size: 25px;
+								font-style: normal;
+								font-weight: 600;
+								line-height: 35px;
+								text-wrap: nowrap;
+							}
+
+							.small-title {
+								width: 250px;
+								margin-bottom: 30px;
+								color: #181a20;
+								font-family: $font;
+								font-size: 16px;
+								font-style: normal;
+								font-weight: 400;
+
+								.icon {
+									width: 25px;
+									height: 25px;
+									padding-top: 10px;
+								}
+							}
+
+							.info {
+								width: 290px;
+								height: 50px;
+								margin-bottom: 5px;
+								margin-left: -15px;
+								display: flex;
+								justify-content: center;
+								align-items: center;
+								border-radius: 1rem;
+								border: 1px solid #405FF4;
+								background: rgb(228, 239, 255);
+								flex-direction: row;
+								align-items: center;
+								gap: 38px;
+
+								&:hover {
+									border-radius: 1rem;
+									color: #fff;
+									border: 1px solid #405FF4;
+									background: #405FF2;
+
+									.icons {
+										color: #fff;
+									}
+
+									.data {
+										color: #fff;
+									}
+								}
+
+								.icons {
+									width: 22px;
+									height: 22px;
+									margin-left: -2px;
+									display: flex;
+									justify-content: center;
+									align-items: center;
+									color: #405FF2;
+
+								}
+
+								.data {
+									width: 150px;
+									color: #181a20;
+									font-family: $font;
+									font-size: 12px;
+									font-style: normal;
+									font-weight: 400;
+									line-height: 35px;
 								}
 							}
 						}

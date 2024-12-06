@@ -18,6 +18,7 @@ import { Messages } from '../../libs/config';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
 import DealerCard from '../../libs/components/common/DealerCard';
 import ServiceCard from '../../libs/components/common/ServiceCard';
+import MembershipCard from '../../libs/components/common/MembershipCard';
 
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -59,15 +60,6 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 		},
 	});
 	/** LIFECYCLES **/
-	useEffect(() => {
-		if (router.query.input) {
-			const input_obj = JSON.parse(router?.query?.input as string);
-			setSearchFilter(input_obj);
-		} else
-			router.replace(`/service?input=${JSON.stringify(searchFilter)}`, `/service?input=${JSON.stringify(searchFilter)}`);
-
-		setCurrentPage(searchFilter.page === undefined ? 1 : searchFilter.page);
-	}, [router]);
 
 	/** HANDLERS **/
 	const sortingClickHandler = (e: MouseEvent<HTMLElement>) => {
@@ -103,14 +95,6 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 		setAnchorEl2(null);
 	};
 
-	const paginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-		searchFilter.page = value;
-		await router.push(`/service?input=${JSON.stringify(searchFilter)}`, `/service?input=${JSON.stringify(searchFilter)}`, {
-			scroll: false,
-		});
-		setCurrentPage(value);
-	};
-
 	const likeMemberHandler = async (user: any, id: string) => {
 		try {
 			if (!id) return;
@@ -135,67 +119,21 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 		return <h1>AGENTS PAGE MOBILE</h1>;
 	} else {
 		return (
-			<Stack className={'dealer-page'}>
+			<Stack className={'membership-page'}>
 				<Stack className={'container'}>
 					<Stack className={'filter'}>
-						<Box component={'div'} className={'left'}>
-							<TravelExploreOutlinedIcon className={'icon'} />
-							<Typography>Dealers Page</Typography>
-						</Box>
-						<Box component={'div'} className={'right'}>
-							<span>Sort by</span>
-							<div>
-								<Button onClick={sortingClickHandler} endIcon={<KeyboardArrowDownRoundedIcon />}>
-									{filterSortName}
-								</Button>
-								<Menu anchorEl={anchorEl} open={sortingOpen} onClose={sortingCloseHandler} sx={{ paddingTop: '5px' }}>
-									<MenuItem onClick={sortingHandler} id={'recent'} disableRipple>
-										Recent
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'old'} disableRipple>
-										Oldest
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'likes'} disableRipple>
-										Likes
-									</MenuItem>
-									<MenuItem onClick={sortingHandler} id={'views'} disableRipple>
-										Views
-									</MenuItem>
-								</Menu>
-							</div>
-						</Box>
+						<Typography>Membership Plans</Typography>
 					</Stack>
 					<Stack className={'card-wrap'}>
 						{agents?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Dealers found!</p>
+								<p>No Membership found!</p>
 							</div>
 						) : (
 							agents.map((agent: Member) => {
-								return <ServiceCard likeMemberHandler={likeMemberHandler} agent={agent} key={agent._id} />;
+								return <MembershipCard />;
 							})
-						)}
-					</Stack>
-					<Stack className={'pagination'}>
-						<Stack className="pagination-box">
-							{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
-								<Stack className="pagination-box">
-									<Pagination
-										page={currentPage}
-										count={Math.ceil(total / searchFilter.limit)}
-										onChange={paginationChangeHandler}
-										shape="circular"
-										color="primary"
-									/>
-								</Stack>
-							)}
-						</Stack>
-
-						{agents.length !== 0 && (
-							<span>
-								Total {total} dealer{total > 1 ? 's' : ''} available
-							</span>
 						)}
 					</Stack>
 				</Stack>
@@ -207,7 +145,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 AgentList.defaultProps = {
 	initialInput: {
 		page: 1,
-		limit: 10,
+		limit: 3,
 		sort: 'createdAt',
 		direction: 'DESC',
 		search: {},

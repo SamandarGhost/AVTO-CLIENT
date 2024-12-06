@@ -1,0 +1,49 @@
+#pc-wrap {
+	.membership-page {
+		position: relative;
+		padding: 147px 0 75px;
+		width: 100%;
+		height: auto;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+
+		.container {
+			width: 1300px;
+			height: auto;
+			display: flex;
+			flex-direction: column;
+
+			.filter {
+				justify-content: center;
+				align-items: center;
+
+				p {
+					width: auto;
+					height: auto;
+					margin-left: 50px;
+					margin-bottom: 50px;
+					color: #181a20;
+					font-family: $font;
+					font-size: 50px;
+					font-style: normal;
+					font-weight: 600;
+					line-height: 26px;
+					box-sizing: border-box;
+					letter-spacing: 3px;
+				}
+			}
+
+			.card-wrap {
+				position: relative;
+				margin-top: 35px;
+				width: 100%;
+				min-height: 700px;
+				height: auto;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+			}
+		}
+	}
+}

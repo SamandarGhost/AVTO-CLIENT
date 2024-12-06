@@ -397,7 +397,10 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                     />
                                 </Stack>
                                 <Stack className={'sub-images'}>
-                                    {property?.propertyImages.map((subImg: string) => {
+                                    <Stack className={'sub-img-box'}>
+                                        <img src={''} alt={'sub-image'} />
+                                    </Stack>
+                                    {property?.propertyImages.slice(0, 3).map((subImg: string) => {
                                         const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
                                         return (
                                             <Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
@@ -431,115 +434,196 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                         <Stack className={'info-box'}>
                                             <Stack className={'left'}>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/carbody.svg" alt="" />
+                                                    <div>
+                                                        <img src="/img/icons/carbody.svg" alt="" />
+                                                        Body:
+                                                    </div>
                                                     <Typography className={'data'}>SUV</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/speedb.svg" alt="" />
-                                                    <Typography className={'data'}>110,500 miles</Typography>
+                                                    <div>
+                                                        <img src="/img/icons/speedb.svg" alt="" />
+                                                        Mile:
+                                                    </div>
+                                                    <Typography className={'data'}>110,500</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/petrolb.svg" alt="" />
+                                                    <div>
+                                                        <img src="/img/icons/petrolb.svg" alt="" />
+                                                        Fuel:
+                                                    </div>
                                                     <Typography className={'data'}>GASOLINE</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/yearb.svg" alt="" />
-                                                    <Typography className={'data'}>2023 yaers</Typography>
+                                                    <div>
+                                                        <img src="/img/icons/yearb.svg" alt="" />
+                                                        Year:
+                                                    </div>
+                                                    <Typography className={'data'}>2023</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/transb.svg" alt="" />
+                                                    <div>
+                                                        <img src="/img/icons/transb.svg" alt="" />
+                                                        Trans:
+                                                    </div>
                                                     <Typography className={'data'}>AUTOMATIC</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/engineb.svg" alt="" />
+                                                    <div>
+                                                        <img src="/img/icons/engineb.svg" alt="" />
+                                                        Size:
+                                                    </div>
                                                     <Typography className={'data'}>4.5 L</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/doorb.svg" alt="" />
-                                                    <Typography className={'data'}>4 doors</Typography>
+                                                    <div>
+                                                        <img src="/img/icons/doorb.svg" alt="" />
+                                                        Doors:
+                                                    </div>
+                                                    <Typography className={'data'}>4</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/cyldb.svg" alt="" />
-                                                    <Typography className={'data'}>6 cylinders</Typography>
+                                                    <div>
+                                                        <img src="/img/icons/cyldb.svg" alt="" />
+                                                        Cylinders
+                                                    </div>
+                                                    <Typography className={'data'}>6</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/driveb.svg" alt="" />
+                                                    <div>
+                                                        <img src="/img/icons/driveb.svg" alt="" />
+                                                        Drive:
+                                                    </div>
                                                     <Typography className={'data'}>FWD</Typography>
                                                 </Box>
                                             </Stack>
                                             <Stack className={'middle'}>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/conb.svg" alt="" />
+                                                    <div>
+                                                        <img src="/img/icons/conb.svg" alt="" />
+                                                        Condition:
+                                                    </div>
                                                     <Typography className={'data'}>USED</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <LanguageOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <LanguageOutlinedIcon className={'icons'} />
+                                                        MadeIn:
+                                                    </div>
                                                     <Typography className={'data'}>Sweden</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <CarRepairOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <CarRepairOutlinedIcon className={'icons'} />
+                                                        Brand:
+                                                    </div>
                                                     <Typography className={'data'}>Volvo</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <HandymanOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <HandymanOutlinedIcon className={'icons'} />
+                                                        Repair:
+                                                    </div>
                                                     <Typography className={'data'}>0 repaires</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <MinorCrashOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <MinorCrashOutlinedIcon className={'icons'} />
+                                                        Crush:
+                                                    </div>
                                                     <Typography className={'data'}>0 crushes</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <ApartmentOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <ApartmentOutlinedIcon className={'icons'} />
+                                                        MpgCity:
+                                                    </div>
                                                     <Typography className={'data'}>500 km</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/colorb.svg" alt="" />
-                                                    <Typography className={'data'}>White</Typography>
+                                                    <div>
+                                                        <AddRoadOutlinedIcon className={'icons'} />
+                                                        MpgHw:
+                                                    </div>
+                                                    <Typography className={'data'}>600 km</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <ScaleOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <ScaleOutlinedIcon className={'icons'} />
+                                                        Weigth:
+                                                    </div>
                                                     <Typography className={'data'}>900 kg</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <LocalShippingOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <LocalShippingOutlinedIcon className={'icons'} />
+                                                        Load Weigth:
+                                                    </div>
                                                     <Typography className={'data'}>1000 kg</Typography>
                                                 </Box>
                                             </Stack>
                                             <Stack className={'right'}>
                                                 <Box component={'div'} className={'info'}>
-                                                    <AddRoadOutlinedIcon className={'icons'} />
-                                                    <Typography className={'data'}>600 km</Typography>
+                                                    <div>
+                                                        <img src="/img/icons/colorb.svg" alt="" />
+                                                        Color:
+                                                    </div>
+                                                    <Typography className={'data'}>White</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <SpeedOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <SpeedOutlinedIcon className={'icons'} />
+                                                        Max Speed:
+                                                    </div>
                                                     <Typography className={'data'}>300 km/h</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <ElectricBoltOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <ElectricBoltOutlinedIcon className={'icons'} />
+                                                        100km Speed
+                                                    </div>
                                                     <Typography className={'data'}>4.5 s</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <HeightOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <HeightOutlinedIcon className={'icons'} />
+                                                        Heigth:
+                                                    </div>
                                                     <Typography className={'data'}>1.80 m</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <DirectionsCarOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <DirectionsCarOutlinedIcon className={'icons'} />
+                                                        Width:
+                                                    </div>
                                                     <Typography className={'data'}>2 m</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <AirportShuttleOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <AirportShuttleOutlinedIcon className={'icons'} />
+                                                        Length:
+                                                    </div>
                                                     <Typography className={'data'}>3 m</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <DonutSmallOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <DonutSmallOutlinedIcon className={'icons'} />
+                                                        Tire:
+                                                    </div>
                                                     <Typography className={'data'}>235/50 R18</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <AirlineSeatReclineNormalOutlinedIcon className={'icons'} />
-                                                    <Typography className={'data'}>5 Seats</Typography>
+                                                    <div>
+                                                        <AirlineSeatReclineNormalOutlinedIcon className={'icons'} />
+                                                        Seats:
+                                                    </div>
+                                                    <Typography className={'data'}>5 </Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
-                                                    <SwapHorizontalCircleOutlinedIcon className={'icons'} />
+                                                    <div>
+                                                        <SwapHorizontalCircleOutlinedIcon className={'icons'} />
+                                                        Wheel Base
+                                                    </div>
                                                     <Typography className={'data'}>112.8 inches</Typography>
                                                 </Box>
                                             </Stack>

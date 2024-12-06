@@ -1,10 +1,8 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography } from '@mui/material';
-import PropertyCard from '../../libs/components/property/PropertyCard';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import Filter from '../../libs/components/property/Filter';
 import { useRouter } from 'next/router';
 import { PropertiesInquiry } from '../../libs/types/property/property.input';
 import { Property } from '../../libs/types/property/property';
@@ -16,6 +14,8 @@ import { GET_PROPERTIES } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
+import Filter from '../../libs/components/shop/Filter';
+import PropertyCard from '../../libs/components/shop/PropertyCard';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -127,10 +127,10 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		return <h1>PROPERTIES MOBILE</h1>;
 	} else {
 		return (
-			<div id="property-list-page" style={{ position: 'relative' }}>
+			<div id="shop-list-page" style={{ position: 'relative' }}>
 				<div className="container">
 					<Box component={'div'} className={'right'}>
-						<span>Sort by</span>
+						<span>Sort</span>
 						<div>
 							<Button onClick={sortingClickHandler} endIcon={<KeyboardArrowDownRoundedIcon />}>
 								{filterSortName}
@@ -173,7 +173,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 								{properties?.length === 0 ? (
 									<div className={'no-data'}>
 										<img src="/img/icons/icoAlert.svg" alt="" />
-										<p>No Properties found!</p>
+										<p>No Shoping things found!</p>
 									</div>
 								) : (
 									properties.map((property: Property) => {
@@ -189,7 +189,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 											count={Math.ceil(total / searchFilter.limit)}
 											onChange={handlePaginationChange}
 											shape="circular"
-											color="primary"
+											color="secondary"
 										/>
 									</Stack>
 								)}

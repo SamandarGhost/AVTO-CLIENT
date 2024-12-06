@@ -1,0 +1,820 @@
+#pc-wrap {
+	#shop-detail-page {
+		position: relative;
+		background: #fff;
+		padding-top: 87px;
+		padding-bottom: 200px;
+
+		.property-detail-config {
+			width: 100%;
+			height: auto;
+			padding-top: 56px;
+			gap: 30px;
+
+			.main-text {
+				color: #181a20;
+				font-family: $font;
+				font-size: 40px;
+				font-style: normal;
+				font-weight: 700;
+				line-height: normal;
+				letter-spacing: 2px;
+			}
+
+			.property-info-config {
+				width: 100%;
+				height: auto;
+				gap: 30px;
+
+				.info {
+					width: 100%;
+					height: auto;
+					flex-direction: row;
+					justify-content: flex-end;
+
+					.right-box {
+						width: auto;
+						height: auto;
+						align-items: flex-end;
+
+						.buttons {
+							width: auto;
+							height: auto;
+							flex-direction: row;
+							align-items: center;
+							gap: 11px;
+							margin: 0 10px 27px 0;
+
+							p {
+								color: #181a20;
+								text-align: right;
+								font-family: $font;
+								font-size: 18px;
+								font-style: normal;
+								font-weight: 400;
+								line-height: normal;
+								letter-spacing: 0.52px;
+								text-transform: capitalize;
+							}
+
+							.button-box {
+								flex-direction: row;
+								gap: 5px;
+								align-items: center;
+							}
+						}
+
+						img {
+							width: 28px;
+							height: 27px;
+						}
+
+						svg {
+							width: 28px;
+							height: 27px;
+							cursor: pointer;
+						}
+
+						p {
+							color: #181a20;
+							text-align: right;
+							font-family: $font;
+							font-size: 26px;
+							font-style: normal;
+							font-weight: 600;
+							line-height: normal;
+							letter-spacing: 0.52px;
+							text-transform: capitalize;
+						}
+
+						span {
+							color: #181a20;
+							text-align: right;
+							font-family: $font;
+							font-size: 15px;
+							font-style: normal;
+							font-weight: 400;
+							line-height: normal;
+							letter-spacing: 0.3px;
+							text-transform: capitalize;
+						}
+					}
+				}
+
+				.images {
+					width: 100%;
+					height: auto;
+					display: flex;
+					flex-direction: row;
+					justify-content: space-around;
+					align-items: flex-start;
+					border-radius: 1rem;
+					gap: 10px;
+
+					.right-frame {
+						width: 35%;
+						height: auto;
+
+						.right-config {
+							width: 100%;
+							margin-top: 30px;
+							padding: 30px 25px;
+							gap: 20px;
+							border-radius: 12px;
+							background: #fff;
+
+							.text {
+								.main-title {
+									width: 100%;
+									height: 40px;
+									color: #181a20;
+									font-family: $font;
+									font-size: 30px;
+									font-style: normal;
+									font-weight: 700;
+									line-height: normal;
+									margin-bottom: 17px;
+									overflow: hidden;
+									text-overflow: ellipsis;
+								}
+							}
+
+							.info-box {
+								position: relative;
+								display: flex;
+								width: 100%;
+								gap: 5px;
+
+								.title {
+									color: #181a20;
+									font-family: $font;
+									font-size: 25px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: normal;
+								}
+
+								.sub-title {
+									color: #181a20;
+									font-family: $font;
+									font-size: 14px;
+									font-style: normal;
+									font-weight: 400;
+									line-height: normal;
+								}
+
+								.cat-title {
+									color: #181a20;
+									font-family: $font;
+									font-size: 14px;
+									font-style: normal;
+									font-weight: 500;
+									line-height: normal;
+								}
+
+								.box {
+									width: 100%;
+									height: auto;
+									display: flex;
+									flex-direction: row;
+									justify-content: space-around;
+									align-items: center;
+								}
+							}
+
+							.info {
+								position: relative;
+								display: flex;
+								flex-direction: row;
+								justify-content: space-around;
+								align-items: center;
+								width: 100%;
+
+								.box {
+									width: 30%;
+									height: 40px;
+									display: flex;
+									flex-direction: row;
+									justify-content: space-around;
+									align-items: center;
+									color: #181a20;
+									font-family: $font;
+									font-size: 16px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: normal;
+									border: 1px solid #ddd;
+									border-radius: 0.5rem;
+
+									p {
+										color: #181a20;
+										font-family: $font;
+										font-size: 16px;
+										font-style: normal;
+										font-weight: 600;
+										line-height: normal;
+										cursor: pointer;
+
+										&:hover {
+											color: #405FF2;
+											cursor: pointer;
+										}
+									}
+								}
+
+								.add {
+									width: 60%;
+									height: 40px;
+									justify-content: space-evenly;
+									align-items: center;
+									color: #181a20;
+									font-family: $font;
+									font-size: 16px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: normal;
+									background: #405FF2;
+									color: #fff;
+									border: 1px solid #405FF2;
+									border-radius: 0.5rem;
+									transition: transform 1s;
+
+									&:hover {
+										transform: scale(1.05);
+									}
+								}
+							}
+
+							.right {
+
+								.main-title {
+									width: 121px;
+									color: #181a20;
+									font-family: $font;
+									font-size: 25px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: 35px;
+									text-wrap: nowrap;
+								}
+
+								.small-title {
+									width: 250px;
+									margin-bottom: 30px;
+									color: #181a20;
+									font-family: $font;
+									font-size: 16px;
+									font-style: normal;
+									font-weight: 400;
+
+									.icon {
+										width: 25px;
+										height: 25px;
+										padding-top: 10px;
+									}
+								}
+
+								.info {
+									width: 290px;
+									height: 50px;
+									margin-bottom: 5px;
+									margin-left: -15px;
+									display: flex;
+									justify-content: center;
+									align-items: center;
+									border-radius: 1rem;
+									border: 1px solid #405FF4;
+									background: rgb(228, 239, 255);
+									flex-direction: row;
+									align-items: center;
+									gap: 38px;
+
+									&:hover {
+										border-radius: 1rem;
+										color: #fff;
+										border: 1px solid #405FF4;
+										background: #405FF2;
+
+										.icons {
+											color: #fff;
+										}
+
+										.data {
+											color: #fff;
+										}
+									}
+
+									.icons {
+										width: 22px;
+										height: 22px;
+										margin-left: -2px;
+										display: flex;
+										justify-content: center;
+										align-items: center;
+										color: #405FF2;
+
+									}
+
+									.data {
+										width: 150px;
+										color: #181a20;
+										font-family: $font;
+										font-size: 12px;
+										font-style: normal;
+										font-weight: 400;
+										line-height: 35px;
+									}
+								}
+							}
+						}
+					}
+
+					.main-image {
+						width: 60%;
+						height: 600px;
+						display: flex;
+						flex-direction: row;
+						justify-content: space-between;
+						align-items: flex-start;
+
+						.sub-images {
+							width: 20%;
+							height: auto;
+							flex-direction: column;
+							gap: 10px;
+							max-height: 600px;
+
+							.sub-img-box {
+								width: 100%;
+								height: 180px;
+								justify-content: center;
+								align-items: center;
+								border-radius: 0.5rem;
+								border: 1px solid #ddd;
+								cursor: pointer;
+
+								img {
+									width: 85%;
+									height: 85%;
+									object-fit: cover;
+									border-radius: 0.5rem;
+									background: #717171;
+
+								}
+							}
+						}
+
+						.main {
+							width: 75%;
+							height: 80%;
+							border: 1px solid #ddd;
+							border-radius: 0.5rem;
+							justify-content: center;
+							align-items: center;
+
+							img {
+								width: 90%;
+								height: 90%;
+								object-fit: cover;
+								background: #717171;
+								border-radius: 1rem;
+							}
+						}
+					}
+				}
+			}
+
+			.property-desc-config {
+				width: 100%;
+				height: auto;
+				flex-direction: row;
+				gap: 22px;
+
+				.left-config {
+					width: 960px;
+					height: auto;
+					gap: 40px;
+
+					.options-config {
+						width: 100%;
+						height: auto;
+						flex-direction: row;
+						gap: 47.5px;
+
+						.option {
+							width: auto;
+							height: auto;
+							flex-direction: row;
+							gap: 17px;
+
+							.svg-box {
+								width: 56px;
+								height: 50px;
+								align-items: center;
+								justify-content: center;
+								border-radius: 12px;
+								border: 1px solid #ddd;
+
+								img {
+									width: 35px;
+									height: auto;
+								}
+							}
+
+							.option-includes {
+								width: auto;
+								height: auto;
+
+								.title {
+									color: #181a20;
+									font-family: $font;
+									font-size: 15px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: normal;
+								}
+
+								.option-data {
+									color: #181a20;
+									font-family: $font;
+									font-size: 15px;
+									font-style: normal;
+									font-weight: 400;
+									line-height: normal;
+								}
+							}
+						}
+					}
+
+					.prop-desc-config {
+						width: 100%;
+						height: auto;
+						gap: 50px;
+						padding: 29px 38px 50px 38px;
+
+						.top {
+							width: 100%;
+							height: auto;
+							gap: 30px;
+
+							.title {
+								color: #181a20;
+								font-family: $font;
+								font-size: 40px;
+								font-style: normal;
+								font-weight: 600;
+								line-height: normal;
+								letter-spacing: 1px;
+							}
+						}
+
+						.bottom {
+							width: 100%;
+							height: auto;
+							display: flex;
+							flex-direction: column;
+							justify-content: space-evenly;
+							align-items: flex-start;
+							gap: 30px;
+
+							.data {
+								color: #181a20;
+								font-family: $font;
+								font-size: 15px;
+								font-style: normal;
+								font-weight: 400;
+								line-height: normal;
+							}
+						}
+					}
+
+					.reviews-config {
+						width: 100%;
+						height: auto;
+						padding: 30px 38px 45px 38px;
+
+						.filter-box {
+							width: 100%;
+							height: auto;
+							flex-direction: row;
+							justify-content: space-between;
+							margin-bottom: 30px;
+
+							.review-cnt {
+								width: auto;
+								height: auto;
+								flex-direction: row;
+								align-items: center;
+								gap: 12px;
+
+								.reviews {
+									width: 153.6px;
+									color: #181a20;
+									font-family: $font;
+									font-size: 17px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: normal;
+								}
+							}
+
+							.select-box {
+								width: auto;
+								height: auto;
+								flex-direction: row;
+								gap: 10px;
+
+								.sort-title {
+									color: #717171;
+									font-family: $font;
+									font-size: 14px;
+									font-style: normal;
+									font-weight: 400;
+									line-height: 26px;
+								}
+
+								.select-main {
+									width: 140px;
+									border: none;
+									outline: none;
+									color: #181a20;
+									font-family: $font;
+									font-size: 14px;
+									font-style: normal;
+									font-weight: 400;
+									line-height: 26px;
+								}
+							}
+						}
+
+						.review-list {
+							width: 100%;
+							height: auto;
+							gap: 20px;
+
+							.review-config {
+								width: 100%;
+								height: auto;
+								padding-bottom: 10px;
+								border-bottom: 1px solid #c4c4c4;
+
+								.review-mb-info {
+									width: 100%;
+									height: auto;
+									flex-direction: row;
+									justify-content: space-between;
+
+									.img-name-box {
+										width: 30%;
+										flex-direction: row;
+										align-items: center;
+										gap: 20px;
+
+										.img-box {
+											width: 65px;
+											height: 65px;
+											align-items: center;
+											justify-content: center;
+											border-radius: 1rem;
+											background: rgb(228, 239, 255);
+											border: 1px solid rgb(228, 239, 255);
+											object-fit: cover;
+										}
+
+										.name {
+											width: 100%;
+											color: #181a20;
+											font-family: $font;
+											font-size: 15px;
+											font-style: normal;
+											font-weight: 600;
+											line-height: normal;
+											cursor: pointer;
+										}
+
+										.date {
+											width: 100%;
+											color: #181a20;
+											font-family: $font;
+											font-size: 13px;
+											font-style: normal;
+											font-weight: 400;
+											line-height: normal;
+										}
+									}
+
+									.review-stars {
+										padding-top: 10px;
+									}
+								}
+
+								.desc-box {
+									width: 100%;
+									height: auto;
+									margin-top: 15px;
+
+									.description {
+										color: #181a20;
+										font-family: $font;
+										font-size: 14px;
+										font-style: normal;
+										font-weight: 400;
+										line-height: 26px;
+									}
+								}
+							}
+
+							.pagination-box {
+								margin-top: 15px;
+								width: 100%;
+								height: auto;
+								display: flex;
+								justify-content: center;
+							}
+						}
+					}
+
+					.leave-review-config {
+						background: #fff;
+						padding: 30px 38px;
+
+						.main-title {
+							color: #181a20;
+							font-family: $font;
+							font-size: 17px;
+							font-style: normal;
+							font-weight: 600;
+							line-height: normal;
+						}
+
+						.review-title {
+							margin-top: 20px;
+							color: #181a20;
+							font-family: $font;
+							font-size: 14px;
+							font-style: normal;
+							font-weight: 600;
+							line-height: normal;
+						}
+
+						textarea {
+							width: 100%;
+							height: 120px;
+							margin-top: 8px;
+							padding: 20px;
+							border-radius: 8px;
+							border: 1px solid #ddd;
+							color: #717171;
+							font-family: $font;
+							font-size: 14px;
+							font-style: normal;
+							font-weight: 400;
+							line-height: 26px;
+						}
+
+						.submit-btn {
+							width: 100%;
+							display: flex;
+							justify-content: flex-end;
+
+							button:disabled {
+								background: #405FF2;
+							}
+
+							.submit-review {
+								display: flex;
+								width: 256px;
+								margin-top: 30px;
+								padding: 16px 30px;
+								justify-content: center;
+								align-items: center;
+								gap: 10px;
+								border-radius: 1rem;
+								border: 1px solid #405FF2;
+								background: rgb(0, 71, 177);
+								cursor: pointer;
+
+								.title {
+									color: #fff;
+									font-family: $font;
+									font-size: 15px;
+									font-style: normal;
+									font-weight: 600;
+									line-height: normal;
+								}
+							}
+						}
+					}
+				}
+
+				.right-frame {
+					width: 318px;
+					height: 700px;
+					margin-top: 30px;
+					padding: 30px 25px;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					align-items: flex-start;
+					gap: 20px;
+
+					.top {
+						.main {
+							color: #181a20;
+							font-family: $font;
+							font-size: 20px;
+							font-style: normal;
+							font-weight: 500;
+							line-height: normal;
+							color: #405FF2;
+						}
+
+						.second {
+							color: #717171;
+							font-family: $font;
+							font-size: 20px;
+							font-style: normal;
+							font-weight: 500;
+							line-height: normal;
+						}
+
+						div {
+							width: 120px;
+							height: 1px;
+							background: #ddd;
+						}
+
+						.div-m {
+							background: #405FF2;
+						}
+					}
+
+				}
+			}
+
+			.similar-properties-config {
+				width: 100%;
+				margin-top: 45px;
+				gap: 66px;
+
+				.title-pagination-box {
+					width: 100%;
+					height: auto;
+					flex-direction: row;
+					justify-content: space-between;
+					align-items: flex-end;
+
+					.title-box {
+						width: 50%;
+
+						.main-title {
+							color: #181a20;
+							font-family: $font;
+							font-size: 30px;
+							font-style: normal;
+							font-weight: 600;
+							line-height: normal;
+							letter-spacing: 0.6px;
+							text-transform: capitalize;
+						}
+
+						.sub-title {
+							color: #181a20;
+							font-family: $font;
+							font-size: 16px;
+							font-style: normal;
+							font-weight: 400;
+							line-height: 26px;
+							letter-spacing: 3px;
+						}
+					}
+
+					.pagination-box {
+						flex-direction: row;
+						align-items: center;
+						gap: 22px;
+					}
+				}
+
+				.cards-box {
+					width: 100%;
+					padding-bottom: 10px;
+
+					.similar-homes-swiper {
+						width: 100%;
+						height: 600px;
+						display: flex;
+						flex-direction: row;
+						justify-content: flex-start;
+						align-items: center;
+
+						.similar-homes-slide {
+							width: 300px;
+
+						}
+					}
+				}
+			}
+		}
+	}
+}
