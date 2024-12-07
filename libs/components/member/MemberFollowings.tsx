@@ -124,7 +124,6 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 												}
 											/>
 										)}
-										<span>({follower?.followingData?.memberLikes})</span>
 									</Box>
 								</Stack>
 								{user?._id !== follower?.followingId && (
@@ -166,8 +165,8 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 								page={followInquiry.page}
 								count={Math.ceil(total / followInquiry.limit)}
 								onChange={paginationHandler}
-								shape="circular"
-								color="primary"
+								shape="rounded"
+								color="secondary"
 							/>
 						</Stack>
 						<Stack className="total-result">

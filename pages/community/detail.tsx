@@ -316,10 +316,10 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 													src={memberImage}
 													alt=""
 													className="member-img"
-													onClick={() => goMemberPage(boardArticle?.memberData?._id)}
+													onClick={() => goMemberPage(boardArticle?.creatorData?._id)}
 												/>
-												<Typography className="member-nick" onClick={() => goMemberPage(boardArticle?.memberData?._id)}>
-													{boardArticle?.memberData?.memberNick}
+												<Typography className="member-nick" onClick={() => goMemberPage(boardArticle?.creatorData?._id)}>
+													{boardArticle?.creatorData}
 												</Typography>
 												<Stack className="divider"></Stack>
 												<Moment className={'time-added'} format={'DD.MM.YY HH:mm'}>
@@ -513,7 +513,7 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 											count={Math.ceil(total / searchFilter.limit) || 1}
 											page={searchFilter.page}
 											shape="circular"
-											color="primary"
+											color="secondary"
 											onChange={paginationHandler}
 										/>
 									</Stack>

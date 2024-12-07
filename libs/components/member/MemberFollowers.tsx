@@ -78,7 +78,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 					<Stack className="listing-title-box">
 						<Typography className="title-text">Name</Typography>
 						<Typography className="title-text">Details</Typography>
-						<Typography className="title-text">Subscription</Typography>
+						<Typography className="title-text">Follow</Typography>
 					</Stack>
 					{memberFollowers?.length === 0 && (
 						<div className={'no-data'}>
@@ -124,7 +124,6 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 												}
 											/>
 										)}
-										<span>({follower?.followerData?.memberLikes})</span>
 									</Box>
 								</Stack>
 								{user?._id !== follower?.followerId && (
@@ -166,8 +165,8 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 								page={followInquiry.page}
 								count={Math.ceil(total / followInquiry.limit)}
 								onChange={paginationHandler}
-								shape="circular"
-								color="primary"
+								shape="rounded"
+								color="secondary"
 							/>
 						</Stack>
 						<Stack className="total-result">

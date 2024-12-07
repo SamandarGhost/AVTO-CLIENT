@@ -95,8 +95,8 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 							<Pagination
 								count={Math.ceil(totalCount / searchCommunity.limit)}
 								page={searchCommunity.page}
-								shape="circular"
-								color="primary"
+								shape="rounded"
+								color="secondary"
 								onChange={paginationHandler}
 							/>
 						</Stack>

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
-import PropertyCard from '../property/PropertyCard';
 import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
 import { useQuery } from '@apollo/client';
 import { GET_VISITED } from '../../../apollo/user/query';
+import TrendPropertyCard from '../homepage/TrendPropertyCard';
+import PopularPropertyCard from '../homepage/PopularPropertyCard';
+import TopPropertyCard from '../homepage/TopPropertyCard';
 
 const RecentlyVisited: NextPage = () => {
 	const device = useDeviceDetect();
@@ -36,6 +38,25 @@ const RecentlyVisited: NextPage = () => {
 		setSearchVisited({ ...searchVisited, page: value });
 	};
 
+	const likePropertyHandler = async (user: T, id: string) => {
+		try {
+			if (!id) return;
+			// if (!user._id) throw new Error(Messages.error2);
+
+			// execute likePropertyHandler mutation
+			// await likeTargetProperty({
+			// variables: { input: id },
+			// });
+		} catch (err) {
+
+			// execute getPropertiesRefetch
+			// getFavoritesRefetch({ input: searchFavorites });
+			// } catch (err: any) {
+			// console.log('ERROR, likePropertyHandler:', err);
+			// sweetMixinErrorAlert(err.message).then();
+		}
+	};
+
 	if (device === 'mobile') {
 		return <div>NESTAR MY FAVORITES MOBILE</div>;
 	} else {
@@ -50,7 +71,7 @@ const RecentlyVisited: NextPage = () => {
 				<Stack className="favorites-list-box">
 					{recentlyVisited?.length ? (
 						recentlyVisited?.map((property: Property) => {
-							return <PropertyCard property={property} recentlyVisited={true} />;
+							return <TopPropertyCard likePropertyHandler={likePropertyHandler} property={property} />;
 						})
 					) : (
 						<div className={'no-data'}>
@@ -65,8 +86,8 @@ const RecentlyVisited: NextPage = () => {
 							<Pagination
 								count={Math.ceil(total / searchVisited.limit)}
 								page={searchVisited.page}
-								shape="circular"
-								color="primary"
+								shape="rounded"
+								color="secondary"
 								onChange={paginationHandler}
 							/>
 						</Stack>

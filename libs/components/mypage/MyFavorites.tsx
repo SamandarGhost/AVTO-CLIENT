@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
-import PropertyCard from '../property/PropertyCard';
 import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
 import { useMutation, useQuery } from '@apollo/client';
@@ -10,6 +9,7 @@ import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
 import { GET_FAVORITES } from '../../../apollo/user/query';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Messages } from '../../config';
+import TopPropertyCard from '../homepage/TopPropertyCard';
 
 const MyFavorites: NextPage = () => {
 	const device = useDeviceDetect();
@@ -74,7 +74,7 @@ const MyFavorites: NextPage = () => {
 				<Stack className="favorites-list-box">
 					{myFavorites?.length ? (
 						myFavorites?.map((property: Property) => {
-							return <PropertyCard likePropertyHandler={likePropertyHandler} property={property} myFavorites={true} />;
+							return <TopPropertyCard likePropertyHandler={likePropertyHandler} property={property} />;
 						})
 					) : (
 						<div className={'no-data'}>
@@ -89,8 +89,8 @@ const MyFavorites: NextPage = () => {
 							<Pagination
 								count={Math.ceil(total / searchFavorites.limit)}
 								page={searchFavorites.page}
-								shape="circular"
-								color="primary"
+								shape="rounded"
+								color="secondary"
 								onChange={paginationHandler}
 							/>
 						</Stack>
