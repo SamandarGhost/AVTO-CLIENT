@@ -571,7 +571,7 @@ const Filter = (props: FilterType) => {
 					</Stack>
 				</Stack>
 				<div className={'divider'}></div>
-				<Stack classNmae={'madein'}>
+				<Stack className={'madein'}>
 					<FormControl>
 						<InputLabel id="demo-simple-select-label">Made In</InputLabel>
 						<Select
