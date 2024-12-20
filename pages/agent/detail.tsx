@@ -21,7 +21,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { CREATE_COMMENT, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
 import { GET_COMMENTS, GET_MEMBER, GET_PROPERTIES } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
-import TrendPropertyCard from '../../libs/components/homepage/TrendPropertyCard';
+import TrendPropertyCard from '../../libs/components/homepage/ReccomendedCarsCard';
 import TopPropertyCard from '../../libs/components/homepage/TopPropertyCard';
 import PopularPropertyCard from '../../libs/components/homepage/PopularPropertyCard';
 import CallOutlinedIcon from '@mui/icons-material/CallOutlined';

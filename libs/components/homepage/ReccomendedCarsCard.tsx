@@ -3,40 +3,39 @@ import { Stack, Box, Divider, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Property } from '../../types/property/property';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { REACT_APP_API_URL } from '../../config';
 import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { Car } from '../../types/car/car';
 
-interface TrendPropertyCardProps {
-	property: Property;
-	likePropertyHandler: any;
+interface RecommendedCarCardProps {
+	car: Car;
+	likeCarHandler: any;
 }
 
-const TrendPropertyCard = (props: TrendPropertyCardProps) => {
-	const { property, likePropertyHandler } = props;
+const RecommendedCarCard = (props: RecommendedCarCardProps) => {
+	const { car, likeCarHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 
 	/** HANDLERS **/
 	const pushDetailhandler = async (propertyId: string) => {
-		console.log("propertyId:", propertyId);
-		await router.push({ pathname: '/property/detail', query: { id: propertyId } })
+		await router?.push({ pathname: '/cars/detail', query: { id: propertyId } })
 	};
 
 	if (device === 'mobile') {
 		return (
-			<Stack className="trend-card-box" key={property._id}>
+			<Stack className="trend-card-box" key={car?._id}>
 				<Box
 					component={'div'}
 					className={'card-img'}
 					// style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.propertyImages[0]})` }}
 					onClick={() => {
-						pushDetailhandler(property._id);
+						pushDetailhandler(car?._id);
 					}}
 				>
 					<div>Top</div>
@@ -44,46 +43,46 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 				<Box component={'div'} className={'info'}>
 					<strong className={'title'}
 						onClick={() => {
-							pushDetailhandler(property._id);
-						}}>{property.propertyTitle}</strong>
-					<p className={'desc'}>{property.propertyDesc ?? 'no description'}</p>
+							pushDetailhandler(car?._id);
+						}}>{car?.carTitle}</strong>
+					<p className={'desc'}>{car?.carDesc ?? 'no description'}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/speed.svg" alt="" />
-							<span>{property.propertyBeds} Mile</span>
+							<span>{car?.carMileage} Mile</span>
 						</div>
 						<div>
 							<img src="/img/icons/petrol.svg" alt="" />
-							<span>{property.propertyRooms} Petrol</span>
+							<span>{car?.carFuelType} Petrol</span>
 						</div>
 						<div>
 							<img src="/img/icons/trans.svg" alt="" />
-							<span>{property.propertySquare} Automatic</span>
+							<span>{car?.carTransmission} Automatic</span>
 						</div>
 						<div>
 							<img src="/img/icons/trans.svg" alt="" />
-							<span>${property.propertyPrice}</span>
+							<span>${car?.carPrice}</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '17px' }} />
 					<div className={'bott'}>
 						<p>
-							{property.propertyRent ? 'Rent' : ''} {property.propertyRent && property.propertyBarter && '/'}{' '}
-							{property.propertyBarter ? 'Barter' : ''}
+							{car?.carRent ? 'Rent' : ''} {car?.carRent && car?.carBarter && '/'}{' '}
+							{car?.carBarter ? 'Barter' : ''}
 						</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyViews}</Typography>
-							<IconButton color={'default'} onClick={() => likePropertyHandler(user, property?._id)} >
-								{property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+							<Typography className="view-cnt">{car?.carViews}</Typography>
+							<IconButton color={'default'} onClick={() => likeCarHandler(user, car?._id)} >
+								{car?.meLiked && car?.meLiked[0]?.myFavorite ? (
 									<FavoriteIcon style={{ color: 'red' }} />
 								) : (
 									<FavoriteIcon />
 								)}
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyLikes}</Typography>
+							<Typography className="view-cnt">{car?.carLikes}</Typography>
 						</div>
 					</div>
 				</Box>
@@ -91,13 +90,13 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 		);
 	} else {
 		return (
-			<Stack className="trend-card-box" key={property._id}>
+			<Stack className="trend-card-box" key={car?._id}>
 				<Box
 					component={'div'}
 					className={'card-img'}
-					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${property?.propertyImages[0]})` }}
+					style={{ backgroundImage: `url(${REACT_APP_API_URL}/${car?.carImages?.[0]})` }}
 					onClick={() => {
-						pushDetailhandler(property._id);
+						pushDetailhandler(car?._id);
 					}}
 				>
 					<span className={'save'}>
@@ -108,26 +107,26 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 				<Box component={'div'} className={'info'}>
 					<strong className={'title'}
 						onClick={() => {
-							pushDetailhandler(property._id);
+							pushDetailhandler(car?._id);
 						}}>
-						{property.propertyTitle}
+						{car?.carTitle}
 					</strong>
-					<p className={'desc'}>{property.propertyDesc ?? 'no description'}</p>
+					<p className={'desc'}>{car?.carDesc ?? 'no description'}</p>
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/speed.svg" alt="" />
-							<span>{property.propertyBeds}234567 Miles</span>
+							<span>{car?.carMileage} Miles</span>
 						</div>
 						<div>
 							<img src="/img/icons/petrol.svg" alt="" />
-							<span>{property.propertyRooms} Gasoline</span>
+							<span>{car?.carFuelType}</span>
 						</div>
 						<div>
 							<img src="/img/icons/trans.svg" alt="" />
-							<span>{property.propertySquare} Automatic</span>
+							<span>{car?.carTransmission}</span>
 						</div>
 						<div>
-							<span>Price: ${property.propertyPrice}</span>
+							<span>Price: ${car?.carPrice}</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '15px', mb: '5px' }} />
@@ -136,15 +135,15 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon style={{ color: 'white' }} />
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyViews}</Typography>
-							<IconButton color={'default'} onClick={() => likePropertyHandler(user, property?._id)}>
-								{property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+							<Typography className="view-cnt">{car?.carViews}</Typography>
+							<IconButton color={'default'} onClick={() => likeCarHandler(user, car?._id)}>
+								{car?.meLiked && car?.meLiked[0]?.myFavorite ? (
 									<FavoriteIcon style={{ color: 'red' }} />
 								) : (
 									<FavoriteIcon style={{ color: 'white' }} />
 								)}
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyLikes}</Typography>
+							<Typography className="view-cnt">{car?.carLikes}</Typography>
 						</div>
 					</div>
 				</Box>
@@ -153,4 +152,4 @@ const TrendPropertyCard = (props: TrendPropertyCardProps) => {
 	}
 };
 
-export default TrendPropertyCard;
+export default RecommendedCarCard;

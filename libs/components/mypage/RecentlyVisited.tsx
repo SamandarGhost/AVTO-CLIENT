@@ -6,7 +6,7 @@ import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
 import { useQuery } from '@apollo/client';
 import { GET_VISITED } from '../../../apollo/user/query';
-import TrendPropertyCard from '../homepage/TrendPropertyCard';
+import TrendPropertyCard from '../homepage/ReccomendedCarsCard';
 import PopularPropertyCard from '../homepage/PopularPropertyCard';
 import TopPropertyCard from '../homepage/TopPropertyCard';
 

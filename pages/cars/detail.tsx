@@ -88,7 +88,7 @@ import VideoStableOutlinedIcon from '@mui/icons-material/VideoStableOutlined'; /
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined'; //hill start
 import TireRepairOutlinedIcon from '@mui/icons-material/TireRepairOutlined'; // tire pressure
 import TouchAppOutlinedIcon from '@mui/icons-material/TouchAppOutlined'; // push button
-import TrendPropertyCard from '../../libs/components/homepage/TrendPropertyCard';
+import TrendPropertyCard from '../../libs/components/homepage/ReccomendedCarsCard';
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import FitbitOutlinedIcon from '@mui/icons-material/FitbitOutlined'; // flibit
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';

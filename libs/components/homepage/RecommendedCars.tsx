@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { Stack, Box } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import WestIcon from '@mui/icons-material/West';
-import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
-import { Property } from '../../types/property/property';
-import { PropertiesInquiry } from '../../types/property/property.input';
-import TrendPropertyCard from './TrendPropertyCard';
+import TrendPropertyCard from './ReccomendedCarsCard';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PROPERTIES } from '../../../apollo/user/query';
 import { T } from '../../types/common';
@@ -16,49 +12,49 @@ import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { CarsInquiry } from '../../types/car/car.input';
+import { Car } from '../../types/car/car';
 
-interface TrendPropertiesProps {
-	initialInput: PropertiesInquiry;
+interface RecommendedCarsProps {
+	initialInput: CarsInquiry;
 }
 
-const TrendProperties = (props: TrendPropertiesProps) => {
+const RecommendedCars = (props: RecommendedCarsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [trendProperties, setTrendProperties] = useState<Property[]>([]);
+	const [recomCars, setRecomCars] = useState<Car[]>([]);
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetCar] = useMutation(LIKE_TARGET_PROPERTY);
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch
+		loading: getCarsLoading,
+		data: getCarsData,
+		error: getCarsError,
+		refetch: getCarsRefetch
 	} = useQuery(GET_PROPERTIES, {
 		fetchPolicy: 'cache-and-network',
 		variables: { input: initialInput },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setTrendProperties(data?.getProperties?.list);
+			setRecomCars(data?.getCars?.list);
 		},
 	});
 	/** HANDLERS **/
-	const likePropertyHandler = async (user: T, id: string) => {
+	const likeCarHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.SOMETHING_WENT_WRONG);
 
-			await likeTargetProperty({
+			await likeTargetCar({
 				variables: { input: id },
 			});
-			await getPropertiesRefetch({ input: initialInput });
+			await getCarsRefetch({ input: initialInput });
 		} catch (err: any) {
-			console.log('Error, likePropertyHandler:', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	}
 
-	if (trendProperties) console.log('trendProperties:', trendProperties);
-	if (!trendProperties) return null;
+	if (!recomCars) return null;
 
 	if (device === 'mobile') {
 		return (
@@ -68,9 +64,9 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 						<span>Recommended Cars</span>
 					</Stack>
 					<Stack className={'card-box'}>
-						{trendProperties.length === 0 ? (
+						{recomCars?.length === 0 ? (
 							<Box component={'div'} className={'empty-list'}>
-								Trends Empty
+								Recommmended Cars Empty
 							</Box>
 						) : (
 							<Swiper
@@ -80,10 +76,10 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 								spaceBetween={15}
 								modules={[Autoplay]}
 							>
-								{trendProperties.map((property: Property) => {
+								{recomCars?.map((car: Car) => {
 									return (
-										<SwiperSlide key={property._id} className={'trend-property-slide'}>
-											<TrendPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+										<SwiperSlide key={car._id} className={'trend-property-slide'}>
+											<TrendPropertyCard car={car} likeCarHandler={likeCarHandler} />
 										</SwiperSlide>
 									);
 								})}
@@ -111,9 +107,9 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 						</Box>
 					</Stack>
 					<Stack className={'card-box'}>
-						{trendProperties.length === 0 ? (
+						{recomCars?.length === 0 ? (
 							<Box component={'div'} className={'empty-list'}>
-								Trends Empty
+								Recommmended Cars Empty
 							</Box>
 						) : (
 							<Swiper
@@ -129,10 +125,10 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 									el: '.swiper-trend-pagination',
 								}}
 							>
-								{trendProperties.map((property: Property) => {
+								{recomCars?.map((car: Car) => {
 									return (
-										<SwiperSlide key={property._id} className={'trend-property-slide'}>
-											<TrendPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+										<SwiperSlide key={car._id} className={'trend-property-slide'}>
+											<TrendPropertyCard car={car} likeCarHandler={likeCarHandler} />
 										</SwiperSlide>
 									);
 								})}
@@ -145,14 +141,14 @@ const TrendProperties = (props: TrendPropertiesProps) => {
 	}
 };
 
-TrendProperties.defaultProps = {
+RecommendedCars.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 8,
-		sort: 'propertyLikes',
+		sort: 'carLikes',
 		direction: 'DESC',
 		search: {},
 	},
 };
 
-export default TrendProperties;
+export default RecommendedCars;
