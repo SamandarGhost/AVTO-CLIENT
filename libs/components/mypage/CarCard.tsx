@@ -10,14 +10,14 @@ import Moment from 'react-moment';
 import { useRouter } from 'next/router';
 import { PropertyStatus } from '../../enums/property.enum';
 
-interface PropertyCardProps {
+interface CarCardProps {
 	property: Property;
 	deletePropertyHandler?: any;
 	memberPage?: boolean;
 	updatePropertyHandler?: any;
 }
 
-export const PropertyCard = (props: PropertyCardProps) => {
+export const CarCard = (props: CarCardProps) => {
 	const { property, deletePropertyHandler, memberPage, updatePropertyHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();

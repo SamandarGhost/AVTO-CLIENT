@@ -11,7 +11,7 @@ import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Messages } from '../../config';
 import TopPropertyCard from '../homepage/FindingCarCard';
 
-const MyFavorites: NextPage = () => {
+const MyLiked: NextPage = () => {
 	const device = useDeviceDetect();
 	const [myFavorites, setMyFavorites] = useState<Property[]>([]);
 	const [total, setTotal] = useState<number>(0);
@@ -106,4 +106,4 @@ const MyFavorites: NextPage = () => {
 	}
 };
 
-export default MyFavorites;
+export default MyLiked;

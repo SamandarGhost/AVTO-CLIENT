@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { PropertyCard } from './PropertyCard';
+import { CarCard } from './CarCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { Property } from '../../types/property/property';
 import { AgentPropertiesInquiry } from '../../types/property/property.input';
@@ -134,7 +134,7 @@ const MyCars: NextPage = ({ initialInput, ...props }: any) => {
 						) : (
 							agentProperties.map((property: Property) => {
 								return (
-									<PropertyCard
+									<CarCard
 										property={property}
 										deletePropertyHandler={deletePropertyHandler}
 										updatePropertyHandler={updatePropertyHandler}

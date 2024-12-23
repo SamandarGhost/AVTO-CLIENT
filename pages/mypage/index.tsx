@@ -4,7 +4,6 @@ import { NextPage } from 'next';
 import { Stack } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import MyFavorites from '../../libs/components/mypage/MyFavorites';
 import RecentlyVisited from '../../libs/components/mypage/RecentlyVisited';
 import MyProfile from '../../libs/components/mypage/MyProfile';
 import MyArticles from '../../libs/components/mypage/MyArticles';
@@ -18,8 +17,12 @@ import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { LIKE_TARGET_MEMBER, SUBSCRIBE, UNSUBSCRIBE } from '../../apollo/user/mutation';
 import { Messages } from '../../libs/config';
-import AddCar from '../../libs/components/mypage/AddNewProperty';
-import MyCars from '../../libs/components/mypage/MyProperties';
+import AddCar from '../../libs/components/mypage/AddNewCar';
+import MyCars from '../../libs/components/mypage/MyCars';
+import AddProduct from '../../libs/components/mypage/AddNewProduct';
+import MyProducts from '../../libs/components/mypage/MyProducts';
+import MyLiked from '../../libs/components/mypage/MyLiked';
+import MySaved from '../../libs/components/mypage/MySaved';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -121,8 +124,11 @@ const MyPage: NextPage = () => {
 							<Stack className="main-config" mb={'76px'}>
 								<Stack className={'list-config'}>
 									{category === 'addCar' && <AddCar />}
+									{category === 'addProdcut' && <AddProduct />}
 									{category === 'myCars' && <MyCars />}
-									{category === 'myFavorites' && <MyFavorites />}
+									{category === 'myProducts' && <MyProducts />}
+									{category === 'myLiked' && <MyLiked />}
+									{category === 'mySaved' && <MySaved />}
 									{category === 'recentlyVisited' && <RecentlyVisited />}
 									{category === 'myArticles' && <MyArticles />}
 									{category === 'writeArticle' && <WriteArticle />}
