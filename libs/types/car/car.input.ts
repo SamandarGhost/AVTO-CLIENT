@@ -98,8 +98,6 @@ export interface CarInput {
     carRightBackDoor?: boolean;
     carLeftBackDoor?: boolean;
     memberId: string;
-    dealerId?: string;
-    carCreatedBy?: String;
 }
 export interface CarRange {
     min: number;

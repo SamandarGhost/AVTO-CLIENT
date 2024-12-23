@@ -1,17 +1,17 @@
 import { Direction } from "../../enums/common.enum";
-import { MemberAuthType, MemberStatus, MemberType } from "../../enums/member.enum";
+import { AuthType, Status, Type } from "../../enums/member.enum";
 
 export interface MemberInput {
-    memberNick: string;
-    memberPassword: string;
-    memberPhone: string;
-    memberType?: MemberType;
-    memberAuthType?: MemberAuthType;
+    titleNick: string;
+    password: string;
+    phone: string;
+    type?: Type;
+    authType?: AuthType;
 };
 
 export interface LoginInput {
-    memberNick: string;
-    memberPassword: string;
+    titleNick: string;
+    password: string;
 };
 
 interface AISearch {
@@ -27,8 +27,8 @@ export interface AgentsInquiry {
 };
 
 interface MISearch {
-    memberStatus?: MemberStatus;
-    memberType?: MemberType;
+    status?: Status;
+    type?: Type;
     text?: string;
 }
 

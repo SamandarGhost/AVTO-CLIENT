@@ -16,7 +16,7 @@ interface TopPropertyCardProps {
 	likePropertyHandler: any;
 }
 
-const TopPropertyCard = (props: TopPropertyCardProps) => {
+const FindingCarCard = (props: TopPropertyCardProps) => {
 	const { property, likePropertyHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -90,7 +90,7 @@ const TopPropertyCard = (props: TopPropertyCardProps) => {
 		);
 	} else {
 		return (
-			<Stack className="top-card-box">
+			<Stack className="find-card-box">
 				<Box
 					component={'div'}
 					className={'card-img'}
@@ -107,8 +107,8 @@ const TopPropertyCard = (props: TopPropertyCardProps) => {
 					<strong className={'title'}
 						onClick={() => {
 							pushDetailhandler(property._id);
-						}}>{property?.propertyTitle}</strong>
-					<p className={'desc'}>{property?.propertyAddress}</p>
+						}}>{property?.propertyTitle}Merc</strong>
+					<p className={'desc'}>{property?.propertyAddress}Seoul, Iteawon</p>
 					<Divider sx={{ mt: '2px', mb: '2px' }} />
 					<div className={'options'}>
 						<div>
@@ -150,4 +150,4 @@ const TopPropertyCard = (props: TopPropertyCardProps) => {
 	}
 };
 
-export default TopPropertyCard;
+export default FindingCarCard;

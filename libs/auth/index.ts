@@ -42,7 +42,7 @@ const requestJwtToken = async ({
 	try {
 		const result = await apolloClient.mutate({
 			mutation: LOGIN,
-			variables: { input: { memberNick: nick, memberPassword: password } },
+			variables: { input: { titleNick: nick, password: password } },
 			fetchPolicy: 'network-only',
 		});
 
@@ -96,7 +96,7 @@ const requestSignUpJwtToken = async ({
 		const result = await apolloClient.mutate({
 			mutation: SIGN_UP,
 			variables: {
-				input: { memberNick: nick, memberPassword: password, memberPhone: phone, memberType: type },
+				input: { titleNick: nick, password: password, phone: phone, type: type },
 			},
 			fetchPolicy: 'network-only',
 		});

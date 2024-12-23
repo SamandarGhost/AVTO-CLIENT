@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client';
 import { GET_VISITED } from '../../../apollo/user/query';
 import TrendPropertyCard from '../homepage/ReccomendedCarsCard';
 import PopularPropertyCard from '../homepage/PopularPropertyCard';
-import TopPropertyCard from '../homepage/TopPropertyCard';
+import TopPropertyCard from '../homepage/FindingCarCard';
 
 const RecentlyVisited: NextPage = () => {
 	const device = useDeviceDetect();

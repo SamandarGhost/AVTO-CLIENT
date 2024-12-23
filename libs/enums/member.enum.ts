@@ -1,4 +1,4 @@
-export enum MemberType {
+export enum Type {
 	USER = 'USER',
 	AGENT = 'AGENT',
 	ADMIN = 'ADMIN',
@@ -7,13 +7,13 @@ export enum MemberType {
 	SELLER = 'SELLER',
 }
 
-export enum MemberStatus {
+export enum Status {
 	ACTIVE = 'ACTIVE',
 	BLOCK = 'BLOCK',
 	DELETE = 'DELETE',
 }
 
-export enum MemberAuthType {
+export enum AuthType {
 	PHONE = 'PHONE',
 	EMAIL = 'EMAIL',
 	KAKAOTALK = 'KAKAOTALK',

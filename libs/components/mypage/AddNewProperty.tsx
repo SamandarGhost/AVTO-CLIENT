@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { PropertyLocation, PropertyType } from '../../enums/property.enum';
-import { REACT_APP_API_URL, propertySquare } from '../../config';
-import { PropertyInput } from '../../types/property/property.input';
+import { REACT_APP_API_URL } from '../../config';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
@@ -12,52 +10,144 @@ import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { CREATE_PROPERTY, UPDATE_PROPERTY } from '../../../apollo/user/mutation';
 import { GET_PROPERTY } from '../../../apollo/user/query';
-import { Category } from '@mui/icons-material';
+import { CarInput } from '../../types/car/car.input';
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarTransmission, CarTuningType, CarType } from '../../enums/car.enum';
 
-const AddProperty = ({ initialValues, ...props }: any) => {
+const AddCar = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const inputRef = useRef<any>(null);
-	const [insertPropertyData, setInsertPropertyData] = useState<PropertyInput>(initialValues);
-	const [propertyType, setPropertyType] = useState<PropertyType[]>(Object.values(PropertyType));
-	const [propertyLocation, setPropertyLocation] = useState<PropertyLocation[]>(Object.values(PropertyLocation));
+	const [insertCarData, setInsertCarData] = useState<CarInput>(initialValues);
+	const [carType, setCarType] = useState<CarType[]>(Object.values(CarType));
+	const [carColor, setCarColor] = useState<CarColor[]>(Object.values(CarColor));
+	const [carTuningType, setCarTuningType] = useState<CarTuningType[]>(Object.values(CarTuningType));
+	const [carSort, setCarSort] = useState<CarSort[]>(Object.values(CarSort));
+	const [carFuelType, setCarFuelType] = useState<CarFuelType[]>(Object.values(CarFuelType));
+	const [carTransmission, setCarTransmission] = useState<CarTransmission[]>(Object.values(CarTransmission));
+	const [carDriveType, setCarDriveType] = useState<CarDriveType[]>(Object.values(CarDriveType));
+	const [carBody, setCarBody] = useState<CarBody[]>(Object.values(CarBody));
+	const [carMadeIn, setCarMadeIn] = useState<CarMadeIn[]>(Object.values(CarMadeIn));
+	const [carGroup, setCarGroup] = useState<CarGroup[]>(Object.values(CarGroup));
+	const [carBrand, setCarBrand] = useState<CarBrand[]>(Object.values(CarBrand));
+	const [carLocation, setCarLocation] = useState<CarLocation[]>(Object.values(CarLocation));
 	const token = getJwtToken();
 	const user = useReactiveVar(userVar);
 
 	/** APOLLO REQUESTS **/
-	const [createProperty] = useMutation(CREATE_PROPERTY);
-	const [updateProperty] = useMutation(UPDATE_PROPERTY);
+	const [createCar] = useMutation(CREATE_PROPERTY);
+	const [updateCar] = useMutation(UPDATE_PROPERTY);
 
 	const {
-		loading: getPropertyLoading,
-		data: getPropertyData,
-		error: getPropertyError,
-		refetch: getPropertyRefetch,
+		loading: getCarLoading,
+		data: getCarData,
+		error: getCarError,
+		refetch: getCarRefetch,
 	} = useQuery(GET_PROPERTY, {
 		fetchPolicy: 'network-only',
 		variables: {
-			input: router.query.propertyId,
+			input: router.query.carId,
 		},
 	});
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		setInsertPropertyData({
-			...insertPropertyData,
-			propertyTitle: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyTitle : '',
-			propertyPrice: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyPrice : 0,
-			propertyType: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyType : '',
-			propertyLocation: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyLocation : '',
-			propertyAddress: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyAddress : '',
-			propertyBarter: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyBarter : false,
-			propertyRent: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyRent : false,
-			propertyRooms: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyRooms : 0,
-			propertyBeds: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyBeds : 0,
-			propertySquare: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertySquare : 0,
-			propertyDesc: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyDesc : '',
-			propertyImages: getPropertyData?.getProperty ? getPropertyData?.getProperty?.propertyImages : [],
+		setInsertCarData({
+			...insertCarData,
+			carType: getCarData?.getCar ? getCarData?.getCar?.carType : '',
+			carTitle: getCarData?.getCar ? getCarData?.getCar?.carTitle : '',
+			carBody: getCarData?.getCar ? getCarData?.getCar?.carBody : '',
+			carSort: getCarData?.getCar ? getCarData?.getCar?.carSort : '',
+			carGroup: getCarData?.getCar ? getCarData?.getCar?.carGroup : '',
+			carMadeIn: getCarData?.getCar ? getCarData?.getCar?.carMadeIn : '',
+			carBrand: getCarData?.getCar ? getCarData?.getCar?.carBrand : '',
+			carPrice: getCarData?.getCar ? getCarData?.getCar?.carPrice : 0,
+			carImages: getCarData?.getCar ? getCarData?.getCar?.carImages : [],
+			carVideo: getCarData?.getCar ? getCarData?.getCar?.carVideo : '',
+			carLocation: getCarData?.getCar ? getCarData?.getCar?.carLocation : '',
+			carAddress: getCarData?.getCar ? getCarData?.getCar?.carAddress : '',
+			carDesc: getCarData?.getCar ? getCarData?.getCar?.carDesc : '',
+			carBarter: getCarData?.getCar ? getCarData?.getCar?.carBarter : false,
+			carRent: getCarData?.getCar ? getCarData?.getCar?.carRent : false,
+			carYear: getCarData?.getCar ? getCarData?.getCar?.carYear : 0,
+			carTuning: getCarData?.getCar ? getCarData?.getCar?.carTuning : false,
+			carTuningType: getCarData?.getCar ? getCarData?.getCar?.carTuningType : '',
+			carMileage: getCarData?.getCar ? getCarData?.getCar?.carMileage : 0,
+			carFuelType: getCarData?.getCar ? getCarData?.getCar?.carFuelType : '',
+			carDriveType: getCarData?.getCar ? getCarData?.getCar?.carDriveType : '',
+			carTransmission: getCarData?.getCar ? getCarData?.getCar?.carTransmission : '',
+			carEngineSize: getCarData?.getCar ? getCarData?.getCar?.carEngineSize : '',
+			carColor: getCarData?.getCar ? getCarData?.getCar?.carColor : '',
+			carFullFuel: getCarData?.getCar ? getCarData?.getCar?.carFullFuel : 0,
+			carMpgHw: getCarData?.getCar ? getCarData?.getCar?.carMpgHw : 0,
+			carMpgCity: getCarData?.getCar ? getCarData?.getCar?.carMpgCity : 0,
+			carDoor: getCarData?.getCar ? getCarData?.getCar?.carDoor : 0,
+			carCylinders: getCarData?.getCar ? getCarData?.getCar?.carCylinders : 0,
+			carMaxSpeed: getCarData?.getCar ? getCarData?.getCar?.carMaxSpeed : 0,
+			carHorsePower: getCarData?.getCar ? getCarData?.getCar?.carHorsePower : 0,
+			carHundredSpeed: getCarData?.getCar ? getCarData?.getCar?.carHundredSpeed : '',
+			carTorque: getCarData?.getCar ? getCarData?.getCar?.carTorque : '',
+			carLength: getCarData?.getCar ? getCarData?.getCar?.carLength : '',
+			carHeigth: getCarData?.getCar ? getCarData?.getCar?.carHeigth : '',
+			carWidth: getCarData?.getCar ? getCarData?.getCar?.carWidth : '',
+			carSeatsUp: getCarData?.getCar ? getCarData?.getCar?.carSeatsUp : 0,
+			carWeigth: getCarData?.getCar ? getCarData?.getCar?.carWeigth : 0,
+			carLoadWeight: getCarData?.getCar ? getCarData?.getCar?.carLoadWeight : 0,
+			carTireSize: getCarData?.getCar ? getCarData?.getCar?.carTireSize : '',
+			carWheelBase: getCarData?.getCar ? getCarData?.getCar?.carWheelBase : '',
+			carAutoBrake: getCarData?.getCar ? getCarData?.getCar?.carAutoBrake : false,
+			carCruiseControl: getCarData?.getCar ? getCarData?.getCar?.carCruiseControl : false,
+			carESC: getCarData?.getCar ? getCarData?.getCar?.carESC : false,
+			carAutonomuosDrive: getCarData?.getCar ? getCarData?.getCar?.carAutonomuosDrive : false,
+			carExteriorLight: getCarData?.getCar ? getCarData?.getCar?.carExteriorLight : false,
+			carPanoramicSunroof: getCarData?.getCar ? getCarData?.getCar?.carPanoramicSunroof : false,
+			carHeatedSeats: getCarData?.getCar ? getCarData?.getCar?.carHeatedSeats : false,
+			carCooledSeats: getCarData?.getCar ? getCarData?.getCar?.carCooledSeats : false,
+			carTouchscreenDisplay: getCarData?.getCar ? getCarData?.getCar?.carTouchscreenDisplay : false,
+			carAutoHeadLight: getCarData?.getCar ? getCarData?.getCar?.carAutoHeadLight : false,
+			carStarStop: getCarData?.getCar ? getCarData?.getCar?.carStarStop : false,
+			carNoiseCancellation: getCarData?.getCar ? getCarData?.getCar?.carNoiseCancellation : false,
+			carRemoteKeyless: getCarData?.getCar ? getCarData?.getCar?.carRemoteKeyless : false,
+			carLaneDW: getCarData?.getCar ? getCarData?.getCar?.carLaneDW : false,
+			carBlindSpotMonitoring: getCarData?.getCar ? getCarData?.getCar?.carBlindSpotMonitoring : false,
+			carRearCrossTrafficAlert: getCarData?.getCar ? getCarData?.getCar?.carRearCrossTrafficAlert : false,
+			carApplePlay: getCarData?.getCar ? getCarData?.getCar?.carApplePlay : false,
+			carAndroidAuto: getCarData?.getCar ? getCarData?.getCar?.carAndroidAuto : false,
+			carVoiceControl: getCarData?.getCar ? getCarData?.getCar?.carVoiceControl : false,
+			carBluetoothConnectivity: getCarData?.getCar ? getCarData?.getCar?.carBluetoothConnectivity : false,
+			carWirelessCharging: getCarData?.getCar ? getCarData?.getCar?.carWirelessCharging : false,
+			carParkingAssist: getCarData?.getCar ? getCarData?.getCar?.carParkingAssist : false,
+			carSurroundViewCamera: getCarData?.getCar ? getCarData?.getCar?.carSurroundViewCamera : false,
+			carFrontSensors: getCarData?.getCar ? getCarData?.getCar?.carFrontSensors : false,
+			carRearSensors: getCarData?.getCar ? getCarData?.getCar?.carRearSensors : false,
+			carFrontRecordCamera: getCarData?.getCar ? getCarData?.getCar?.carFrontRecordCamera : false,
+			carRearRecordCamera: getCarData?.getCar ? getCarData?.getCar?.carRearRecordCamera : false,
+			carHeadsUpDisplay: getCarData?.getCar ? getCarData?.getCar?.carHeadsUpDisplay : false,
+			carClimateControl: getCarData?.getCar ? getCarData?.getCar?.carClimateControl : false,
+			carAdjustableSeats: getCarData?.getCar ? getCarData?.getCar?.carAdjustableSeats : false,
+			carMemorySeats: getCarData?.getCar ? getCarData?.getCar?.carMemorySeats : false,
+			carPowerTrain: getCarData?.getCar ? getCarData?.getCar?.carPowerTrain : false,
+			carRegenerativeBraking: getCarData?.getCar ? getCarData?.getCar?.carRegenerativeBraking : false,
+			carTractionControl: getCarData?.getCar ? getCarData?.getCar?.carTractionControl : false,
+			carStabilityControl: getCarData?.getCar ? getCarData?.getCar?.carStabilityControl : false,
+			carHillStartAssist: getCarData?.getCar ? getCarData?.getCar?.carHillStartAssist : false,
+			carTirePressureSystem: getCarData?.getCar ? getCarData?.getCar?.carTirePressureSystem : false,
+			carPushButton: getCarData?.getCar ? getCarData?.getCar?.carPushButton : false,
+			carCrush: getCarData?.getCar ? getCarData?.getCar?.carCrush : 0,
+			carRepair: getCarData?.getCar ? getCarData?.getCar?.carRepair : 0,
+			carFrontBumper: getCarData?.getCar ? getCarData?.getCar?.carFrontBumper : false,
+			carBackBumper: getCarData?.getCar ? getCarData?.getCar?.carBackBumper : false,
+			carBonnet: getCarData?.getCar ? getCarData?.getCar?.carBonnet : false,
+			carTailgate: getCarData?.getCar ? getCarData?.getCar?.carTailgate : false,
+			carRightFrontWing: getCarData?.getCar ? getCarData?.getCar?.carRightFrontWing : false,
+			carLeftFrontWing: getCarData?.getCar ? getCarData?.getCar?.carLeftFrontWing : false,
+			carRightBackWing: getCarData?.getCar ? getCarData?.getCar?.carRightBackWing : false,
+			carRoof: getCarData?.getCar ? getCarData?.getCar?.carRoof : false,
+			carRightFrontDoor: getCarData?.getCar ? getCarData?.getCar?.carRightFrontDoor : false,
+			carLeftFrontDoor: getCarData?.getCar ? getCarData?.getCar?.carLeftFrontDoor : false,
+			carRightBackDoor: getCarData?.getCar ? getCarData?.getCar?.carRightBackDoor : false,
+			carLeftBackDoor: getCarData?.getCar ? getCarData?.getCar?.carLeftBackDoor : false,
 		});
-	}, [getPropertyLoading, getPropertyData]);
+	}, [getCarLoading, getCarData]);
 
 	/** HANDLERS **/
 	async function uploadImages() {
@@ -76,7 +166,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 				  }`,
 					variables: {
 						files: [null, null, null, null, null],
-						target: 'property',
+						target: 'car',
 					},
 				}),
 			);
@@ -104,80 +194,84 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 
 			const responseImages = response.data.data.imagesUploader;
 
-			console.log('+responseImages: ', responseImages);
-			setInsertPropertyData({ ...insertPropertyData, propertyImages: responseImages });
+			setInsertCarData({ ...insertCarData, carImages: responseImages });
 		} catch (err: any) {
-			console.log('err: ', err.message);
 			await sweetMixinErrorAlert(err.message);
 		}
 	}
 
 	const doDisabledCheck = () => {
 		if (
-			insertPropertyData.propertyTitle === '' ||
-			insertPropertyData.propertyPrice === 0 || // @ts-ignore
-			insertPropertyData.propertyType === '' || // @ts-ignore
-			insertPropertyData.propertyLocation === '' || // @ts-ignore
-			insertPropertyData.propertyAddress === '' || // @ts-ignore
-			insertPropertyData.propertyBarter === '' || // @ts-ignore
-			insertPropertyData.propertyRent === '' ||
-			insertPropertyData.propertyRooms === 0 ||
-			insertPropertyData.propertyBeds === 0 ||
-			insertPropertyData.propertySquare === 0 ||
-			insertPropertyData.propertyDesc === '' ||
-			insertPropertyData.propertyImages.length === 0
+			insertCarData.carTitle === '' ||
+			insertCarData.carPrice === 0 || // @ts-ignore
+			insertCarData.carType === '' || // @ts-ignore
+			insertCarData.carLocation === '' || // @ts-ignore
+			insertCarData.carAddress === '' || // @ts-ignore
+			insertCarData.carMadeIn === '' || // @ts-ignore
+			insertCarData.carBrand === '' || // @ts-ignore
+			insertCarData.carFuelType === '' || // @ts-ignore
+			insertCarData.carDriveType === '' || // @ts-ignore
+			insertCarData.carTransmission === '' || // @ts-ignore
+			insertCarData.carBody === '' || // @ts-ignore
+			insertCarData.carYear === '' || // @ts-ignore
+			insertCarData.carMileage === '' || // @ts-ignore
+			insertCarData.carMpgHw === '' || // @ts-ignore
+			insertCarData.carMpgCity === '' || // @ts-ignore
+			insertCarData.carBarter === '' || // @ts-ignore
+			insertCarData.carRent === '' ||
+			insertCarData.carDesc === '' ||
+			insertCarData.carImages.length === 0
 		) {
 			return true;
 		}
 	};
 
-	const insertPropertyHandler = useCallback(async () => {
+	const insertCarHandler = useCallback(async () => {
 		try {
-			const result = await createProperty({
+			const result = await createCar({
 				variables: {
-					input: insertPropertyData,
+					input: insertCarData,
 				},
 			});
 
-			await sweetMixinSuccessAlert('This property has been created sucessfully');
+			await sweetMixinSuccessAlert('This car has been created sucessfully');
 			await router.push({
 				pathname: '/my-page',
 				query: {
-					category: 'myProperties',
+					category: 'myCars',
 				},
 			});
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
-	}, [insertPropertyData]);
+	}, [insertCarData]);
 
-	const updatePropertyHandler = useCallback(async () => {
+	const updateCarHandler = useCallback(async () => {
 		try {
 			// @ts-ignore
-			insertPropertyData._id = getPropertyData?.getProperty?._id;
-			const result = await updateProperty({
+			insertCarData._id = getCarData?.getCar?._id;
+			const result = await updateCar({
 				variables: {
-					input: insertPropertyData,
+					input: insertCarData,
 				},
 			});
 
-			await sweetMixinSuccessAlert('This property has been updated sucessfully');
+			await sweetMixinSuccessAlert('This car has been updated sucessfully');
 			await router.push({
 				pathname: '/my-page',
 				query: {
-					category: 'myProperties',
+					category: 'myCars',
 				},
 			});
 		} catch (err: any) {
 			sweetErrorHandling(err).then();
 		}
-	}, [insertPropertyData]);
+	}, [insertCarData]);
 
 	if (user?.memberType !== 'AGENT') {
 		router.back();
 	}
 
-	console.log('+insertPropertyData', insertPropertyData);
 
 	if (device === 'mobile') {
 		return <div>ADD NEW PROPERTY MOBILE PAGE</div>;
@@ -198,9 +292,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									type="text"
 									className="description-input"
 									placeholder={'Model'}
-									value={insertPropertyData.propertyTitle}
+									value={insertCarData?.carTitle}
 									onChange={({ target: { value } }) =>
-										setInsertPropertyData({ ...insertPropertyData, propertyTitle: value })
+										setInsertCarData({ ...insertCarData, carTitle: value })
 									}
 								/>
 							</Stack>
@@ -209,37 +303,43 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Year</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Price'}
-										value={insertPropertyData.propertyPrice}
+										placeholder={'Year'}
+										value={insertCarData?.carYear}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyPrice: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carYear: parseInt(value) })
 										}
+										min={1886}
+										max={new Date().getFullYear()}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Mileage</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Price'}
-										value={insertPropertyData.propertyPrice}
+										placeholder={'Mileage'}
+										value={insertCarData?.carMileage}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyPrice: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carMileage: parseInt(value) })
 										}
+										min={0}
+										max={1000000}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Price</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
 										placeholder={'Price'}
-										value={insertPropertyData.propertyPrice}
+										value={insertCarData?.carPrice}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyPrice: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carPrice: parseInt(value) })
 										}
+										min={500}
+										max={1000000000}
 									/>
 								</Stack>
 							</Stack>
@@ -248,22 +348,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Condition</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carType || 'select'}
+										value={insertCarData?.carType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carType: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carType?.length > 0 &&
+												carType?.map((type: any) => (
+													<option value={`${type}`} key={type}>
+														{type}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -272,22 +373,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Made In</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carMadeIn || 'select'}
+										value={insertCarData?.carMadeIn || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carMadeIn: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carMadeIn?.length > 0 &&
+												carMadeIn?.map((madeIn: any) => (
+													<option value={`${madeIn}`} key={madeIn}>
+														{madeIn}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -296,22 +398,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Brand</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carBrand || 'select'}
+										value={insertCarData?.carBrand || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carBrand: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carBrand?.length > 0 &&
+												carBrand.map((location: any) => (
+													<option value={`${location}`} key={location}>
+														{location}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -323,22 +426,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Group</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carGroup || 'select'}
+										value={insertCarData?.carGroup || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carGroup: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carGroup.length > 0 &&
+												carGroup?.map((group: any) => (
+													<option value={`${group}`} key={group}>
+														{group}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -347,22 +451,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Body</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carBody || 'select'}
+										value={insertCarData?.carBody || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carBody: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carBody?.length > 0 &&
+												carBody?.map((body: any) => (
+													<option value={`${body}`} key={body}>
+														{body}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -371,22 +476,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Fuel</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carFuelType || 'select'}
+										value={insertCarData?.carFuelType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carFuelType: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carFuelType?.length > 0 &&
+												carFuelType?.map((fuel: any) => (
+													<option value={`${fuel}`} key={fuel}>
+														{fuel}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -398,22 +504,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Color</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carColor || 'select'}
+										value={insertCarData?.carColor || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carColor: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carColor?.length > 0 &&
+												carColor?.map((color: any) => (
+													<option value={`${color}`} key={color}>
+														{color}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -422,22 +529,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Drive Type</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carDriveType || 'select'}
+										value={insertCarData?.carDriveType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertCarData({ ...insertCarData, carDriveType: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carDriveType?.length > 0 &&
+												carDriveType?.map((drive: any) => (
+													<option value={`${drive}`} key={drive}>
+														{drive}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -446,22 +554,23 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Transmission</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertPropertyData.propertyLocation || 'select'}
-										value={insertPropertyData.propertyLocation || 'select'}
+										defaultValue={insertCarData?.carTransmission || 'select'}
+										value={insertCarData?.carTransmission || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertPropertyData, propertyLocation: value })
+											setInsertPropertyData({ ...insertCarData, carTransmission: value })
 										}
 									>
 										<>
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{propertyLocation.map((location: any) => (
-												<option value={`${location}`} key={location}>
-													{location}
-												</option>
-											))}
+											{carTransmission?.length > 0 &&
+												carTransmission?.map((transmission: any) => (
+													<option value={`${transmission}`} key={transmission}>
+														{transmission}
+													</option>
+												))}
 										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
@@ -473,10 +582,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Barter</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyBarter ? 'yes' : 'no'}
-										defaultValue={insertPropertyData.propertyBarter ? 'yes' : 'no'}
+										value={insertCarData?.carBarter ? 'yes' : 'no'}
+										defaultValue={insertCarData?.carBarter ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyBarter: value === 'yes' })
+											setInsertCarData({ ...insertCarData, carBarter: value === 'yes' })
 										}
 									>
 										<option disabled={true} selected={true}>
@@ -491,10 +600,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Rent</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyRent ? 'yes' : 'no'}
-										defaultValue={insertPropertyData.propertyRent ? 'yes' : 'no'}
+										value={insertCarData?.carRent ? 'yes' : 'no'}
+										defaultValue={insertCarData?.carRent ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyRent: value === 'yes' })
+											setInsertCarData({ ...insertCarData, carRent: value === 'yes' })
 										}
 									>
 										<option disabled={true} selected={true}>
@@ -510,10 +619,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Tuning</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyRent ? 'yes' : 'no'}
-										defaultValue={insertPropertyData.propertyRent ? 'yes' : 'no'}
+										value={insertCarData?.carTuning ? 'yes' : 'no'}
+										defaultValue={insertCarData?.carTuning ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyRent: value === 'yes' })
+											setInsertCarData({ ...insertCarData, carTuning: value === 'yes' })
 										}
 									>
 										<option disabled={true} selected={true}>
@@ -525,56 +634,42 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 							</Stack>
-							<Stack className="config-row">
-								<Stack className="price-year-after-price">
-									<Typography className="title">Tuning Type</Typography>
-									<select
-										className={'select-description'}
-										value={insertPropertyData.propertyBarter ? 'yes' : 'no'}
-										defaultValue={insertPropertyData.propertyBarter ? 'yes' : 'no'}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyBarter: value === 'yes' })
-										}
-									>
-										<option disabled={true} selected={true}>
-											Select
-										</option>
-										<option value={'yes'}>Yes</option>
-										<option value={'no'}>No</option>
-									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
-								</Stack>
-							</Stack>
-
 							<Stack className="config-row">
 								<Stack className="price-year-after-price">
 									<Typography className="title">Location</Typography>
 									<select
 										className={'select-description'}
-										value={insertPropertyData.propertyRooms || 'select'}
-										defaultValue={insertPropertyData.propertyRooms || 'select'}
+										defaultValue={insertCarData?.carLocation || 'select'}
+										value={insertCarData?.carLocation || 'select'}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyRooms: parseInt(value) })
+											// @ts-ignore
+											setInsertPropertyData({ ...insertCarData, carLocation: value })
 										}
 									>
-										<option disabled={true} selected={true} value={'select'}>
-											Select
-										</option>
-										{[1, 2, 3, 4, 5].map((room: number) => (
-											<option value={`${room}`}>{room}</option>
-										))}
+										<>
+											<option selected={true} disabled={true} value={'select'}>
+												Select
+											</option>
+											{carLocation?.length > 0 &&
+												carLocation?.map((location: any) => (
+													<option value={`${location}`} key={location}>
+														{location}
+													</option>
+												))}
+										</>
 									</select>
 									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
+
 								<Stack className="price-year-after-price">
 									<Typography className="title">Address</Typography>
 									<input
 										type="text"
 										className="description-input"
 										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										value={insertCarData?.carAddress}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carAddress: value })
 										}
 									/>
 								</Stack>
@@ -585,9 +680,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									name=""
 									id=""
 									className="description-text"
-									value={insertPropertyData.propertyDesc}
+									value={insertCarData?.carDesc}
 									onChange={({ target: { value } }) =>
-										setInsertPropertyData({ ...insertPropertyData, propertyDesc: value })
+										setInsertCarData({ ...insertCarData, carDesc: value })
 									}
 								></textarea>
 							</Stack>
@@ -598,46 +693,47 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Engine Size'}
+										value={insertCarData?.carEngineSize}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carEngineSize: value })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Full Feul</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Full Fuel'}
+										value={insertCarData?.carFullFuel}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carFullFuel: parseInt(value) })
+
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">MpgCity</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Mpg City'}
+										value={insertCarData?.carMpgCity}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carMpgCity: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">MpgHw</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Mpg Hw'}
+										value={insertCarData?.carMpgHw}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carMpgHw: parseInt(value) })
 										}
 									/>
 								</Stack>
@@ -646,48 +742,48 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Doors</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Doors'}
+										value={insertCarData?.carDoor}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carDoor: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Cylinders</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Cylinders'}
+										value={insertCarData?.carCylinders}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carCylinders: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Max Speed</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Max Speed'}
+										value={insertCarData?.carMaxSpeed}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carMaxSpeed: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
-									<Typography className="title">Hundred Spped</Typography>
+									<Typography className="title">Hundred Speed</Typography>
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Hundred Speed'}
+										value={insertCarData?.carHundredSpeed}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carHundredSpeed: value })
 										}
 									/>
 								</Stack>
@@ -697,12 +793,12 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Horse Power</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Horse Power'}
+										value={insertCarData?.carHorsePower}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carHorsePower: parseInt(value) })
 										}
 									/>
 								</Stack>
@@ -711,10 +807,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Torque'}
+										value={insertCarData?.carTorque}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carTorque: value })
 										}
 									/>
 								</Stack>
@@ -723,10 +819,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Wheel Base'}
+										value={insertCarData?.carWheelBase}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carWheelBase: value })
 										}
 									/>
 								</Stack>
@@ -735,10 +831,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Tire Size'}
+										value={insertCarData?.carTireSize}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carTireSize: value })
 										}
 									/>
 								</Stack>
@@ -750,10 +846,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Length'}
+										value={insertCarData?.carLength}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carLength: value })
 										}
 									/>
 								</Stack>
@@ -762,10 +858,10 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Width'}
+										value={insertCarData?.carWidth}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carWidth: value })
 										}
 									/>
 								</Stack>
@@ -774,22 +870,22 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="text"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Height'}
+										value={insertCarData?.carHeigth}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carHeigth: value })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Weigth</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Weigth'}
+										value={insertCarData?.carWeigth}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carWeigth: parseInt(value) })
 										}
 									/>
 								</Stack>
@@ -798,48 +894,48 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Load Weight</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Load Weight'}
+										value={insertCarData?.carLoadWeight}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carLoadWeight: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Seats Up</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Seats Up'}
+										value={insertCarData?.carSeatsUp}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carSeatsUp: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Car Crush</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Crushes'}
+										value={insertCarData?.carCrush}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carCrush: parseInt(value) })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Repair</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
+										placeholder={'Repairs'}
+										value={insertCarData?.carRepair}
 										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+											setInsertCarData({ ...insertCarData, carRepair: parseInt(value) })
 										}
 									/>
 								</Stack>
@@ -851,10 +947,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carAutoBrake}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carAutoBrake: checked })
 										}
 									/>
 									<Typography className="title">Auto Brake</Typography>
@@ -863,10 +958,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carCruiseControl}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carCruiseControl: checked })
 										}
 									/>
 									<Typography className="title">Cruise Control</Typography>
@@ -875,10 +969,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carESC}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carESC: checked })
 										}
 									/>
 									<Typography className="title">ESC System</Typography>
@@ -887,10 +980,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carAutonomuosDrive}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carAutonomuosDrive: checked })
 										}
 									/>
 									<Typography className="title">Auto Drive</Typography>
@@ -900,10 +992,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carExteriorLight}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carExteriorLight: checked })
 										}
 									/>
 									<Typography className="title">Exterior Light</Typography>
@@ -913,10 +1004,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carPanoramicSunroof}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carPanoramicSunroof: checked })
 										}
 									/>
 									<Typography className="title">Panoramic Sunroof</Typography>
@@ -927,10 +1017,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carHeatedSeats}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carHeatedSeats: checked })
 										}
 									/>
 									<Typography className="title">Hot Seats</Typography>
@@ -939,10 +1028,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carCooledSeats}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carCooledSeats: checked })
 										}
 									/>
 									<Typography className="title">Cool Seats</Typography>
@@ -951,10 +1039,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carTouchscreenDisplay}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carTouchscreenDisplay: checked })
 										}
 									/>
 									<Typography className="title">Display</Typography>
@@ -963,10 +1050,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carAutoHeadLight}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carAutoHeadLight: checked })
 										}
 									/>
 									<Typography className="title">Auto Head Light</Typography>
@@ -976,10 +1062,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carStarStop}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carStarStop: checked })
 										}
 									/>
 									<Typography className="title">Star Stop</Typography>
@@ -989,10 +1074,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carNoiseCancellation}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carNoiseCancellation: checked })
 										}
 									/>
 									<Typography className="title">Noise Cancellation</Typography>
@@ -1003,10 +1087,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRemoteKeyless}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRemoteKeyless: checked })
 										}
 									/>
 									<Typography className="title">Remote Keyless</Typography>
@@ -1015,10 +1098,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carLaneDW}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carLaneDW: checked })
 										}
 									/>
 									<Typography className="title">Lane DW system</Typography>
@@ -1027,10 +1109,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carBlindSpotMonitoring}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carBlindSpotMonitoring: checked })
 										}
 									/>
 									<Typography className="title">BSM System</Typography>
@@ -1039,10 +1120,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRearCrossTrafficAlert}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRearCrossTrafficAlert: checked })
 										}
 									/>
 									<Typography className="title">RCTA System</Typography>
@@ -1052,10 +1132,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carApplePlay}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carApplePlay: checked })
 										}
 									/>
 									<Typography className="title">Apple Play</Typography>
@@ -1065,10 +1144,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carAndroidAuto}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carAndroidAuto: checked })
 										}
 									/>
 									<Typography className="title">Android Auto</Typography>
@@ -1079,10 +1157,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carVoiceControl}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carVoiceControl: checked })
 										}
 									/>
 									<Typography className="title">Voice Control</Typography>
@@ -1091,10 +1168,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carBluetoothConnectivity}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carBluetoothConnectivity: checked })
 										}
 									/>
 									<Typography className="title">Bluetooth</Typography>
@@ -1103,10 +1179,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carWirelessCharging}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carWirelessCharging: checked })
 										}
 									/>
 									<Typography className="title">Wireless Charging</Typography>
@@ -1115,10 +1190,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carParkingAssist}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carParkingAssist: checked })
 										}
 									/>
 									<Typography className="title">Parking Assist</Typography>
@@ -1128,10 +1202,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carSurroundViewCamera}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carSurroundViewCamera: checked })
 										}
 									/>
 									<Typography className="title">360 Camera</Typography>
@@ -1141,10 +1214,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carFrontSensors}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carFrontSensors: checked })
 										}
 									/>
 									<Typography className="title">Front Sensors</Typography>
@@ -1155,10 +1227,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRearSensors}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRearSensors: checked })
 										}
 									/>
 									<Typography className="title">Rear Sensors</Typography>
@@ -1167,10 +1238,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carFrontRecordCamera}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carFrontRecordCamera: checked })
 										}
 									/>
 									<Typography className="title">Front Recording</Typography>
@@ -1179,10 +1249,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRearRecordCamera}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRearRecordCamera: checked })
 										}
 									/>
 									<Typography className="title">Rear Recording</Typography>
@@ -1191,10 +1260,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carHeadsUpDisplay}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carHeadsUpDisplay: checked })
 										}
 									/>
 									<Typography className="title">HeadsUp Display</Typography>
@@ -1204,10 +1272,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carClimateControl}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carClimateControl: checked })
 										}
 									/>
 									<Typography className="title">Climate Control</Typography>
@@ -1217,10 +1284,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carAdjustableSeats}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carAdjustableSeats: checked })
 										}
 									/>
 									<Typography className="title">Adjustable Seats</Typography>
@@ -1231,10 +1297,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carMemorySeats}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carMemorySeats: checked })
 										}
 									/>
 									<Typography className="title">Memory Seats</Typography>
@@ -1243,10 +1308,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carPowerTrain}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carPowerTrain: checked })
 										}
 									/>
 									<Typography className="title">Power Train</Typography>
@@ -1255,10 +1319,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRegenerativeBraking}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRegenerativeBraking: checked })
 										}
 									/>
 									<Typography className="title">Regenerative Brake</Typography>
@@ -1267,10 +1330,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carTractionControl}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carTractionControl: checked })
 										}
 									/>
 									<Typography className="title">Traction Control</Typography>
@@ -1280,10 +1342,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carStabilityControl}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carStabilityControl: checked })
 										}
 									/>
 									<Typography className="title">Stability Control</Typography>
@@ -1293,10 +1354,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carHillStartAssist}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carHillStartAssist: checked })
 										}
 									/>
 									<Typography className="title">Hill Start Assist</Typography>
@@ -1307,10 +1367,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carTirePressureSystem}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carTirePressureSystem: checked })
 										}
 									/>
 									<Typography className="title">Tire Pressure System</Typography>
@@ -1319,10 +1378,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carPushButton}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carPushButton: checked })
 										}
 									/>
 									<Typography className="title">Push Button</Typography>
@@ -1334,10 +1392,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carFrontBumper}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carFrontBumper: checked })
 										}
 									/>
 									<Typography className="title">Front Bumper</Typography>
@@ -1346,10 +1403,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carBackBumper}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carBackBumper: checked })
 										}
 									/>
 									<Typography className="title">Back Bumper</Typography>
@@ -1358,10 +1414,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carBonnet}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carBonnet: checked })
 										}
 									/>
 									<Typography className="title">Bonnet</Typography>
@@ -1370,10 +1425,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carTailgate}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carTailgate: checked })
 										}
 									/>
 									<Typography className="title">Tailgate</Typography>
@@ -1383,10 +1437,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRoof}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRoof: checked })
 										}
 									/>
 									<Typography className="title">Roof</Typography>
@@ -1397,10 +1450,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRightFrontWing}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRightFrontWing: checked })
 										}
 									/>
 									<Typography className="title">Right Front Wing</Typography>
@@ -1409,10 +1461,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carLeftFrontWing}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carLeftFrontWing: checked })
 										}
 									/>
 									<Typography className="title">Left Front Wing</Typography>
@@ -1421,10 +1472,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRightBackWing}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRightBackWing: checked })
 										}
 									/>
 									<Typography className="title">Right Back Wing</Typography>
@@ -1433,10 +1483,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carLeftBackWing}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carLeftBackWing: checked })
 										}
 									/>
 									<Typography className="title">Left Back Wing</Typography>
@@ -1447,10 +1496,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRightFrontDoor}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRightFrontDoor: checked })
 										}
 									/>
 									<Typography className="title">Right Front Door</Typography>
@@ -1459,10 +1507,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carLeftFrontDoor}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carLeftFrontDoor: checked })
 										}
 									/>
 									<Typography className="title">Left Front Door</Typography>
@@ -1471,10 +1518,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carRightBackDoor}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carRightBackDoor: checked })
 										}
 									/>
 									<Typography className="title">Right Back Door</Typography>
@@ -1483,10 +1529,9 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										placeholder={'Address'}
-										value={insertPropertyData.propertyAddress}
-										onChange={({ target: { value } }) =>
-											setInsertPropertyData({ ...insertPropertyData, propertyAddress: value })
+										checked={!!insertCarData?.carLeftBackDoor}
+										onChange={({ target: { checked } }) =>
+											setInsertCarData({ ...insertCarData, carLeftBackDoor: checked })
 										}
 									/>
 									<Typography className="title">Left Back Door</Typography>
@@ -1574,7 +1619,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								</Button>
 							</Stack>
 							<Stack className="gallery-box">
-								{insertPropertyData?.propertyImages.map((image: string) => {
+								{insertCarData?.carImages?.map((image: string) => {
 									const imagePath: string = `${REACT_APP_API_URL}/${image}`;
 									return (
 										<Stack className="image-box">
@@ -1663,7 +1708,7 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 								</Button>
 							</Stack>
 							<Stack className="gallery-box">
-								{insertPropertyData?.propertyImages.map((image: string) => {
+								{insertCarData?.carImages?.map((image: string) => {
 									const imagePath: string = `${REACT_APP_API_URL}/${image}`;
 									return (
 										<Stack className="image-box">
@@ -1675,12 +1720,12 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 						</Stack>
 
 						<Stack className="buttons-row">
-							{router.query.propertyId ? (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={updatePropertyHandler}>
+							{router?.query?.carId ? (
+								<Button className="next-button" disabled={doDisabledCheck()} onClick={updateCarHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							) : (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={insertPropertyHandler}>
+								<Button className="next-button" disabled={doDisabledCheck()} onClick={insertCarHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							)}
@@ -1692,21 +1737,25 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 	}
 };
 
-AddProperty.defaultProps = {
+AddCar.defaultProps = {
 	initialValues: {
-		propertyTitle: '',
-		propertyPrice: 0,
-		propertyType: '',
-		propertyLocation: '',
-		propertyAddress: '',
-		propertyBarter: false,
-		propertyRent: false,
-		propertyRooms: 0,
-		propertyBeds: 0,
-		propertySquare: 0,
-		propertyDesc: '',
-		propertyImages: [],
+		carTitle: '',
+		carPrice: 0,
+		carType: '',
+		carLocation: '',
+		carAddress: '',
+		carBarter: false,
+		carRent: false,
+		carMileage: 0,
+		carYear: 0,
+		carMadeIn: '',
+		carBrand: '',
+		carTransmission: '',
+		carDriveType: '',
+		carFuelType: '',
+		carDesc: '',
+		carImages: [],
 	},
 };
 
-export default AddProperty;
+export default AddCar;

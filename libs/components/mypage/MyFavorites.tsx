@@ -9,7 +9,7 @@ import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
 import { GET_FAVORITES } from '../../../apollo/user/query';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Messages } from '../../config';
-import TopPropertyCard from '../homepage/TopPropertyCard';
+import TopPropertyCard from '../homepage/FindingCarCard';
 
 const MyFavorites: NextPage = () => {
 	const device = useDeviceDetect();

@@ -107,8 +107,6 @@ export interface Car {
     carComments: number;
     carRank: number;
     memberId: string;
-    dealerId?: string;
-    carCreatedBy?: string;
     soldAt?: Date;
     deletedAt?: Date;
     createdAt: Date;
