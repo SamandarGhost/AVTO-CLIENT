@@ -10,7 +10,7 @@ export interface Member {
     titleNick: string;
     password?: string;
     fullName?: string;
-    image: string;
+    image?: string;
     images?: string[];
     location?: Location;
     address?: string;
