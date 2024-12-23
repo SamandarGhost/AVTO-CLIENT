@@ -11,9 +11,8 @@ export interface Comment {
 	memberId: string;
 	createdAt: Date;
 	updatedAt: Date;
-	/** from aggregation **/
 	meLiked?: MeLiked[];
-	memberData?: Member;
+	creatorData?: Member;
 }
 
 export interface Comments {

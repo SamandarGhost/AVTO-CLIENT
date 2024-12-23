@@ -13,7 +13,6 @@ export interface Follower {
 	followerId: string;
 	createdAt: Date;
 	updatedAt: Date;
-	/** from aggregation **/
 	meLiked?: MeLiked[];
 	meFollowed?: MeFollowed[];
 	followerData?: Member;
@@ -30,7 +29,6 @@ export interface Following {
 	followerId: string;
 	createdAt: Date;
 	updatedAt: Date;
-	/** from aggregation **/
 	meLiked?: MeLiked[];
 	meFollowed?: MeFollowed[];
 	followingData?: Member;
