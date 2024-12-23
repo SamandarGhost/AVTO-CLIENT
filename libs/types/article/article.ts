@@ -1,12 +1,12 @@
-import { BoardArticleCategory, BoardArticleStatus } from '../../enums/board-article.enum';
+import { ArticleCategory, ArticleStatus } from '../../enums/article.enum';
 import { Dealer } from '../dealer/dealer';
 import { Member } from '../member/member';
 import { MeLiked, TotalCounter } from '../property/property';
 
-export interface BoardArticle {
+export interface Article {
 	_id: string;
-	articleCategory: BoardArticleCategory;
-	articleStatus: BoardArticleStatus;
+	articleCategory: ArticleCategory;
+	articleStatus: ArticleStatus;
 	articleTitle: string;
 	articleContent: string;
 	articleImage: string;
@@ -16,12 +16,11 @@ export interface BoardArticle {
 	memberId: string;
 	createdAt: Date;
 	updatedAt: Date;
-
 	creatorData?: Member | Dealer;
 	meLiked?: MeLiked[];
 }
 
-export interface BoardArticles {
-	list: BoardArticle[];
+export interface Articles {
+	list: Article[];
 	metaCounter: TotalCounter[];
 }

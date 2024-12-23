@@ -3,11 +3,11 @@ import Link from 'next/link';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Stack, Typography } from '@mui/material';
 import CommunityCard from './CommunityCard';
-import { BoardArticle } from '../../types/board-article/board-article';
+import { BoardArticle } from '../../types/article/article';
 import { useQuery } from '@apollo/client';
 import { GET_BOARD_ARTICLES } from '../../../apollo/user/query';
 import { T } from '../../types/common';
-import { BoardArticleCategory } from '../../enums/board-article.enum';
+import { BoardArticleCategory } from '../../enums/article.enum';
 
 const CommunityBoards = () => {
 	const device = useDeviceDetect();

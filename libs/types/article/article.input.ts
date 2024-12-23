@@ -1,8 +1,8 @@
-import { BoardArticleCategory, BoardArticleStatus } from '../../enums/board-article.enum';
+import { ArticleCategory, ArticleStatus } from '../../enums/article.enum';
 import { Direction } from '../../enums/common.enum';
 
-export interface BoardArticleInput {
-	articleCategory: BoardArticleCategory;
+export interface ArticleInput {
+	articleCategory: ArticleCategory;
 	articleTitle: string;
 	articleContent: string;
 	articleImage: string;
@@ -10,7 +10,7 @@ export interface BoardArticleInput {
 }
 
 interface BAISearch {
-	articleCategory: BoardArticleCategory;
+	articleCategory: ArticleCategory;
 	text?: string;
 }
 
@@ -22,15 +22,15 @@ export interface BoardArticlesInquiry {
 	search: BAISearch;
 }
 
-interface ABAISearch {
-	articleStatus?: BoardArticleStatus;
-	articleCategory?: BoardArticleCategory;
+interface AAISearch {
+	articleStatus?: ArticleStatus;
+	articleCategory?: ArticleCategory;
 }
 
-export interface AllBoardArticlesInquiry {
+export interface AllArticlesInquiry {
 	page: number;
 	limit: number;
 	sort?: string;
 	direction?: Direction;
-	search: ABAISearch;
+	search: AAISearch;
 }

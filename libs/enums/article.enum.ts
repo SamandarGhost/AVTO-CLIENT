@@ -1,4 +1,4 @@
-export enum BoardArticleCategory {
+export enum ArticleCategory {
 	FREE = 'FREE',
 	RECOMMEND = 'RECOMMEND',
 	NEWS = 'NEWS',
@@ -8,7 +8,7 @@ export enum BoardArticleCategory {
 	EVENT = 'EVENT',
 }
 
-export enum BoardArticleStatus {
+export enum ArticleStatus {
 	ACTIVE = 'ACTIVE',
 	DELETE = 'DELETE',
 }
