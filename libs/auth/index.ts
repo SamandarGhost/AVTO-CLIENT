@@ -24,9 +24,7 @@ export const logIn = async (nick: string, password: string): Promise<void> => {
 			updateUserInfo(jwtToken);
 		}
 	} catch (err) {
-		console.warn('login err', err);
 		logOut();
-		// throw new Error('Login Err');
 	}
 };
 
@@ -46,12 +44,10 @@ const requestJwtToken = async ({
 			fetchPolicy: 'network-only',
 		});
 
-		console.log('---------- login ----------');
 		const { accessToken } = result?.data?.login;
 
 		return { jwtToken: accessToken };
 	} catch (err: any) {
-		console.log('request token err', err.graphQLErrors);
 		switch (err.graphQLErrors[0].message) {
 			case 'Definer: login and password do not match':
 				await sweetMixinErrorAlert('Please check your password again');
@@ -73,9 +69,7 @@ export const signUp = async (nick: string, password: string, phone: string, type
 			updateUserInfo(jwtToken);
 		}
 	} catch (err) {
-		console.warn('login err', err);
 		logOut();
-		// throw new Error('Login Err');
 	}
 };
 
@@ -101,12 +95,10 @@ const requestSignUpJwtToken = async ({
 			fetchPolicy: 'network-only',
 		});
 
-		console.log('---------- login ----------');
 		const { accessToken } = result?.data?.signup;
 
 		return { jwtToken: accessToken };
 	} catch (err: any) {
-		console.log('request token err', err.graphQLErrors);
 		switch (err.graphQLErrors[0].message) {
 			case 'Definer: login and password do not match':
 				await sweetMixinErrorAlert('Please check your password again');
@@ -130,26 +122,87 @@ export const updateUserInfo = (jwtToken: any) => {
 	const claims = decodeJWT<CustomJwtPayload>(jwtToken);
 	userVar({
 		_id: claims._id ?? '',
-		memberType: claims.memberType ?? '',
-		memberStatus: claims.memberStatus ?? '',
-		memberAuthType: claims.memberAuthType,
-		memberPhone: claims.memberPhone ?? '',
-		memberNick: claims.memberNick ?? '',
-		memberFullName: claims.memberFullName ?? '',
-		memberImage:
-			claims.memberImage === null || claims.memberImage === undefined
+		type: claims.type ?? '',
+		status: claims.status ?? '',
+		authType: claims.authType ?? '',
+		titleNick: claims.titleNick ?? '',
+		password: claims.password ?? '',
+		fullName: claims.fullName ?? '',
+		image:
+			claims.image === null || claims.image === undefined
 				? '/img/profile/defaultUser.svg'
-				: `${claims.memberImage}`,
-		memberAddress: claims.memberAddress ?? '',
-		memberDesc: claims.memberDesc ?? '',
-		memberProperties: claims.memberProperties,
-		memberRank: claims.memberRank,
-		memberArticles: claims.memberArticles,
-		memberPoints: claims.memberPoints,
-		memberLikes: claims.memberLikes,
-		memberViews: claims.memberViews,
-		memberWarnings: claims.memberWarnings,
-		memberBlocks: claims.memberBlocks,
+				: `${claims.image}`,
+		images: claims.images ?? [],
+		location: claims.location ?? '',
+		address: claims.address ?? '',
+		shortDesc: claims.shortDesc ?? '',
+		longDesc: claims.longDesc ?? '',
+		phone: claims.phone ?? '',
+		phone2: claims.phone2 ?? '',
+		email: claims.email ?? '',
+		kakaoTalk: claims.kakaoTalk ?? '',
+		youtube: claims.youtube ?? '',
+		instagram: claims.instagram ?? '',
+		facebook: claims.facebook ?? '',
+		tikTok: claims.tikTok ?? '',
+		naverBlog: claims.naverBlog ?? '',
+		xcom: claims.xcom ?? '',
+		followers: claims.followers ?? 0,
+		followings: claims.followings ?? 0,
+		likes: claims.likes ?? 0,
+		views: claims.views ?? 0,
+		comments: claims.comments ?? 0,
+		warnings: claims.warnings ?? 0,
+		articles: claims.articles ?? 0,
+		blocks: claims.blocks ?? 0,
+		memberCars: claims.memberCars ?? 0,
+		usedCars: claims.usedCars ?? 0,
+		newCars: claims.newCars ?? 0,
+		rank: claims.rank ?? 0,
+		points: claims.points ?? 0,
+		sellerProducts: claims.sellerProducts ?? 0,
+		dealerBrand: claims.dealerBrand ?? '',
+		dealerFinancing: claims.dealerFinancing ?? false,
+		dealerCarService: claims.dealerCarService ?? false,
+		dealerTradeIn: claims.dealerTradeIn ?? false,
+		dealerCustomization: claims.dealerCustomization ?? false,
+		dealerWarranties: claims.dealerWarranties ?? false,
+		dealerParts: claims.dealerParts ?? false,
+		dealerAccessories: claims.dealerAccessories ?? false,
+		dealerCarDetailing: claims.dealerCarDetailing ?? false,
+		dealerCarWash: claims.dealerCarWash ?? false,
+		dealerCarTestDrive: claims.dealerCarTestDrive ?? false,
+		dealerCarDelivery: claims.dealerCarDelivery ?? false,
+		dealerPlusService: claims.dealerPlusService ?? '',
+		carServiceType: claims.carServiceType ?? '',
+		carOilChange: claims.carOilChange ?? false,
+		carAlignment: claims.carAlignment ?? false,
+		carTireChange: claims.carTireChange ?? false,
+		carBrakeCheck: claims.carBrakeCheck ?? false,
+		carBatteryCheck: claims.carBatteryCheck ?? false,
+		carTireBalance: claims.carTireBalance ?? false,
+		carSuspension: claims.carSuspension ?? false,
+		carAirCondition: claims.carAirCondition ?? false,
+		carTransmissionCheck: claims.carTransmissionCheck ?? false,
+		carEngineDiagnostic: claims.carEngineDiagnostic ?? false,
+		carExhaust: claims.carExhaust ?? false,
+		carDetailing: claims.carDetailing ?? false,
+		carWindshield: claims.carWindshield ?? false,
+		carTimingBelt: claims.carTimingBelt ?? false,
+		carChainReplacement: claims.carChainReplacement ?? false,
+		comfort: claims.comfort ?? 0,
+		performance: claims.performance ?? 0,
+		exterior: claims.exterior ?? 0,
+		interior: claims.interior ?? 0,
+		reliability: claims.reliability ?? 0,
+		fast: claims.fast ?? 0,
+		openAt: claims.openAt ?? '',
+		closeAt: claims.closeAt ?? '',
+		openSunday: claims.openSunday ?? '',
+		closeSunday: claims.closeSunday ?? '',
+		openSaturday: claims.openSaturday ?? '',
+		closeSaturday: claims.closeSaturday ?? '',
+		publicHolidays: claims.publicHolidays ?? false,
 	});
 };
 
@@ -167,22 +220,83 @@ const deleteStorage = () => {
 const deleteUserInfo = () => {
 	userVar({
 		_id: '',
-		memberType: '',
-		memberStatus: '',
-		memberAuthType: '',
-		memberPhone: '',
-		memberNick: '',
-		memberFullName: '',
-		memberImage: '',
-		memberAddress: '',
-		memberDesc: '',
-		memberProperties: 0,
-		memberRank: 0,
-		memberArticles: 0,
-		memberPoints: 0,
-		memberLikes: 0,
-		memberViews: 0,
-		memberWarnings: 0,
-		memberBlocks: 0,
+		type: '',
+		status: '',
+		authType: '',
+		titleNick: '',
+		password: '',
+		fullName: '',
+		image: '',
+		images: [],
+		location: '',
+		address: '',
+		shortDesc: '',
+		longDesc: '',
+		phone: '',
+		phone2: '',
+		email: '',
+		kakaoTalk: '',
+		youtube: '',
+		instagram: '',
+		facebook: '',
+		tikTok: '',
+		naverBlog: '',
+		xcom: '',
+		followers: 0,
+		followings: 0,
+		likes: 0,
+		views: 0,
+		warnings: 0,
+		articles: 0,
+		blocks: 0,
+		comments: 0,
+		memberCars: 0,
+		usedCars: 0,
+		newCars: 0,
+		rank: 0,
+		points: 0,
+		sellerProducts: 0,
+		dealerBrand: '',
+		dealerFinancing: false,
+		dealerCarService: false,
+		dealerTradeIn: false,
+		dealerCustomization: false,
+		dealerWarranties: false,
+		dealerParts: false,
+		dealerAccessories: false,
+		dealerCarDetailing: false,
+		dealerCarWash: false,
+		dealerCarTestDrive: false,
+		dealerCarDelivery: false,
+		dealerPlusService: '',
+		carServiceType: '',
+		carOilChange: false,
+		carAlignment: false,
+		carTireChange: false,
+		carBrakeCheck: false,
+		carBatteryCheck: false,
+		carTireBalance: false,
+		carSuspension: false,
+		carAirCondition: false,
+		carTransmissionCheck: false,
+		carEngineDiagnostic: false,
+		carExhaust: false,
+		carDetailing: false,
+		carWindshield: false,
+		carTimingBelt: false,
+		carChainReplacement: false,
+		comfort: 0,
+		performance: 0,
+		exterior: 0,
+		interior: 0,
+		reliability: 0,
+		fast: 0,
+		openAt: '',
+		closeAt: '',
+		openSunday: '',
+		closeSunday: '',
+		openSaturday: '',
+		closeSaturday: '',
+		publicHolidays: false
 	});
 };

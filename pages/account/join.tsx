@@ -74,7 +74,7 @@ const Join: NextPage = () => {
 							{/* @ts-ignore */}
 							<Box className={'logo'}>
 								<img src="/img/logo/logoText.svg" alt="" />
-								<span>Nestar</span>
+								<span>WCar</span>
 							</Box>
 							<Box className={'info'}>
 								<span>{loginView ? 'login' : 'signup'}</span>
@@ -151,6 +151,43 @@ const Join: NextPage = () => {
 														/>
 													}
 													label="Agent"
+												/>
+											</FormGroup>
+											<FormGroup>
+												<FormControlLabel
+													control={
+														<Checkbox
+															size="small"
+															name={'DEALER'}
+															onChange={checkUserTypeHandler}
+															checked={input?.type == 'DEALER'}
+														/>
+													}
+													label="Dealer"
+												/>
+											</FormGroup><FormGroup>
+												<FormControlLabel
+													control={
+														<Checkbox
+															size="small"
+															name={'SERVICE'}
+															onChange={checkUserTypeHandler}
+															checked={input?.type == 'SERVICE'}
+														/>
+													}
+													label="Service"
+												/>
+											</FormGroup><FormGroup>
+												<FormControlLabel
+													control={
+														<Checkbox
+															size="small"
+															name={'SELLER'}
+															onChange={checkUserTypeHandler}
+															checked={input?.type == 'SELLER'}
+														/>
+													}
+													label="Seller"
 												/>
 											</FormGroup>
 										</div>
