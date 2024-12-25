@@ -25,7 +25,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [total, setTotal] = useState<number>(0);
-	const category: any = router.query?.category ?? 'properties';
+	const category: any = router.query?.category ?? 'cars';
 	const [followInquiry, setFollowInquiry] = useState<FollowInquiry>(initialInput);
 	const [memberFollowers, setMemberFollowers] = useState<Follower[]>([]);
 	const user = useReactiveVar(userVar);
@@ -49,8 +49,8 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 
 	/** LIFECYCLES **/
 	useEffect(() => {
-		if (router.query.memberId)
-			setFollowInquiry({ ...followInquiry, search: { followingId: router.query.memberId as string } });
+		if (router?.query?.memberId)
+			setFollowInquiry({ ...followInquiry, search: { followingId: router?.query?.memberId as string } });
 		else setFollowInquiry({ ...followInquiry, search: { followingId: user?._id } });
 	}, [router]);
 
@@ -65,7 +65,7 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR FOLLOWS MOBILE</div>;
+		return <div>WCAR FOLLOWS MOBILE</div>;
 	} else {
 		return (
 			<div id="member-follows-page">
@@ -86,12 +86,12 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 							<p>No Followers yet!</p>
 						</div>
 					)}
-					{memberFollowers.map((follower: Follower) => {
+					{memberFollowers?.map((follower: Follower) => {
 						const imagePath: string = follower?.followerData?.image
 							? `${REACT_APP_API_URL}/${follower?.followerData?.image}`
 							: '/img/profile/defaultUser.svg';
 						return (
-							<Stack className="follows-card-box" key={follower._id}>
+							<Stack className="follows-card-box" key={follower?._id}>
 								<Stack className={'info'} onClick={() => redirectToMemberPageHandler(follower?.followerData?._id)}>
 									<Stack className="image-box">
 										<img src={imagePath} alt="" />
@@ -158,12 +158,12 @@ const MemberFollowers = (props: MemberFollowsProps) => {
 						);
 					})}
 				</Stack>
-				{memberFollowers.length !== 0 && (
+				{memberFollowers?.length !== 0 && (
 					<Stack className="pagination-config">
 						<Stack className="pagination-box">
 							<Pagination
-								page={followInquiry.page}
-								count={Math.ceil(total / followInquiry.limit)}
+								page={followInquiry?.page}
+								count={Math.ceil(total / followInquiry?.limit)}
 								onChange={paginationHandler}
 								shape="rounded"
 								color="secondary"

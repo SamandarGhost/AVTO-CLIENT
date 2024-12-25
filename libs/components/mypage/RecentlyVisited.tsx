@@ -6,8 +6,6 @@ import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
 import { useQuery } from '@apollo/client';
 import { GET_VISITED } from '../../../apollo/user/query';
-import TrendPropertyCard from '../homepage/ReccomendedCarsCard';
-import PopularPropertyCard from '../homepage/PopularPropertyCard';
 import TopPropertyCard from '../homepage/FindingCarCard';
 
 const RecentlyVisited: NextPage = () => {
@@ -58,7 +56,7 @@ const RecentlyVisited: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR MY FAVORITES MOBILE</div>;
+		return <div>WCAR MY FAVORITES MOBILE</div>;
 	} else {
 		return (
 			<div id="my-favorites-page">

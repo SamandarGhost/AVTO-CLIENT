@@ -25,7 +25,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [total, setTotal] = useState<number>(0);
-	const category: any = router.query?.category ?? 'properties';
+	const category: any = router.query?.category ?? 'cars';
 	const [followInquiry, setFollowInquiry] = useState<FollowInquiry>(initialInput);
 	const [memberFollowings, setMemberFollowings] = useState<Following[]>([]);
 	const user = useReactiveVar(userVar);
@@ -50,7 +50,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	/** LIFECYCLES **/
 	useEffect(() => {
 		if (router.query.memberId)
-			setFollowInquiry({ ...followInquiry, search: { followerId: router.query.memberId as string } });
+			setFollowInquiry({ ...followInquiry, search: { followerId: router?.query?.memberId as string } });
 		else setFollowInquiry({ ...followInquiry, search: { followerId: user?._id } });
 	}, [router]);
 
@@ -65,7 +65,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR FOLLOWS MOBILE</div>;
+		return <div>WCAR FOLLOWS MOBILE</div>;
 	} else {
 		return (
 			<div id="member-follows-page">
@@ -86,12 +86,12 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 							<p>No Followings yet!</p>
 						</div>
 					)}
-					{memberFollowings.map((follower: Following) => {
+					{memberFollowings?.map((follower: Following) => {
 						const imagePath: string = follower?.followingData?.image
 							? `${REACT_APP_API_URL}/${follower?.followingData?.image}`
 							: '/img/profile/defaultUser.svg';
 						return (
-							<Stack className="follows-card-box" key={follower._id}>
+							<Stack className="follows-card-box" key={follower?._id}>
 								<Stack className={'info'} onClick={() => redirectToMemberPageHandler(follower?.followingData?._id)}>
 									<Stack className="image-box">
 										<img src={imagePath} alt="" />
@@ -128,7 +128,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 								</Stack>
 								{user?._id !== follower?.followingId && (
 									<Stack className="action-box">
-										{follower.meFollowed && follower.meFollowed[0]?.myFollowing ? (
+										{follower?.meFollowed && follower.meFollowed[0]?.myFollowing ? (
 											<>
 												<Typography>Following</Typography>
 												<Button
@@ -158,12 +158,12 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 						);
 					})}
 				</Stack>
-				{memberFollowings.length !== 0 && (
+				{memberFollowings?.length !== 0 && (
 					<Stack className="pagination-config">
 						<Stack className="pagination-box">
 							<Pagination
-								page={followInquiry.page}
-								count={Math.ceil(total / followInquiry.limit)}
+								page={followInquiry?.page}
+								count={Math.ceil(total / followInquiry?.limit)}
 								onChange={paginationHandler}
 								shape="rounded"
 								color="secondary"
