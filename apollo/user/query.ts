@@ -409,56 +409,178 @@ export const GET_BOARD_ARTICLE = gql`
 	}
 `;
 
-export const GET_BOARD_ARTICLES = gql`
-	query GetBoardArticles($input: BoardArticlesInquiry!) {
-		getBoardArticles(input: $input) {
-			list {
-				_id
-				articleCategory
-				articleStatus
-				articleTitle
-				articleContent
-				articleImage
-				articleViews
-				articleLikes
-				articleComments
-				memberId
-				createdAt
-				updatedAt
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-				memberData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberWarnings
-					memberBlocks
-					memberProperties
-					memberRank
-					memberPoints
-					memberLikes
-					memberViews
-					deletedAt
-					createdAt
-					updatedAt
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
+export const GET_ARTICLES = gql`
+query GetArticles($input: ArticlesInquiry!) {
+    getArticles(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            articleCategory
+            articleStatus
+            articleTitle
+            articleContent
+            articleImage
+            articleViews
+            articleLikes
+            articleComments
+            memberId
+            createdAt
+            updatedAt
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+            creatorData {
+                _id
+                type
+                status
+                authType
+                titleNick
+                fullName
+                image
+                images
+                location
+                address
+                shortDesc
+                longDesc
+                phone
+                phone2
+                email
+                kakaoTalk
+                youtube
+                instagram
+                facebook
+                tikTok
+                naverBlog
+                xcom
+                followers
+                followings
+                likes
+                views
+                comments
+                warnings
+                articles
+                blocks
+                memberCars
+                usedCars
+                newCars
+                rank
+                points
+                sellerProducts
+                dealerBrand
+                dealerFinancing
+                dealerCarService
+                dealerTradeIn
+                dealerCustomization
+                dealerWarranties
+                dealerParts
+                dealerAccessories
+                dealerCarDetailing
+                dealerCarWash
+                dealerCarTestDrive
+                dealerCarDelivery
+                dealerPlusService
+                carServiceType
+                carOilChange
+                carAlignment
+                carTireChange
+                carBrakeCheck
+                carBatteryCheck
+                carTireBalance
+                carSuspension
+                carAirCondition
+                carTransmissionCheck
+                carEngineDiagnostic
+                carExhaust
+                carDetailing
+                carWindshield
+                carTimingBelt
+                carChainReplacement
+                comfort
+                performance
+                exterior
+                interior
+                reliability
+                fast
+                openAt
+                closeAt
+                openSunday
+                closeSunday
+                openSaturday
+                closeSaturday
+                publicHolidays
+                deletedAt
+                createdAt
+                updatedAt
+                accessToken
+                meFollowed {
+                    followingId
+                    followerId
+                    myFollowing
+                }
+                meLiked {
+                    memberId
+                    likeRefId
+                    myFavorite
+                }
+            }
+        }
+    }
+}`
+
+// export const GET_BOARD_ARTICLES = gql`
+// 	query GetBoardArticles($input: BoardArticlesInquiry!) {
+// 		getBoardArticles(input: $input) {
+// 			list {
+// 				_id
+// 				articleCategory
+// 				articleStatus
+// 				articleTitle
+// 				articleContent
+// 				articleImage
+// 				articleViews
+// 				articleLikes
+// 				articleComments
+// 				memberId
+// 				createdAt
+// 				updatedAt
+// 				meLiked {
+// 					memberId
+// 					likeRefId
+// 					myFavorite
+// 				}
+// 				memberData {
+// 					_id
+// 					memberType
+// 					memberStatus
+// 					memberAuthType
+// 					memberPhone
+// 					memberNick
+// 					memberFullName
+// 					memberImage
+// 					memberAddress
+// 					memberDesc
+// 					memberWarnings
+// 					memberBlocks
+// 					memberProperties
+// 					memberRank
+// 					memberPoints
+// 					memberLikes
+// 					memberViews
+// 					deletedAt
+// 					createdAt
+// 					updatedAt
+// 				}
+// 			}
+// 			metaCounter {
+// 				total
+// 			}
+// 		}
+// 	}
+// `;
 
 /**************************
  *         COMMENT        *
@@ -510,109 +632,350 @@ export const GET_COMMENTS = gql`
 /**************************
  *         FOLLOW        *
  *************************/
-export const GET_MEMBER_FOLLOWERS = gql`
-	query GetMemberFollowers($input: FollowInquiry!) {
-		getMemberFollowers(input: $input) {
-			list {
-				_id
-				followingId
-				followerId
-				createdAt
-				updatedAt
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-				meFollowed {
-					followingId
-					followerId
-					myFollowing
-				}
-				followerData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberProperties
-					memberArticles
-					memberPoints
-					memberLikes
-					memberViews
-					memberComments
-					memberFollowings
-					memberFollowers
-					memberRank
-					memberWarnings
-					memberBlocks
-					deletedAt
-					createdAt
-					updatedAt
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
 
-export const GET_MEMBER_FOLLOWINGS = gql`
-	query GetMemberFollowings($input: FollowInquiry!) {
-		getMemberFollowings(input: $input) {
-			list {
-				_id
-				followingId
-				followerId
-				createdAt
-				updatedAt
-				followingData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberProperties
-					memberArticles
-					memberPoints
-					memberLikes
-					memberViews
-					memberComments
-					memberFollowings
-					memberFollowers
-					memberRank
-					memberWarnings
-					memberBlocks
-					deletedAt
-					createdAt
-					updatedAt
-					accessToken
-				}
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-				meFollowed {
-					followingId
-					followerId
-					myFollowing
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
+export const GET_FOLLOWERS = gql`
+query GetMemberFollowers($input: FollowInquiry!) {
+    getMemberFollowers(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            followingId
+            followerId
+            createdAt
+            updatedAt
+            followerData {
+                _id
+                type
+                status
+                authType
+                titleNick
+                fullName
+                image
+                images
+                location
+                address
+                shortDesc
+                longDesc
+                phone
+                phone2
+                email
+                kakaoTalk
+                youtube
+                instagram
+                facebook
+                tikTok
+                naverBlog
+                xcom
+                followers
+                followings
+                likes
+                views
+                comments
+                warnings
+                articles
+                blocks
+                memberCars
+                usedCars
+                newCars
+                rank
+                points
+                sellerProducts
+                dealerBrand
+                dealerFinancing
+                dealerCarService
+                dealerTradeIn
+                dealerCustomization
+                dealerWarranties
+                dealerParts
+                dealerAccessories
+                dealerCarDetailing
+                dealerCarWash
+                dealerCarTestDrive
+                dealerCarDelivery
+                dealerPlusService
+                carServiceType
+                carOilChange
+                carAlignment
+                carTireChange
+                carBrakeCheck
+                carBatteryCheck
+                carTireBalance
+                carSuspension
+                carAirCondition
+                carTransmissionCheck
+                carEngineDiagnostic
+                carExhaust
+                carDetailing
+                carWindshield
+                carTimingBelt
+                carChainReplacement
+                comfort
+                performance
+                exterior
+                interior
+                reliability
+                fast
+                openAt
+                closeAt
+                openSunday
+                closeSunday
+                openSaturday
+                closeSaturday
+                publicHolidays
+                deletedAt
+                createdAt
+                updatedAt
+                accessToken
+                meFollowed {
+                    followingId
+                    followerId
+                    myFollowing
+                }
+                meLiked {
+                    memberId
+                    likeRefId
+                    myFavorite
+                }
+            }
+            meFollowed {
+                followingId
+                followerId
+                myFollowing
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+        }
+    }
+}`;
+
+// export const GET_MEMBER_FOLLOWERS = gql`
+// 	query GetMemberFollowers($input: FollowInquiry!) {
+// 		getMemberFollowers(input: $input) {
+// 			list {
+// 				_id
+// 				followingId
+// 				followerId
+// 				createdAt
+// 				updatedAt
+// 				meLiked {
+// 					memberId
+// 					likeRefId
+// 					myFavorite
+// 				}
+// 				meFollowed {
+// 					followingId
+// 					followerId
+// 					myFollowing
+// 				}
+// 				followerData {
+// 					_id
+// 					memberType
+// 					memberStatus
+// 					memberAuthType
+// 					memberPhone
+// 					memberNick
+// 					memberFullName
+// 					memberImage
+// 					memberAddress
+// 					memberDesc
+// 					memberProperties
+// 					memberArticles
+// 					memberPoints
+// 					memberLikes
+// 					memberViews
+// 					memberComments
+// 					memberFollowings
+// 					memberFollowers
+// 					memberRank
+// 					memberWarnings
+// 					memberBlocks
+// 					deletedAt
+// 					createdAt
+// 					updatedAt
+// 				}
+// 			}
+// 			metaCounter {
+// 				total
+// 			}
+// 		}
+// 	}
+// `;
+
+export const GET_FOLLOWINGS = gql`
+query GetMemberFollowings($input: FollowInquiry!) {
+    getMemberFollowings(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            followingId
+            followerId
+            createdAt
+            updatedAt
+            followingData {
+                _id
+                type
+                status
+                authType
+                titleNick
+                fullName
+                image
+                images
+                location
+                address
+                shortDesc
+                longDesc
+                phone
+                phone2
+                email
+                kakaoTalk
+                youtube
+                instagram
+                facebook
+                tikTok
+                naverBlog
+                xcom
+                followers
+                followings
+                likes
+                views
+                comments
+                warnings
+                articles
+                blocks
+                memberCars
+                usedCars
+                newCars
+                rank
+                points
+                sellerProducts
+                dealerBrand
+                dealerFinancing
+                dealerCarService
+                dealerTradeIn
+                dealerCustomization
+                dealerWarranties
+                dealerParts
+                dealerAccessories
+                dealerCarDetailing
+                dealerCarWash
+                dealerCarTestDrive
+                dealerCarDelivery
+                dealerPlusService
+                carServiceType
+                carOilChange
+                carAlignment
+                carTireChange
+                carBrakeCheck
+                carBatteryCheck
+                carTireBalance
+                carSuspension
+                carAirCondition
+                carTransmissionCheck
+                carEngineDiagnostic
+                carExhaust
+                carDetailing
+                carWindshield
+                carTimingBelt
+                carChainReplacement
+                comfort
+                performance
+                exterior
+                interior
+                reliability
+                fast
+                openAt
+                closeAt
+                openSunday
+                closeSunday
+                openSaturday
+                closeSaturday
+                publicHolidays
+                deletedAt
+                createdAt
+                updatedAt
+                accessToken
+                meFollowed {
+                    followingId
+                    followerId
+                    myFollowing
+                }
+                meLiked {
+                    memberId
+                    likeRefId
+                    myFavorite
+                }
+            }
+            meFollowed {
+                followingId
+                followerId
+                myFollowing
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+        }
+    }
+}`;
+
+// export const GET_MEMBER_FOLLOWINGS = gql`
+// 	query GetMemberFollowings($input: FollowInquiry!) {
+// 		getMemberFollowings(input: $input) {
+// 			list {
+// 				_id
+// 				followingId
+// 				followerId
+// 				createdAt
+// 				updatedAt
+// 				followingData {
+// 					_id
+// 					memberType
+// 					memberStatus
+// 					memberAuthType
+// 					memberPhone
+// 					memberNick
+// 					memberFullName
+// 					memberImage
+// 					memberAddress
+// 					memberDesc
+// 					memberProperties
+// 					memberArticles
+// 					memberPoints
+// 					memberLikes
+// 					memberViews
+// 					memberComments
+// 					memberFollowings
+// 					memberFollowers
+// 					memberRank
+// 					memberWarnings
+// 					memberBlocks
+// 					deletedAt
+// 					createdAt
+// 					updatedAt
+// 					accessToken
+// 				}
+// 				meLiked {
+// 					memberId
+// 					likeRefId
+// 					myFavorite
+// 				}
+// 				meFollowed {
+// 					followingId
+// 					followerId
+// 					myFollowing
+// 				}
+// 			}
+// 			metaCounter {
+// 				total
+// 			}
+// 		}
+// 	}
+// `;

@@ -502,23 +502,41 @@ export const LIKE_TARGET_PROPERTY = gql`
  *      BOARD-ARTICLE     *
  *************************/
 
-export const CREATE_BOARD_ARTICLE = gql`
-	mutation CreateBoardArticle($input: BoardArticleInput!) {
-		createBoardArticle(input: $input) {
-			_id
-			articleCategory
-			articleStatus
-			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
-			memberId
-			createdAt
-			updatedAt
-		}
-	}
-`;
+export const CREATE_ARTICLE = gql`
+mutation CreateArticle($input: ArticleInput!) {
+    createArticle(input: $input) {
+        _id
+        articleCategory
+        articleStatus
+        articleTitle
+        articleContent
+        articleImage
+        articleViews
+        articleLikes
+        articleComments
+        memberId
+        createdAt
+        updatedAt
+    }
+}`;
+
+// export const CREATE_BOARD_ARTICLE = gql`
+// 	mutation CreateBoardArticle($input: BoardArticleInput!) {
+// 		createBoardArticle(input: $input) {
+// 			_id
+// 			articleCategory
+// 			articleStatus
+// 			articleTitle
+// 			articleContent
+// 			articleImage
+// 			articleViews
+// 			articleLikes
+// 			memberId
+// 			createdAt
+// 			updatedAt
+// 		}
+// 	}
+// `;
 
 export const UPDATE_BOARD_ARTICLE = gql`
 	mutation UpdateBoardArticle($input: BoardArticleUpdate!) {

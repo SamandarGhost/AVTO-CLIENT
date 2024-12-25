@@ -1,6 +1,6 @@
 import { AuthType, Brand, CarServiceType, Status, Type } from "../../enums/member.enum";
 
-export interface Member {
+export interface MemberUpdate {
     _id: string;
     type?: Type;
     status?: Status;

@@ -38,29 +38,29 @@ const MyMenu = () => {
 				<Stack className={'profile'}>
 					<Box component={'div'} className={'profile-img'}>
 						<img
-							src={user?.memberImage ? `${REACT_APP_API_URL}/${user?.memberImage}` : '/img/profile/defaultUser.svg'}
+							src={user?.image ? `${REACT_APP_API_URL}/${user?.image}` : '/img/profile/defaultUser.svg'}
 							alt={'member-photo'}
 						/>
 					</Box>
 					<Stack className={'user-info'}>
-						<Typography className={'user-name'}>{user?.memberNick}</Typography>
+						<Typography className={'user-name'}>{user?.titleNick}</Typography>
 						<Box component={'div'} className={'user-phone'}>
 							<PhoneOutlinedIcon className={'call'} />
-							<Typography className={'p-number'}>{user?.memberPhone}</Typography>
+							<Typography className={'p-number'}>{user?.phone}</Typography>
 						</Box>
-						{user?.memberType === 'ADMIN' ? (
+						{user?.type === 'ADMIN' ? (
 							<a href="/_admin/users" target={'_blank'}>
-								<Typography className={'view-list'}>{user?.memberType}</Typography>
+								<Typography className={'view-list'}>{user?.type}</Typography>
 							</a>
 						) : (
-							<Typography className={'view-list'}>{user?.memberType}</Typography>
+							<Typography className={'view-list'}>{user?.type}</Typography>
 						)}
 					</Stack>
 				</Stack>
 				<Stack className={'sections'}>
-					<Stack className={'section'} style={{ height: user.memberType === 'AGENT' ? '228px' : '153px' }}>
+					<Stack className={'section'} style={{ height: user.type === 'AGENT' ? '228px' : '153px' }}>
 						<List className={'sub-section'}>
-							{user.memberType === 'AGENT' && (
+							{user.type === 'AGENT' && (
 								<>
 									<ListItem className={pathname === 'addCar' ? 'focus' : ''}>
 										<Link
@@ -274,38 +274,6 @@ const MyMenu = () => {
 										<img className={'com-icon'} src={'/img/icons/profile.svg'} alt={'com-icon'} />
 										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 											Profile
-										</Typography>
-									</div>
-								</Link>
-							</ListItem>
-							<ListItem className={pathname === 'dealer' ? 'focus' : ''}>
-								<Link
-									href={{
-										pathname: '/mypage',
-										query: { category: 'dealer' },
-									}}
-									scroll={false}
-								>
-									<div className={'flex-box'}>
-										<img className={'com-icon'} src={'/img/icons/profile.svg'} alt={'com-icon'} />
-										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-											Dealer Info
-										</Typography>
-									</div>
-								</Link>
-							</ListItem>
-							<ListItem className={pathname === 'service' ? 'focus' : ''}>
-								<Link
-									href={{
-										pathname: '/mypage',
-										query: { category: 'service' },
-									}}
-									scroll={false}
-								>
-									<div className={'flex-box'}>
-										<img className={'com-icon'} src={'/img/icons/profile.svg'} alt={'com-icon'} />
-										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-											Service Info
 										</Typography>
 									</div>
 								</Link>

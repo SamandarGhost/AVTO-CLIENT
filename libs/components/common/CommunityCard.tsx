@@ -2,7 +2,6 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Stack, Typography } from '@mui/material';
-import { BoardArticle } from '../../types/article/article';
 import Moment from 'react-moment';
 import { REACT_APP_API_URL } from '../../config';
 import { useReactiveVar } from '@apollo/client';
@@ -11,28 +10,29 @@ import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Article } from '../../types/article/article';
 
 interface CommunityCardProps {
-	boardArticle: BoardArticle;
+	article: Article;
 	size?: string;
-	likeBoardArticleHandler: any;
+	likeArticleHandler: any;
 }
 
 const CommunityCard = (props: CommunityCardProps) => {
-	const { boardArticle, size = 'normal', likeBoardArticleHandler } = props;
+	const { article, size = 'normal', likeArticleHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
-	const imagePath: string = boardArticle?.articleImage
-		? `${REACT_APP_API_URL}/${boardArticle?.articleImage}`
+	const imagePath: string = article?.articleImage
+		? `${REACT_APP_API_URL}/${article?.articleImage}`
 		: '/img/community/communityImg.png';
 
 	/** HANDLERS **/
-	const chooseArticleHandler = (e: React.SyntheticEvent, boardArticle: BoardArticle) => {
+	const chooseArticleHandler = (e: React.SyntheticEvent, article: Article) => {
 		router.push(
 			{
 				pathname: '/community/detail',
-				query: { articleCategory: boardArticle?.articleCategory, id: boardArticle?._id },
+				query: { articleCategory: article?.articleCategory, id: article?._id },
 			},
 			undefined,
 			{ shallow: true },
@@ -51,7 +51,7 @@ const CommunityCard = (props: CommunityCardProps) => {
 			<Stack
 				sx={{ width: size === 'small' ? '285px' : '317px' }}
 				className="community-general-card-config"
-				onClick={(e: any) => chooseArticleHandler(e, boardArticle)}
+				onClick={(e: any) => chooseArticleHandler(e, article)}
 			>
 				<Stack className="image-box">
 					<img src={imagePath} alt="" className="card-img" />
@@ -62,39 +62,39 @@ const CommunityCard = (props: CommunityCardProps) => {
 							className="desc"
 							onClick={(e: any) => {
 								e.stopPropagation();
-								goMemberPage(boardArticle?.memberData?._id as string);
+								goMemberPage(article?.creatorData?._id as string);
 							}}
 						>
-							{boardArticle?.memberData?.memberNick}
+							{article?.creatorData?.memberNick}
 						</Typography>
-						<Typography className="title">{boardArticle?.articleTitle}</Typography>
+						<Typography className="title">{article?.articleTitle}</Typography>
 					</Stack>
 					<Stack className={'buttons'}>
 						<IconButton color={'default'}>
 							<RemoveRedEyeIcon />
 						</IconButton>
-						<Typography className="view-cnt">{boardArticle?.articleViews}</Typography>
+						<Typography className="view-cnt">{article?.articleViews}</Typography>
 						<IconButton
 							color={'default'}
 							onClick={(e: any) => {
-								likeBoardArticleHandler(e, user, boardArticle?._id);
+								likeArticleHandler(e, user, article?._id);
 							}}
 						>
-							{boardArticle?.meLiked && boardArticle?.meLiked[0]?.myFavorite ? (
+							{article?.meLiked && article?.meLiked[0]?.myFavorite ? (
 								<FavoriteIcon color={'primary'} />
 							) : (
 								<FavoriteBorderIcon />
 							)}
 						</IconButton>
-						<Typography className="view-cnt">{boardArticle?.articleLikes}</Typography>
+						<Typography className="view-cnt">{article?.articleLikes}</Typography>
 					</Stack>
 				</Stack>
 				<Stack className="date-box">
 					<Moment className="month" format={'MMMM'}>
-						{boardArticle?.createdAt}
+						{article?.createdAt}
 					</Moment>
 					<Typography className="day">
-						<Moment format={'DD'}>{boardArticle?.createdAt}</Moment>
+						<Moment format={'DD'}>{article?.createdAt}</Moment>
 					</Typography>
 				</Stack>
 			</Stack>

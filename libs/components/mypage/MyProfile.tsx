@@ -7,9 +7,9 @@ import { Messages, REACT_APP_API_URL } from '../../config';
 import { getJwtToken, updateStorage, updateUserInfo } from '../../auth';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
-import { MemberUpdate } from '../../types/member/member.update';
 import { UPDATE_MEMBER } from '../../../apollo/user/mutation';
 import { sweetErrorHandling, sweetMixinSuccessAlert } from '../../sweetAlert';
+import { MemberUpdate } from '../../types/member/member.update';
 
 const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
@@ -24,10 +24,10 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 	useEffect(() => {
 		setUpdateData({
 			...updateData,
-			memberNick: user.memberNick,
-			memberPhone: user.memberPhone,
-			memberAddress: user.memberAddress,
-			memberImage: user.memberImage,
+			titleNick: user.titleNick,
+			phone: user.phone,
+			address: user.address,
+			image: user.image,
 		});
 	}, [user]);
 
@@ -68,7 +68,7 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 
 			const responseImage = response.data.data.imageUploader;
 			console.log('+responseImage: ', responseImage);
-			updateData.memberImage = responseImage;
+			updateData.image = responseImage;
 			setUpdateData({ ...updateData });
 
 			return `${REACT_APP_API_URL}/${responseImage}`;
@@ -99,10 +99,10 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 
 	const doDisabledCheck = () => {
 		if (
-			updateData.memberNick === '' ||
-			updateData.memberPhone === '' ||
-			updateData.memberAddress === '' ||
-			updateData.memberImage === ''
+			updateData.titleNick === '' ||
+			updateData.phone === '' ||
+			updateData.address === '' ||
+			updateData.image === ''
 		) {
 			return true;
 		}
@@ -128,8 +128,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<Stack className="image-box">
 								<img
 									src={
-										updateData?.memberImage
-											? `${REACT_APP_API_URL}/${updateData?.memberImage}`
+										updateData?.image
+											? `${REACT_APP_API_URL}/${updateData?.image}`
 											: `/img/profile/defaultUser.svg`
 									}
 									alt=""
@@ -156,8 +156,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your username"
-								value={updateData.memberNick}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
+								value={updateData.titleNick}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, titleNick: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -165,8 +165,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Phone"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.phone}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, phone: value })}
 							/>
 						</Stack>
 					</Stack>
@@ -175,8 +175,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 						<input
 							type="text"
 							placeholder="Your address"
-							value={updateData.memberAddress}
-							onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberAddress: value })}
+							value={updateData.address}
+							onChange={({ target: { value } }) => setUpdateData({ ...updateData, address: value })}
 						/>
 					</Stack>
 					<Stack className="small-input-box">
@@ -185,8 +185,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your email"
-								value={updateData.memberNick}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
+								value={updateData.email}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, email: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -194,8 +194,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Phone 2"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.phone2}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, phone2: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -203,8 +203,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Instagram"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.instagram}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, instagram: value })}
 							/>
 						</Stack>
 					</Stack>
@@ -214,8 +214,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Kakao Talk"
-								value={updateData.memberNick}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
+								value={updateData.kakaoTalk}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, kakaoTalk: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -223,8 +223,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your You Tube"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.youtube}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, youtube: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -232,8 +232,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Naver Blog"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.naverBlog}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, naverBlog: value })}
 							/>
 						</Stack>
 					</Stack>
@@ -243,8 +243,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Facebook"
-								value={updateData.memberNick}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberNick: value })}
+								value={updateData.facebook}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, facebook: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -252,8 +252,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your Tik Tok"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.tikTok}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, tikTok: value })}
 							/>
 						</Stack>
 						<Stack className="input-box">
@@ -261,8 +261,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							<input
 								type="text"
 								placeholder="Your X.com"
-								value={updateData.memberPhone}
-								onChange={({ target: { value } }) => setUpdateData({ ...updateData, memberPhone: value })}
+								value={updateData.xcom}
+								onChange={({ target: { value } }) => setUpdateData({ ...updateData, xcom: value })}
 							/>
 						</Stack>
 					</Stack>

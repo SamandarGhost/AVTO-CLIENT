@@ -4,45 +4,45 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
 import CommunityCard from '../common/CommunityCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { userVar } from '../../../apollo/store';
 import { T } from '../../types/common';
-import { BoardArticle } from '../../types/article/article';
+import { Article } from '../../types/article/article';
 import { LIKE_TARGET_BOARD_ARTICLE } from '../../../apollo/user/mutation';
-import { GET_BOARD_ARTICLES } from '../../../apollo/user/query';
 import { Messages } from '../../config';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
+import { GET_ARTICLES } from '../../../apollo/user/query';
+import { userVar } from '../../../apollo/store';
 
 const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
 	const [searchCommunity, setSearchCommunity] = useState({
 		...initialInput,
-		search: { memberId: user._id },
+		search: { memberId: user?._id },
 	});
-	const [boardArticles, setBoardArticles] = useState<BoardArticle[]>([]);
+	const [articles, setarticles] = useState<Article[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 
 	/** APOLLO REQUESTS **/
 	const [likeTargetBoardArticle] = useMutation(LIKE_TARGET_BOARD_ARTICLE);
 
 	const {
-		loading: boardArticleLoading,
-		data: boardArticleData,
-		error: geBoardArticleError,
-		refetch: boardArticleRefetch,
-	} = useQuery(GET_BOARD_ARTICLES, {
+		loading: getArticlesLoading,
+		data: getArticlesData,
+		error: getArticlesError,
+		refetch: getArticlesRefetch,
+	} = useQuery(GET_ARTICLES, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchCommunity },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setBoardArticles(data?.getBoardArticles?.list);
-			setTotalCount(data?.getBoardArticles?.metaCounter[0]?.total ?? 0);
+			setarticles(data?.getArticles?.list);
+			setTotalCount(data?.getArticles?.metaCounter[0]?.total ?? 0);
 		},
 	});
 
 
 	/** HANDLERS **/
-	const likeBoardArticleHandler = async (e: any, user: any, id: any) => {
+	const likeArticleHandler = async (e: any, user: any, id: any) => {
 		try {
 			e.stopPropagation();
 			if (!id) return;
@@ -52,7 +52,7 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 				variables: { input: id },
 			});
 
-			boardArticleRefetch({ input: searchCommunity });
+			getArticlesRefetch({ input: searchCommunity });
 
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
@@ -77,9 +77,9 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 					</Stack>
 				</Stack>
 				<Stack className="article-list-box">
-					{boardArticles?.length > 0 ? (
-						boardArticles?.map((boardArticle: BoardArticle) => {
-							return <CommunityCard boardArticle={boardArticle} key={boardArticle?._id} size={'small'} likeBoardArticleHandler={likeBoardArticleHandler} />;
+					{articles?.length > 0 ? (
+						articles?.map((article: Article) => {
+							return <CommunityCard article={article} key={article?._id} size={'small'} likeArticleHandler={likeArticleHandler} />;
 						})
 					) : (
 						<div className={'no-data'}>
@@ -89,7 +89,7 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 					)}
 				</Stack>
 
-				{boardArticles?.length > 0 && (
+				{articles?.length > 0 && (
 					<Stack className="pagination-conf">
 						<Stack className="pagination-box">
 							<Pagination

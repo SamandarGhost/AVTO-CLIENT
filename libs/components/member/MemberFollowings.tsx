@@ -9,8 +9,8 @@ import { REACT_APP_API_URL } from '../../config';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { userVar } from '../../../apollo/store';
-import { GET_MEMBER_FOLLOWINGS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
+import { GET_FOLLOWINGS } from '../../../apollo/user/query';
 
 interface MemberFollowingsProps {
 	initialInput: FollowInquiry;
@@ -36,7 +36,7 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 		data: getMemberFollowingsData,
 		error: getMemberFollowingsError,
 		refetch: getMemberFollowingsRefetch,
-	} = useQuery(GET_MEMBER_FOLLOWINGS, {
+	} = useQuery(GET_FOLLOWINGS, {
 		fetchPolicy: 'network-only',
 		variables: { input: followInquiry },
 		skip: !followInquiry?.search?.followerId,
@@ -87,8 +87,8 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 						</div>
 					)}
 					{memberFollowings.map((follower: Following) => {
-						const imagePath: string = follower?.followingData?.memberImage
-							? `${REACT_APP_API_URL}/${follower?.followingData?.memberImage}`
+						const imagePath: string = follower?.followingData?.image
+							? `${REACT_APP_API_URL}/${follower?.followingData?.image}`
 							: '/img/profile/defaultUser.svg';
 						return (
 							<Stack className="follows-card-box" key={follower._id}>
@@ -97,17 +97,17 @@ const MemberFollowings = (props: MemberFollowingsProps) => {
 										<img src={imagePath} alt="" />
 									</Stack>
 									<Stack className="information-box">
-										<Typography className="name">{follower?.followingData?.memberNick}</Typography>
+										<Typography className="name">{follower?.followingData?.titleNick}</Typography>
 									</Stack>
 								</Stack>
 								<Stack className={'details-box'}>
 									<Box className={'info-box'} component={'div'}>
 										<p>Followers</p>
-										<span>({follower?.followingData?.memberFollowers})</span>
+										<span>({follower?.followingData?.followers})</span>
 									</Box>
 									<Box className={'info-box'} component={'div'}>
 										<p>Followings</p>
-										<span>({follower?.followingData?.memberFollowings})</span>
+										<span>({follower?.followingData?.followings})</span>
 									</Box>
 									<Box className={'info-box'} component={'div'}>
 										{follower?.meLiked && follower?.meLiked[0]?.myFavorite ? (
