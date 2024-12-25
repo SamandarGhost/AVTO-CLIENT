@@ -2,55 +2,52 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
-import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
-import { GET_FAVORITES } from '../../../apollo/user/query';
+import { GET_LIKED } from '../../../apollo/user/query';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Messages } from '../../config';
-import TopPropertyCard from '../homepage/FindingCarCard';
+import { LIKE_CAR } from '../../../apollo/user/mutation';
+import FindingCarCard from '../homepage/FindingCarCard';
+import { Car } from '../../types/car/car';
 
 const MyLiked: NextPage = () => {
 	const device = useDeviceDetect();
-	const [myFavorites, setMyFavorites] = useState<Property[]>([]);
+	const [myLiked, setMyLiked] = useState<Car[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const [searchFavorites, setSearchFavorites] = useState<T>({ page: 1, limit: 6 });
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetCar] = useMutation(LIKE_CAR);
 
 	const {
 		loading: getFavoritesLoading,
 		data: getFavoritesData,
 		error: getFavoritesError,
 		refetch: getFavoritesRefetch,
-	} = useQuery(GET_FAVORITES, {
+	} = useQuery(GET_LIKED, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFavorites },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setMyFavorites(data?.getFavorites?.list);
+			setMyLiked(data?.getFavorites?.list);
 			setTotal(data?.getFavorites?.metaCounter?.[0]?.total ?? 0);
 		},
 	});
 
 
 	/** HANDLERS **/
-	const likePropertyHandler = async (user: T, id: string) => {
+	const likeCarHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Messages.error2);
 
-			// execute likePropertyHandler mutation
-			await likeTargetProperty({
+			await likeTargetCar({
 				variables: { input: id },
 			});
 
-			// execute getPropertiesRefetch
 			getFavoritesRefetch({ input: searchFavorites });
 		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
@@ -61,7 +58,7 @@ const MyLiked: NextPage = () => {
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR MY FAVORITES MOBILE</div>;
+		return <div>WCAR MY LIKED MOBILE</div>;
 	} else {
 		return (
 			<div id="my-favorites-page">
@@ -72,18 +69,18 @@ const MyLiked: NextPage = () => {
 					</Stack>
 				</Stack>
 				<Stack className="favorites-list-box">
-					{myFavorites?.length ? (
-						myFavorites?.map((property: Property) => {
-							return <TopPropertyCard likePropertyHandler={likePropertyHandler} property={property} />;
+					{myLiked?.length ? (
+						myLiked?.map((car: Car) => {
+							return <FindingCarCard likeCarHandler={likeCarHandler} car={car} />;
 						})
 					) : (
 						<div className={'no-data'}>
 							<img src="/img/icons/icoAlert.svg" alt="" />
-							<p>No Favorites found!</p>
+							<p>No Liked found!</p>
 						</div>
 					)}
 				</Stack>
-				{myFavorites?.length ? (
+				{myLiked?.length ? (
 					<Stack className="pagination-config">
 						<Stack className="pagination-box">
 							<Pagination
@@ -96,7 +93,7 @@ const MyLiked: NextPage = () => {
 						</Stack>
 						<Stack className="total-result">
 							<Typography>
-								Total {total} favorite propert{total > 1 ? 'ies' : 'y'}
+								Total {total} favorite car{total > 1 ? 's' : ''}
 							</Typography>
 						</Stack>
 					</Stack>

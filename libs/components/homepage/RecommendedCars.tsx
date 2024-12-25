@@ -7,13 +7,13 @@ import TrendPropertyCard from './ReccomendedCarsCard';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PROPERTIES } from '../../../apollo/user/query';
 import { T } from '../../types/common';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { CarsInquiry } from '../../types/car/car.input';
 import { Car } from '../../types/car/car';
+import { LIKE_CAR } from '../../../apollo/user/mutation';
 
 interface RecommendedCarsProps {
 	initialInput: CarsInquiry;
@@ -25,7 +25,7 @@ const RecommendedCars = (props: RecommendedCarsProps) => {
 	const [recomCars, setRecomCars] = useState<Car[]>([]);
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetCar] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetCar] = useMutation(LIKE_CAR);
 	const {
 		loading: getCarsLoading,
 		data: getCarsData,

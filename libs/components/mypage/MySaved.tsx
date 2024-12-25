@@ -2,93 +2,90 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
-import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
-import { GET_FAVORITES } from '../../../apollo/user/query';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Messages } from '../../config';
-import TopPropertyCard from '../homepage/FindingCarCard';
+import { LIKE_CAR } from '../../../apollo/user/mutation';
+import { Car } from '../../types/car/car';
+import FindingCarCard from '../homepage/FindingCarCard';
+import { GET_SAVED } from '../../../apollo/user/query';
 
 const MySaved: NextPage = () => {
 	const device = useDeviceDetect();
-	const [myFavorites, setMyFavorites] = useState<Property[]>([]);
+	const [mySaved, setMySaved] = useState<Car[]>([]);
 	const [total, setTotal] = useState<number>(0);
-	const [searchFavorites, setSearchFavorites] = useState<T>({ page: 1, limit: 6 });
+	const [searchSaved, setSearchSaved] = useState<T>({ page: 1, limit: 6 });
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetCar] = useMutation(LIKE_CAR);
 
 	const {
-		loading: getFavoritesLoading,
-		data: getFavoritesData,
-		error: getFavoritesError,
-		refetch: getFavoritesRefetch,
-	} = useQuery(GET_FAVORITES, {
+		loading: getSavedLoading,
+		data: getSavedData,
+		error: getSavedError,
+		refetch: getSavedRefetch,
+	} = useQuery(GET_SAVED, {
 		fetchPolicy: 'network-only',
-		variables: { input: searchFavorites },
+		variables: { input: searchSaved },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setMyFavorites(data?.getFavorites?.list);
-			setTotal(data?.getFavorites?.metaCounter?.[0]?.total ?? 0);
+			setMySaved(data?.getSaved?.list);
+			setTotal(data?.getSaved?.metaCounter?.[0]?.total ?? 0);
 		},
 	});
 
 
 	/** HANDLERS **/
-	const likePropertyHandler = async (user: T, id: string) => {
+	const likeCarHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Messages.error2);
 
-			// execute likePropertyHandler mutation
-			await likeTargetProperty({
+			await likeTargetCar({
 				variables: { input: id },
 			});
 
-			// execute getPropertiesRefetch
-			getFavoritesRefetch({ input: searchFavorites });
+			getSavedRefetch({ input: searchSaved });
 		} catch (err: any) {
-			console.log('ERROR, likePropertyHandler:', err);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	};
 
 
 	const paginationHandler = (e: T, value: number) => {
-		setSearchFavorites({ ...searchFavorites, page: value });
+		setSearchSaved({ ...searchSaved, page: value });
 	};
 
 	if (device === 'mobile') {
-		return <div>NESTAR MY FAVORITES MOBILE</div>;
+		return <div>WCAR MY SAVED MOBILE</div>;
 	} else {
 		return (
 			<div id="my-favorites-page">
 				<Stack className="main-title-box">
 					<Stack className="right-box">
-						<Typography className="main-title">My Favorites</Typography>
+						<Typography className="main-title">My Saved</Typography>
 						<Typography className="sub-title">We are glad to see you again!</Typography>
 					</Stack>
 				</Stack>
 				<Stack className="favorites-list-box">
-					{myFavorites?.length ? (
-						myFavorites?.map((property: Property) => {
-							return <TopPropertyCard likePropertyHandler={likePropertyHandler} property={property} />;
+					{mySaved?.length ? (
+						mySaved?.map((car: Car) => {
+							return <FindingCarCard likeCarHandler={likeCarHandler} car={car} />;
 						})
 					) : (
 						<div className={'no-data'}>
 							<img src="/img/icons/icoAlert.svg" alt="" />
-							<p>No Favorites found!</p>
+							<p>No Saved found!</p>
 						</div>
 					)}
 				</Stack>
-				{myFavorites?.length ? (
+				{mySaved?.length ? (
 					<Stack className="pagination-config">
 						<Stack className="pagination-box">
 							<Pagination
-								count={Math.ceil(total / searchFavorites.limit)}
-								page={searchFavorites.page}
+								count={Math.ceil(total / searchSaved.limit)}
+								page={searchSaved.page}
 								shape="rounded"
 								color="secondary"
 								onChange={paginationHandler}

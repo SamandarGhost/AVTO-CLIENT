@@ -12,10 +12,10 @@ import { Direction, Message } from '../../libs/enums/common.enum';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PROPERTIES } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
-import { LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import Filter from '../../libs/components/shop/Filter';
 import PropertyCard from '../../libs/components/shop/PropertyCard';
+import { LIKE_CAR } from '../../apollo/user/mutation';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -37,7 +37,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 	const [filterSortName, setFilterSortName] = useState('New');
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetProperty] = useMutation(LIKE_CAR);
 	const {
 		loading: getPropertiesLoading,
 		data: getPropertiesData,

@@ -14,7 +14,7 @@ interface BAISearch {
 	text?: string;
 }
 
-export interface BoardArticlesInquiry {
+export interface ArticlesInquiry {
 	page: number;
 	limit: number;
 	sort?: string;

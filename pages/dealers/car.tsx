@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Member } from '../../libs/types/member/member';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_MEMBER, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
+import { LIKE_CAR, LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
 import { GET_AGENTS, GET_PROPERTIES } from '../../apollo/user/query';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
@@ -62,7 +62,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
         },
     });
 
-    const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+    const [likeTargetProperty] = useMutation(LIKE_CAR);
     const {
         loading: getPropertiesLoading,
         data: getPropertiesData,

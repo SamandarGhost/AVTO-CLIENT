@@ -81,25 +81,6 @@ const MyMenu = () => {
 											</div>
 										</Link>
 									</ListItem>
-									<ListItem className={pathname === 'addProduct' ? 'focus' : ''}>
-										<Link
-											href={{
-												pathname: '/mypage',
-												query: { category: 'addProduct' },
-											}}
-											scroll={false}
-										>
-											<div className={'flex-box'}>
-												<img className={'com-icon'} src={'/img/icons/addCar.svg'} alt={'com-icon'} />
-												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-													Add Product
-												</Typography>
-												<IconButton aria-label="delete" sx={{ ml: '40px' }}>
-													<PortraitIcon style={{ color: 'red' }} />
-												</IconButton>
-											</div>
-										</Link>
-									</ListItem>
 									<ListItem className={pathname === 'myCars' ? 'focus' : ''}>
 										<Link
 											href={{
@@ -114,6 +95,29 @@ const MyMenu = () => {
 													My Cars
 												</Typography>
 												<IconButton aria-label="delete" sx={{ ml: '36px' }}>
+													<PortraitIcon style={{ color: 'red' }} />
+												</IconButton>
+											</div>
+										</Link>
+									</ListItem>
+								</>
+							)}
+							{user?.type === 'SELLER' && (
+								<>
+									<ListItem className={pathname === 'addProduct' ? 'focus' : ''}>
+										<Link
+											href={{
+												pathname: '/mypage',
+												query: { category: 'addProduct' },
+											}}
+											scroll={false}
+										>
+											<div className={'flex-box'}>
+												<img className={'com-icon'} src={'/img/icons/addCar.svg'} alt={'com-icon'} />
+												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
+													Add Product
+												</Typography>
+												<IconButton aria-label="delete" sx={{ ml: '40px' }}>
 													<PortraitIcon style={{ color: 'red' }} />
 												</IconButton>
 											</div>
@@ -156,11 +160,11 @@ const MyMenu = () => {
 									</div>
 								</Link>
 							</ListItem>
-							<ListItem className={pathname === 'myFavorites' ? 'focus' : ''}>
+							<ListItem className={pathname === 'myLiked' ? 'focus' : ''}>
 								<Link
 									href={{
 										pathname: '/mypage',
-										query: { category: 'myFavorites' },
+										query: { category: 'myLiked' },
 									}}
 									scroll={false}
 								>

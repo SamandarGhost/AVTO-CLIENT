@@ -495,34 +495,147 @@ mutation UpdateCar($input: CarUpdate!) {
 // 	}
 // `;
 
-export const LIKE_TARGET_PROPERTY = gql`
-	mutation LikeTargetProperty($input: String!) {
-		likeTargetProperty(propertyId: $input) {
-			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-		}
-	}
-`;
+export const LIKE_CAR = gql`
+mutation LikeTargetCar($input: String!) {
+    likeTargetCar(carId: $input) {
+        _id
+        carType
+        carTitle
+        carBody
+        carStatus
+        carSort
+        carGroup
+        carMadeIn
+        carBrand
+        carModel
+        carPrice
+        carImages
+        carVideo
+        carLocation
+        carAddress
+        carDesc
+        carBarter
+        carRent
+        carYear
+        carTuning
+        carTuningType
+        carMileage
+        carFuelType
+        carDriveType
+        carTransmission
+        carEngineSize
+        carColor
+        carFullFuel
+        carMpgHw
+        carMpgCity
+        carDoor
+        carCylinders
+        carMaxSpeed
+        carHundredSpeed
+        carHorsePower
+        carTorque
+        carLength
+        carHeigth
+        carWidth
+        carSeatsUp
+        carWeigth
+        carLoadWeight
+        carTireSize
+        carWheelBase
+        carAutoBrake
+        carCruiseControl
+        carESC
+        carAutonomuosDrive
+        carExteriorLight
+        carPanoramicSunroof
+        carHeatedSeats
+        carCooledSeats
+        carTouchscreenDisplay
+        carAutoHeadLight
+        carStarStop
+        carNoiseCancellation
+        carRemoteKeyless
+        carLaneDW
+        carBlindSpotMonitoring
+        carRearCrossTrafficAlert
+        carApplePlay
+        carAndroidAuto
+        carVoiceControl
+        carBluetoothConnectivity
+        carWirelessCharging
+        carParkingAssist
+        carSurroundViewCamera
+        carFrontSensors
+        carRearSensors
+        carFrontRecordCamera
+        carRearRecordCamera
+        carHeadsUpDisplay
+        carClimateControl
+        carAdjustableSeats
+        carMemorySeats
+        carPowerTrain
+        carRegenerativeBraking
+        carTractionControl
+        carStabilityControl
+        carHillStartAssist
+        carTirePressureSystem
+        carPushButton
+        carCrush
+        carRepair
+        carFrontBumper
+        carBackBumper
+        carBonnet
+        carTailgate
+        carRightFrontWing
+        carLeftFrontWing
+        carRightBackWing
+        carLeftBackWing
+        carRoof
+        carRightFrontDoor
+        carLeftFrontDoor
+        carRightBackDoor
+        carLeftBackDoor
+        carViews
+        carLikes
+        carSave
+        carComments
+        carRank
+        memberId
+        soldAt
+        deletedAt
+        createdAt
+        updatedAt
+    }
+}`;
+
+// export const LIKE_TARGET_PROPERTY = gql`
+// 	mutation LikeTargetProperty($input: String!) {
+// 		likeTargetProperty(propertyId: $input) {
+// 			_id
+// 			propertyType
+// 			propertyStatus
+// 			propertyLocation
+// 			propertyAddress
+// 			propertyTitle
+// 			propertyPrice
+// 			propertySquare
+// 			propertyBeds
+// 			propertyRooms
+// 			propertyViews
+// 			propertyLikes
+// 			propertyImages
+// 			propertyDesc
+// 			propertyBarter
+// 			propertyRent
+// 			memberId
+// 			soldAt
+// 			deletedAt
+// 			constructedAt
+// 			createdAt
+// 			updatedAt
+// 		}
+// 	}
+// `;
 
 /**************************
  *      BOARD-ARTICLE     *
@@ -582,23 +695,41 @@ export const UPDATE_BOARD_ARTICLE = gql`
 	}
 `;
 
-export const LIKE_TARGET_BOARD_ARTICLE = gql`
-	mutation LikeTargetBoardArticle($input: String!) {
-		likeTargetBoardArticle(articleId: $input) {
-			_id
-			articleCategory
-			articleStatus
-			articleTitle
-			articleContent
-			articleImage
-			articleViews
-			articleLikes
-			memberId
-			createdAt
-			updatedAt
-		}
-	}
-`;
+export const LIKE_ARTICLE = gql`
+mutation LikeTargetArticle($input: String!) {
+    likeTargetArticle(articleId: $input) {
+        _id
+        articleCategory
+        articleStatus
+        articleTitle
+        articleContent
+        articleImage
+        articleViews
+        articleLikes
+        articleComments
+        memberId
+        createdAt
+        updatedAt
+    }
+}`;
+
+// export const LIKE_TARGET_BOARD_ARTICLE = gql`
+// 	mutation LikeTargetBoardArticle($input: String!) {
+// 		likeTargetBoardArticle(articleId: $input) {
+// 			_id
+// 			articleCategory
+// 			articleStatus
+// 			articleTitle
+// 			articleContent
+// 			articleImage
+// 			articleViews
+// 			articleLikes
+// 			memberId
+// 			createdAt
+// 			updatedAt
+// 		}
+// 	}
+// `;
 
 /**************************
  *         COMMENT        *

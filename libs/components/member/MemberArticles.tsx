@@ -5,36 +5,36 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { useRouter } from 'next/router';
 import CommunityCard from '../common/CommunityCard';
 import { T } from '../../types/common';
-import { BoardArticle } from '../../types/article/article';
-import { BoardArticlesInquiry } from '../../types/article/article.input';
-import { GET_BOARD_ARTICLES } from '../../../apollo/user/query';
+import { Article } from '../../types/article/article';
+import { ArticlesInquiry } from '../../types/article/article.input';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_BOARD_ARTICLE } from '../../../apollo/user/mutation';
+import { LIKE_ARTICLE } from '../../../apollo/user/mutation';
 import { Messages } from '../../config';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
+import { GET_ARTICLES } from '../../../apollo/user/query';
 
 const MemberArticles: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [total, setTotal] = useState<number>(0);
 	const { memberId } = router.query;
-	const [searchFilter, setSearchFilter] = useState<BoardArticlesInquiry>(initialInput);
-	const [memberBoArticles, setMemberBoArticles] = useState<BoardArticle[]>([]);
+	const [searchFilter, setSearchFilter] = useState<ArticlesInquiry>(initialInput);
+	const [memberArticles, setMemberArticles] = useState<Article[]>([]);
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetBoardArticle] = useMutation(LIKE_TARGET_BOARD_ARTICLE);
+	const [likeTargetArticle] = useMutation(LIKE_ARTICLE);
 	const {
-		loading: boardArticlesLoading,
-		data: boardArticlesData,
-		error: getBoardArticlesError,
-		refetch: boardArticlesRefetch,
-	} = useQuery(GET_BOARD_ARTICLES, {
+		loading: getArticlesLoading,
+		data: getArticlesData,
+		error: getArticlesError,
+		refetch: getArticlesRefetch,
+	} = useQuery(GET_ARTICLES, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setMemberBoArticles(data?.getBoardArticles?.list);
-			setTotal(data?.getBoardArticles?.metaCounter[0]?.total ?? 0);
+			setMemberArticles(data?.getArticles?.list);
+			setTotal(data?.getArticles?.metaCounter[0]?.total ?? 0);
 		},
 	});
 
@@ -48,19 +48,17 @@ const MemberArticles: NextPage = ({ initialInput, ...props }: any) => {
 		setSearchFilter({ ...searchFilter, page: value });
 	};
 
-	const likeBoardArticleHandler = async (e: any, user: any, id: string) => {
+	const likeArticleHandler = async (e: any, user: any, id: string) => {
 		try {
 			e.stopPropagation();
 			if (!id) return;
 			if (!user._id) throw new Error(Messages.error2);
 
-			// execute likePropertyHandler mutation
-			await likeTargetBoardArticle({
+			await likeTargetArticle({
 				variables: { input: id },
 			});
 
-			// execute getPropertiesRefetch
-			boardArticlesRefetch({ input: searchFilter });
+			getArticlesRefetch({ input: searchFilter });
 
 			await sweetTopSmallSuccessAlert('success', 800);
 		} catch (err: any) {
@@ -80,24 +78,24 @@ const MemberArticles: NextPage = ({ initialInput, ...props }: any) => {
 					</Stack>
 				</Stack>
 				<Stack className="articles-list-box">
-					{memberBoArticles?.length === 0 && (
+					{memberArticles?.length === 0 && (
 						<div className={'no-data'}>
 							<img src="/img/icons/icoAlert.svg" alt="" />
 							<p>No Articles found!</p>
 						</div>
 					)}
-					{memberBoArticles?.map((boardArticle: BoardArticle) => {
+					{memberArticles?.map((article: Article) => {
 						return (
 							<CommunityCard
-								boardArticle={boardArticle}
-								likeBoardArticleHandler={likeBoardArticleHandler}
-								key={boardArticle?._id}
+								article={article}
+								likeArticleHandler={likeArticleHandler}
+								key={article?._id}
 								size={'small'}
 							/>
 						);
 					})}
 				</Stack>
-				{memberBoArticles?.length !== 0 && (
+				{memberArticles?.length !== 0 && (
 					<Stack className="pagination-config">
 						<Stack className="pagination-box">
 							<Pagination

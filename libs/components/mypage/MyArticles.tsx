@@ -6,11 +6,11 @@ import CommunityCard from '../common/CommunityCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { T } from '../../types/common';
 import { Article } from '../../types/article/article';
-import { LIKE_TARGET_BOARD_ARTICLE } from '../../../apollo/user/mutation';
 import { Messages } from '../../config';
 import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../sweetAlert';
 import { GET_ARTICLES } from '../../../apollo/user/query';
 import { userVar } from '../../../apollo/store';
+import { LIKE_ARTICLE } from '../../../apollo/user/mutation';
 
 const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 	const device = useDeviceDetect();
@@ -23,7 +23,7 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 	const [totalCount, setTotalCount] = useState<number>(0);
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetBoardArticle] = useMutation(LIKE_TARGET_BOARD_ARTICLE);
+	const [likeTargetArticle] = useMutation(LIKE_ARTICLE);
 
 	const {
 		loading: getArticlesLoading,
@@ -48,7 +48,7 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 			if (!id) return;
 			if (!user._id) throw new Error(Messages.error2);
 
-			await likeTargetBoardArticle({
+			await likeTargetArticle({
 				variables: { input: id },
 			});
 

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Stack, Box, Link } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import WestIcon from '@mui/icons-material/West';
-import EastIcon from '@mui/icons-material/East';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import TopPropertyCard from './FindingCarCard';
@@ -11,12 +9,12 @@ import { Property } from '../../types/property/property';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PROPERTIES } from '../../../apollo/user/query';
 import { T } from '../../types/common';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import FeedbackCard from './FeedbackCard';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { LIKE_CAR } from '../../../apollo/user/mutation';
 
 interface TopPropertiesProps {
     initialInput: PropertiesInquiry;
@@ -29,7 +27,7 @@ const Feedback = (props: TopPropertiesProps) => {
 
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+    const [likeTargetProperty] = useMutation(LIKE_CAR);
 
     const {
         loading: getPropertiesLoading,

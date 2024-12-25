@@ -20,7 +20,7 @@ const TuiEditor = () => {
 	const [articleCategory, setArticleCategory] = useState<ArticleCategory>(ArticleCategory.FREE);
 
 	/** APOLLO REQUESTS **/
-	const [createBoardArticle] = useMutation(CREATE_ARTICLE);
+	const [createArticle] = useMutation(CREATE_ARTICLE);
 
 	const memoizedValues = useMemo(() => {
 		const articleTitle = '',
@@ -91,7 +91,7 @@ const TuiEditor = () => {
 				throw new Error(Message.INSERT_ALL_INPUTS);
 			}
 
-			await createBoardArticle({
+			await createArticle({
 				variables: {
 					input: { ...memoizedValues, articleCategory },
 				},

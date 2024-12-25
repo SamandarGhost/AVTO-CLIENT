@@ -1,12 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Box, Button, Checkbox, CircularProgress, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import { NextPage } from 'next';
 import Review from '../../libs/components/property/Review';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
-import PropertyBigCard from '../../libs/components/common/PropertyBigCard';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WestIcon from '@mui/icons-material/West';
@@ -14,88 +12,22 @@ import EastIcon from '@mui/icons-material/East';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { Property } from '../../libs/types/property/property';
-import moment from 'moment';
-import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { userVar } from '../../apollo/store';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { Comment } from '../../libs/types/comment/comment';
 import { CommentGroup } from '../../libs/enums/comment.enum';
 import { Pagination as MuiPagination } from '@mui/material';
-import Link from 'next/link';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { GET_COMMENTS, GET_PROPERTIES, GET_PROPERTY } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_TARGET_PROPERTY } from '../../apollo/user/mutation';
+import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import withLayoutMain from '../../libs/components/layout/LayoutHome';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined'; // country
-import CarRepairOutlinedIcon from '@mui/icons-material/CarRepairOutlined'; // brand
-import HandymanOutlinedIcon from '@mui/icons-material/HandymanOutlined'; // repair
-import MinorCrashOutlinedIcon from '@mui/icons-material/MinorCrashOutlined'; // crush
-import ApartmentOutlinedIcon from '@mui/icons-material/ApartmentOutlined'; // city
-import AddRoadOutlinedIcon from '@mui/icons-material/AddRoadOutlined'; // highway
-import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined'; // max speed
-import ElectricBoltOutlinedIcon from '@mui/icons-material/ElectricBoltOutlined'; // hundred speed
-import HeightOutlinedIcon from '@mui/icons-material/HeightOutlined'; // height
-import DirectionsCarOutlinedIcon from '@mui/icons-material/DirectionsCarOutlined'; //width
-import AirportShuttleOutlinedIcon from '@mui/icons-material/AirportShuttleOutlined'; // lenght
-import ScaleOutlinedIcon from '@mui/icons-material/ScaleOutlined'; // weight
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'; // load weight
-import DonutSmallOutlinedIcon from '@mui/icons-material/DonutSmallOutlined'; // tire size
-import AirlineSeatReclineNormalOutlinedIcon from '@mui/icons-material/AirlineSeatReclineNormalOutlined'; //seats up
-import SwapHorizontalCircleOutlinedIcon from '@mui/icons-material/SwapHorizontalCircleOutlined'; // wheela base
-import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
-import TimeToLeaveOutlinedIcon from '@mui/icons-material/TimeToLeaveOutlined'; // cruise control
-import SurroundSoundOutlinedIcon from '@mui/icons-material/SurroundSoundOutlined'; // esc
-import NoCrashOutlinedIcon from '@mui/icons-material/NoCrashOutlined'; // auto drive
-import FlashlightOnOutlinedIcon from '@mui/icons-material/FlashlightOnOutlined'; // exterior light
-import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined'; // ponarama
-import AirlineSeatLegroomExtraOutlinedIcon from '@mui/icons-material/AirlineSeatLegroomExtraOutlined'; // heated seat
-import AcUnitOutlinedIcon from '@mui/icons-material/AcUnitOutlined'; // cool seat
-import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined'; // touch screen display
-import HighlightOutlinedIcon from '@mui/icons-material/HighlightOutlined'; // auto head light
-import PanToolAltOutlinedIcon from '@mui/icons-material/PanToolAltOutlined'; // start stop
-import NoiseControlOffOutlinedIcon from '@mui/icons-material/NoiseControlOffOutlined'; // noise cencellation
-import SettingsRemoteOutlinedIcon from '@mui/icons-material/SettingsRemoteOutlined'; // remote keyylass
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined'; // laneDw\
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'; // blind monitoring
-import CommuteOutlinedIcon from '@mui/icons-material/CommuteOutlined'; //  rear traffic alert
-import AirplayOutlinedIcon from '@mui/icons-material/AirplayOutlined'; // apple play
-import CastOutlinedIcon from '@mui/icons-material/CastOutlined'; // android play
-import RecordVoiceOverOutlinedIcon from '@mui/icons-material/RecordVoiceOverOutlined'; // voice control
-import BluetoothConnectedOutlinedIcon from '@mui/icons-material/BluetoothConnectedOutlined'; // car bluetooth
-import ElectricalServicesOutlinedIcon from '@mui/icons-material/ElectricalServicesOutlined'; // charging
-import LocalParkingOutlinedIcon from '@mui/icons-material/LocalParkingOutlined'; // parking assist
-import ThreeSixtyOutlinedIcon from '@mui/icons-material/ThreeSixtyOutlined'; // 360 camera
-import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined'; // back sensor
-import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined'; // front sensor
-import CameraOutlinedIcon from '@mui/icons-material/CameraOutlined'; // front camera
-import FlipCameraAndroidOutlinedIcon from '@mui/icons-material/FlipCameraAndroidOutlined'; // rear camera
-import LensBlurOutlinedIcon from '@mui/icons-material/LensBlurOutlined'; // heads up display
-import ThunderstormOutlinedIcon from '@mui/icons-material/ThunderstormOutlined'; // climate control
-import AirlineSeatReclineExtraOutlinedIcon from '@mui/icons-material/AirlineSeatReclineExtraOutlined'; // adjustable seat
-import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined'; // memory seat
-import BatteryCharging20OutlinedIcon from '@mui/icons-material/BatteryCharging20Outlined'; // regenerative braking
-import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined'; // traction control
-import VideoStableOutlinedIcon from '@mui/icons-material/VideoStableOutlined'; // stability
-import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined'; //hill start
-import TireRepairOutlinedIcon from '@mui/icons-material/TireRepairOutlined'; // tire pressure
-import TouchAppOutlinedIcon from '@mui/icons-material/TouchAppOutlined'; // push button
-import TrendPropertyCard from '../../libs/components/homepage/ReccomendedCarsCard';
-import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import FitbitOutlinedIcon from '@mui/icons-material/FitbitOutlined'; // flibit
-import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
-import AlternateEmailOutlinedIcon from '@mui/icons-material/AlternateEmailOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import PropertyCard from '../../libs/components/shop/PropertyCard';
-
 
 
 
@@ -121,13 +53,13 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
     const [commentTotal, setCommentTotal] = useState<number>(0);
     const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-        commentGroup: CommentGroup.PROPERTY,
+        commentGroup: CommentGroup.CAR,
         commentContent: '',
         commentRefId: '',
     });
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+    const [likeTargetProperty] = useMutation(LIKE_CAR);
     const [createComment] = useMutation(CREATE_COMMENT);
     const {
         loading: getPropertyLoading,

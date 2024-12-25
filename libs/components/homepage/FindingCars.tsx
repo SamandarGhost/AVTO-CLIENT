@@ -11,11 +11,11 @@ import { Property } from '../../types/property/property';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_PROPERTIES } from '../../../apollo/user/query';
 import { T } from '../../types/common';
-import { LIKE_TARGET_PROPERTY } from '../../../apollo/user/mutation';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import NorthEastRoundedIcon from '@mui/icons-material/NorthEastRounded';
 import FindingCarCard from './FindingCarCard';
+import { LIKE_CAR } from '../../../apollo/user/mutation';
 
 interface TopPropertiesProps {
 	initialInput: PropertiesInquiry;
@@ -36,7 +36,7 @@ const TopProperties = (props: TopPropertiesProps) => {
 
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_TARGET_PROPERTY);
+	const [likeTargetProperty] = useMutation(LIKE_CAR);
 
 	const {
 		loading: getPropertiesLoading,

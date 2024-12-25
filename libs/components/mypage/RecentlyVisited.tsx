@@ -2,19 +2,23 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { Pagination, Stack, Typography } from '@mui/material';
-import { Property } from '../../types/property/property';
 import { T } from '../../types/common';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_VISITED } from '../../../apollo/user/query';
-import TopPropertyCard from '../homepage/FindingCarCard';
+import { LIKE_CAR } from '../../../apollo/user/mutation';
+import { Messages } from '../../config';
+import FindingCarCard from '../homepage/FindingCarCard';
+import { Car } from '../../types/car/car';
 
 const RecentlyVisited: NextPage = () => {
 	const device = useDeviceDetect();
-	const [recentlyVisited, setRecentlyVisited] = useState<Property[]>([]);
+	const [recentlyVisited, setRecentlyVisited] = useState<Car[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const [searchVisited, setSearchVisited] = useState<T>({ page: 1, limit: 6 });
 
 	/** APOLLO REQUESTS **/
+	const [likeTargetCar] = useMutation(LIKE_CAR);
+
 	const {
 		loading: getVisitedLoading,
 		data: getVisitedData,
@@ -36,22 +40,16 @@ const RecentlyVisited: NextPage = () => {
 		setSearchVisited({ ...searchVisited, page: value });
 	};
 
-	const likePropertyHandler = async (user: T, id: string) => {
+	const likeCarHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
-			// if (!user._id) throw new Error(Messages.error2);
+			if (!user._id) throw new Error(Messages.error2);
 
-			// execute likePropertyHandler mutation
-			// await likeTargetProperty({
-			// variables: { input: id },
-			// });
+			await likeTargetCar({
+				variables: { input: id },
+			});
 		} catch (err) {
-
-			// execute getPropertiesRefetch
-			// getFavoritesRefetch({ input: searchFavorites });
-			// } catch (err: any) {
-			// console.log('ERROR, likePropertyHandler:', err);
-			// sweetMixinErrorAlert(err.message).then();
+			getVisitedRefetch({ input: searchVisited });
 		}
 	};
 
@@ -68,13 +66,13 @@ const RecentlyVisited: NextPage = () => {
 				</Stack>
 				<Stack className="favorites-list-box">
 					{recentlyVisited?.length ? (
-						recentlyVisited?.map((property: Property) => {
-							return <TopPropertyCard likePropertyHandler={likePropertyHandler} property={property} />;
+						recentlyVisited?.map((car: Car) => {
+							return <FindingCarCard likeCarHandler={likeCarHandler} car={car} />;
 						})
 					) : (
 						<div className={'no-data'}>
 							<img src="/img/icons/icoAlert.svg" alt="" />
-							<p>No Recently Visited Properties found!</p>
+							<p>No Recently Visited Cars found!</p>
 						</div>
 					)}
 				</Stack>
@@ -91,7 +89,7 @@ const RecentlyVisited: NextPage = () => {
 						</Stack>
 						<Stack className="total-result">
 							<Typography>
-								Total {total} recently visited propert{total > 1 ? 'ies' : 'y'}
+								Total {total} recently visited car{total > 1 ? 's' : ''}
 							</Typography>
 						</Stack>
 					</Stack>
