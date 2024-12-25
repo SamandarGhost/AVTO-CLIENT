@@ -207,7 +207,7 @@ export const LIKE_TARGET_MEMBER = gql`
 `;
 
 /**************************
- *          CAR           *
+ *        PROPERTY        *
  *************************/
 
 export const CREATE_CAR = gql`
@@ -320,154 +320,180 @@ mutation CreateCar($input: CarInput!) {
         deletedAt
         createdAt
         updatedAt
-        creatorData {
-            _id
-            type
-            status
-            authType
-            titleNick
-            fullName
-            image
-            images
-            location
-            address
-            shortDesc
-            longDesc
-            phone
-            phone2
-            email
-            kakaoTalk
-            youtube
-            instagram
-            facebook
-            tikTok
-            naverBlog
-            xcom
-            followers
-            followings
-            likes
-            views
-            comments
-            warnings
-            articles
-            blocks
-            memberCars
-            usedCars
-            newCars
-            rank
-            points
-            sellerProducts
-            dealerBrand
-            dealerFinancing
-            dealerCarService
-            dealerTradeIn
-            dealerCustomization
-            dealerWarranties
-            dealerParts
-            dealerAccessories
-            dealerCarDetailing
-            dealerCarWash
-            dealerCarTestDrive
-            dealerCarDelivery
-            dealerPlusService
-            carServiceType
-            carOilChange
-            carAlignment
-            carTireChange
-            carBrakeCheck
-            carBatteryCheck
-            carTireBalance
-            carSuspension
-            carAirCondition
-            carTransmissionCheck
-            carEngineDiagnostic
-            carExhaust
-            carDetailing
-            carWindshield
-            carTimingBelt
-            carChainReplacement
-            comfort
-            performance
-            exterior
-            interior
-            reliability
-            fast
-            openAt
-            closeAt
-            openSunday
-            closeSunday
-            openSaturday
-            closeSaturday
-            publicHolidays
-            deletedAt
-            createdAt
-            updatedAt
-            accessToken
-        }
     }
 }`;
 
-/**************************
- *        PROPERTY        *
- *************************/
+// export const CREATE_PROPERTY = gql`
+// 	mutation CreateProperty($input: PropertyInput!) {
+// 		createProperty(input: $input) {
+// 			_id
+// 			propertyType
+// 			propertyStatus
+// 			propertyLocation
+// 			propertyAddress
+// 			propertyTitle
+// 			propertyPrice
+// 			propertySquare
+// 			propertyBeds
+// 			propertyRooms
+// 			propertyViews
+// 			propertyLikes
+// 			propertyImages
+// 			propertyDesc
+// 			propertyBarter
+// 			propertyRent
+// 			memberId
+// 			soldAt
+// 			deletedAt
+// 			constructedAt
+// 			createdAt
+// 			updatedAt
+// 		}
+// 	}
+// `;
 
-export const CREATE_PROPERTY = gql`
-	mutation CreateProperty($input: PropertyInput!) {
-		createProperty(input: $input) {
-			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-		}
-	}
-`;
+export const UPDATE_CAR = gql`
+mutation UpdateCar($input: CarUpdate!) {
+    updateCar(input: $input) {
+        _id
+        carType
+        carTitle
+        carBody
+        carStatus
+        carSort
+        carGroup
+        carMadeIn
+        carBrand
+        carModel
+        carPrice
+        carImages
+        carVideo
+        carLocation
+        carAddress
+        carDesc
+        carBarter
+        carRent
+        carYear
+        carTuning
+        carTuningType
+        carMileage
+        carFuelType
+        carDriveType
+        carTransmission
+        carEngineSize
+        carColor
+        carFullFuel
+        carMpgHw
+        carMpgCity
+        carDoor
+        carCylinders
+        carMaxSpeed
+        carHundredSpeed
+        carHorsePower
+        carTorque
+        carLength
+        carHeigth
+        carWidth
+        carSeatsUp
+        carWeigth
+        carLoadWeight
+        carTireSize
+        carWheelBase
+        carAutoBrake
+        carCruiseControl
+        carESC
+        carAutonomuosDrive
+        carExteriorLight
+        carPanoramicSunroof
+        carHeatedSeats
+        carCooledSeats
+        carTouchscreenDisplay
+        carAutoHeadLight
+        carStarStop
+        carNoiseCancellation
+        carRemoteKeyless
+        carLaneDW
+        carBlindSpotMonitoring
+        carRearCrossTrafficAlert
+        carApplePlay
+        carAndroidAuto
+        carVoiceControl
+        carBluetoothConnectivity
+        carWirelessCharging
+        carParkingAssist
+        carSurroundViewCamera
+        carFrontSensors
+        carRearSensors
+        carFrontRecordCamera
+        carRearRecordCamera
+        carHeadsUpDisplay
+        carClimateControl
+        carAdjustableSeats
+        carMemorySeats
+        carPowerTrain
+        carRegenerativeBraking
+        carTractionControl
+        carStabilityControl
+        carHillStartAssist
+        carTirePressureSystem
+        carPushButton
+        carCrush
+        carRepair
+        carFrontBumper
+        carBackBumper
+        carBonnet
+        carTailgate
+        carRightFrontWing
+        carLeftFrontWing
+        carRightBackWing
+        carLeftBackWing
+        carRoof
+        carRightFrontDoor
+        carLeftFrontDoor
+        carRightBackDoor
+        carLeftBackDoor
+        carViews
+        carLikes
+        carSave
+        carComments
+        carRank
+        memberId
+        soldAt
+        deletedAt
+        createdAt
+        updatedAt
+    }
+}
+`
 
-export const UPDATE_PROPERTY = gql`
-	mutation UpdateProperty($input: PropertyUpdate!) {
-		updateProperty(input: $input) {
-			_id
-			propertyType
-			propertyStatus
-			propertyLocation
-			propertyAddress
-			propertyTitle
-			propertyPrice
-			propertySquare
-			propertyBeds
-			propertyRooms
-			propertyViews
-			propertyLikes
-			propertyImages
-			propertyDesc
-			propertyBarter
-			propertyRent
-			memberId
-			soldAt
-			deletedAt
-			constructedAt
-			createdAt
-			updatedAt
-		}
-	}
-`;
+// export const UPDATE_PROPERTY = gql`
+// 	mutation UpdateProperty($input: PropertyUpdate!) {
+// 		updateProperty(input: $input) {
+// 			_id
+// 			propertyType
+// 			propertyStatus
+// 			propertyLocation
+// 			propertyAddress
+// 			propertyTitle
+// 			propertyPrice
+// 			propertySquare
+// 			propertyBeds
+// 			propertyRooms
+// 			propertyViews
+// 			propertyLikes
+// 			propertyImages
+// 			propertyDesc
+// 			propertyBarter
+// 			propertyRent
+// 			memberId
+// 			soldAt
+// 			deletedAt
+// 			constructedAt
+// 			createdAt
+// 			updatedAt
+// 		}
+// 	}
+// `;
 
 export const LIKE_TARGET_PROPERTY = gql`
 	mutation LikeTargetProperty($input: String!) {

@@ -8,7 +8,7 @@ import { getJwtToken } from '../../auth';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
-import { CREATE_PROPERTY, UPDATE_PROPERTY } from '../../../apollo/user/mutation';
+import { CREATE_CAR, UPDATE_CAR } from '../../../apollo/user/mutation';
 import { GET_PROPERTY } from '../../../apollo/user/query';
 import { CarInput } from '../../types/car/car.input';
 import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarTransmission, CarTuningType, CarType } from '../../enums/car.enum';
@@ -34,8 +34,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 	const user = useReactiveVar(userVar);
 
 	/** APOLLO REQUESTS **/
-	const [createCar] = useMutation(CREATE_PROPERTY);
-	const [updateCar] = useMutation(UPDATE_PROPERTY);
+	const [createCar] = useMutation(CREATE_CAR);
+	const [updateCar] = useMutation(UPDATE_CAR);
 
 	const {
 		loading: getCarLoading,
@@ -200,31 +200,27 @@ const AddCar = ({ initialValues, ...props }: any) => {
 		}
 	}
 
-	const doDisabledCheck = () => {
-		if (
-			insertCarData.carTitle === '' ||
-			insertCarData.carPrice === 0 || // @ts-ignore
-			insertCarData.carType === '' || // @ts-ignore
-			insertCarData.carLocation === '' || // @ts-ignore
-			insertCarData.carAddress === '' || // @ts-ignore
-			insertCarData.carMadeIn === '' || // @ts-ignore
-			insertCarData.carBrand === '' || // @ts-ignore
-			insertCarData.carFuelType === '' || // @ts-ignore
-			insertCarData.carDriveType === '' || // @ts-ignore
-			insertCarData.carTransmission === '' || // @ts-ignore
-			insertCarData.carBody === '' || // @ts-ignore
-			insertCarData.carYear === '' || // @ts-ignore
-			insertCarData.carMileage === '' || // @ts-ignore
-			insertCarData.carMpgHw === '' || // @ts-ignore
-			insertCarData.carMpgCity === '' || // @ts-ignore
-			insertCarData.carBarter === '' || // @ts-ignore
-			insertCarData.carRent === '' ||
-			insertCarData.carDesc === '' ||
-			insertCarData.carImages.length === 0
-		) {
-			return true;
-		}
-	};
+	// const doDisabledCheck = () => {
+	// 	if (
+	// 		insertCarData.carTitle === '' ||
+	// 		insertCarData.carPrice === 0 || // @ts-ignore
+	// 		insertCarData.carLocation === '' || // @ts-ignore
+	// 		insertCarData.carAddress === '' || // @ts-ignore
+	// 		insertCarData.carMadeIn === '' || // @ts-ignore
+	// 		insertCarData.carBrand === '' || // @ts-ignore
+	// 		insertCarData.carFuelType === '' || // @ts-ignore
+	// 		insertCarData.carDriveType === '' || // @ts-ignore
+	// 		insertCarData.carTransmission === '' || // @ts-ignore
+	// 		insertCarData.carBody === '' || // @ts-ignore
+	// 		insertCarData.carYear === '' || // @ts-ignore
+	// 		insertCarData.carMileage === '' || // @ts-ignore
+	// 		insertCarData.carMpgHw === '' || // @ts-ignore
+	// 		insertCarData.carMpgCity === '' || // @ts-ignore
+	// 		insertCarData.carImages.length === 0
+	// 	) {
+	// 		return true;
+	// 	}
+	// };
 
 	const insertCarHandler = useCallback(async () => {
 		try {
@@ -268,7 +264,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 		}
 	}, [insertCarData]);
 
-	if (user?.memberType !== 'AGENT') {
+	if (user?.type !== 'AGENT') {
 		router.back();
 	}
 
@@ -287,14 +283,26 @@ const AddCar = ({ initialValues, ...props }: any) => {
 					<Stack className="config">
 						<Stack className="description-box">
 							<Stack className="config-column">
+								<Typography className="title">Car Title</Typography>
+								<input
+									type="text"
+									className="description-input"
+									placeholder={'Car Title'}
+									value={insertCarData?.carTitle}
+									onChange={({ target: { value } }) =>
+										setInsertCarData({ ...insertCarData, carTitle: value })
+									}
+								/>
+							</Stack>
+							<Stack className="config-column">
 								<Typography className="title">Model</Typography>
 								<input
 									type="text"
 									className="description-input"
 									placeholder={'Model'}
-									value={insertCarData?.carTitle}
+									value={insertCarData?.carModel}
 									onChange={({ target: { value } }) =>
-										setInsertCarData({ ...insertCarData, carTitle: value })
+										setInsertCarData({ ...insertCarData, carModel: value })
 									}
 								/>
 							</Stack>
@@ -367,7 +375,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Made In</Typography>
@@ -392,7 +399,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Brand</Typography>
@@ -417,7 +423,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 							</Stack>
 
@@ -445,7 +450,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Body</Typography>
@@ -470,7 +474,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Fuel</Typography>
@@ -495,7 +498,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 							</Stack>
 
@@ -523,7 +525,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Drive Type</Typography>
@@ -548,7 +549,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Transmission</Typography>
@@ -558,7 +558,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										value={insertCarData?.carTransmission || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertCarData, carTransmission: value })
+											setInsertCarData({ ...insertCarData, carTransmission: value })
 										}
 									>
 										<>
@@ -573,7 +573,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 							</Stack>
 
@@ -594,7 +593,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										<option value={'yes'}>Yes</option>
 										<option value={'no'}>No</option>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Rent</Typography>
@@ -612,7 +610,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										<option value={'yes'}>Yes</option>
 										<option value={'no'}>No</option>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 
 								<Stack className="price-year-after-price">
@@ -631,7 +628,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										<option value={'yes'}>Yes</option>
 										<option value={'no'}>No</option>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
 								</Stack>
 							</Stack>
 							<Stack className="config-row">
@@ -643,7 +639,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										value={insertCarData?.carLocation || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setInsertPropertyData({ ...insertCarData, carLocation: value })
+											setInsertCarData({ ...insertCarData, carLocation: value })
 										}
 									>
 										<>
@@ -658,7 +654,56 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												))}
 										</>
 									</select>
-									<img src={'/img/icons/Vector.svg'} className={'arrow-down'} />
+								</Stack>
+
+								<Stack className="price-year-after-price">
+									<Typography className="title">Sort</Typography>
+									<select
+										className={'select-description'}
+										defaultValue={insertCarData?.carSort || 'select'}
+										value={insertCarData?.carSort || 'select'}
+										onChange={({ target: { value } }) =>
+											// @ts-ignore
+											setInsertCarData({ ...insertCarData, carSort: value })
+										}
+									>
+										<>
+											<option selected={true} disabled={true} value={'select'}>
+												Select
+											</option>
+											{carSort?.length > 0 &&
+												carSort?.map((sort: any) => (
+													<option value={`${sort}`} key={sort}>
+														{sort}
+													</option>
+												))}
+										</>
+									</select>
+								</Stack>
+
+								<Stack className="price-year-after-price">
+									<Typography className="title">Tuning Type</Typography>
+									<select
+										className={'select-description'}
+										defaultValue={insertCarData?.carTuningType || 'select'}
+										value={insertCarData?.carTuningType || 'select'}
+										onChange={({ target: { value } }) =>
+											// @ts-ignore
+											setInsertCarData({ ...insertCarData, carTuningType: value })
+										}
+									>
+										<>
+											<option selected={true} disabled={true} value={'select'}>
+												Select
+											</option>
+											{carTuningType?.length > 0 &&
+												carTuningType?.map((tuningType: any) => (
+													<option value={`${tuningType}`} key={tuningType}>
+														{tuningType}
+													</option>
+												))}
+										</>
+									</select>
 								</Stack>
 
 								<Stack className="price-year-after-price">
@@ -1629,7 +1674,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								})}
 							</Stack>
 						</Stack>
-						<Typography className="upload-title">Upload Video of your Car</Typography>
+						{/* <Typography className="upload-title">Upload Video of your Car</Typography>
 						<Stack className="images-box">
 							<Stack className="upload-box">
 								<svg xmlns="http://www.w3.org/2000/svg" width="121" height="120" viewBox="0 0 121 120" fill="none">
@@ -1717,15 +1762,15 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									);
 								})}
 							</Stack>
-						</Stack>
+						</Stack> */}
 
 						<Stack className="buttons-row">
 							{router?.query?.carId ? (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={updateCarHandler}>
+								<Button className="next-button" onClick={updateCarHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							) : (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={insertCarHandler}>
+								<Button className="next-button" onClick={insertCarHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							)}

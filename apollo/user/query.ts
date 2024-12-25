@@ -199,39 +199,261 @@ export const GET_PROPERTIES = gql`
 	}
 `;
 
-export const GET_AGENT_PROPERTIES = gql`
-	query GetAgentProperties($input: AgentPropertiesInquiry!) {
-		getAgentProperties(input: $input) {
-			list {
-				_id
-				propertyType
-				propertyStatus
-				propertyLocation
-				propertyAddress
-				propertyTitle
-				propertyPrice
-				propertySquare
-				propertyBeds
-				propertyRooms
-				propertyViews
-				propertyLikes
-				propertyImages
-				propertyDesc
-				propertyBarter
-				propertyRent
-				memberId
-				soldAt
-				deletedAt
-				constructedAt
-				createdAt
-				updatedAt
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
+export const GET_ADCARS = gql`
+query GetAgentDealerCars($input: AgentDealerCarsInquiry!) {
+    getAgentDealerCars(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            carType
+            carTitle
+            carBody
+            carStatus
+            carSort
+            carGroup
+            carMadeIn
+            carBrand
+            carModel
+            carPrice
+            carImages
+            carVideo
+            carLocation
+            carAddress
+            carDesc
+            carBarter
+            carRent
+            carYear
+            carTuning
+            carTuningType
+            carMileage
+            carFuelType
+            carDriveType
+            carTransmission
+            carEngineSize
+            carColor
+            carFullFuel
+            carMpgHw
+            carMpgCity
+            carDoor
+            carCylinders
+            carMaxSpeed
+            carHundredSpeed
+            carHorsePower
+            carTorque
+            carLength
+            carHeigth
+            carWidth
+            carSeatsUp
+            carWeigth
+            carLoadWeight
+            carTireSize
+            carWheelBase
+            carAutoBrake
+            carCruiseControl
+            carESC
+            carAutonomuosDrive
+            carExteriorLight
+            carPanoramicSunroof
+            carHeatedSeats
+            carCooledSeats
+            carTouchscreenDisplay
+            carAutoHeadLight
+            carStarStop
+            carNoiseCancellation
+            carRemoteKeyless
+            carLaneDW
+            carBlindSpotMonitoring
+            carRearCrossTrafficAlert
+            carApplePlay
+            carAndroidAuto
+            carVoiceControl
+            carBluetoothConnectivity
+            carWirelessCharging
+            carParkingAssist
+            carSurroundViewCamera
+            carFrontSensors
+            carRearSensors
+            carFrontRecordCamera
+            carRearRecordCamera
+            carHeadsUpDisplay
+            carClimateControl
+            carAdjustableSeats
+            carMemorySeats
+            carPowerTrain
+            carRegenerativeBraking
+            carTractionControl
+            carStabilityControl
+            carHillStartAssist
+            carTirePressureSystem
+            carPushButton
+            carCrush
+            carRepair
+            carFrontBumper
+            carBackBumper
+            carBonnet
+            carTailgate
+            carRightFrontWing
+            carLeftFrontWing
+            carRightBackWing
+            carLeftBackWing
+            carRoof
+            carRightFrontDoor
+            carLeftFrontDoor
+            carRightBackDoor
+            carLeftBackDoor
+            carViews
+            carLikes
+            carSave
+            carComments
+            carRank
+            memberId
+            soldAt
+            deletedAt
+            createdAt
+            updatedAt
+            meSaved {
+                memberId
+                saveRefId
+                mySaved
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+            creatorData {
+                _id
+                type
+                status
+                authType
+                titleNick
+                fullName
+                image
+                images
+                location
+                address
+                shortDesc
+                longDesc
+                phone
+                phone2
+                email
+                kakaoTalk
+                youtube
+                instagram
+                facebook
+                tikTok
+                naverBlog
+                xcom
+                followers
+                followings
+                likes
+                views
+                comments
+                warnings
+                articles
+                blocks
+                memberCars
+                usedCars
+                newCars
+                rank
+                points
+                sellerProducts
+                dealerBrand
+                dealerFinancing
+                dealerCarService
+                dealerTradeIn
+                dealerCustomization
+                dealerWarranties
+                dealerParts
+                dealerAccessories
+                dealerCarDetailing
+                dealerCarWash
+                dealerCarTestDrive
+                dealerCarDelivery
+                dealerPlusService
+                carServiceType
+                carOilChange
+                carAlignment
+                carTireChange
+                carBrakeCheck
+                carBatteryCheck
+                carTireBalance
+                carSuspension
+                carAirCondition
+                carTransmissionCheck
+                carEngineDiagnostic
+                carExhaust
+                carDetailing
+                carWindshield
+                carTimingBelt
+                carChainReplacement
+                comfort
+                performance
+                exterior
+                interior
+                reliability
+                fast
+                openAt
+                closeAt
+                openSunday
+                closeSunday
+                openSaturday
+                closeSaturday
+                publicHolidays
+                deletedAt
+                createdAt
+                updatedAt
+                accessToken
+                meFollowed {
+                    followingId
+                    followerId
+                    myFollowing
+                }
+                meLiked {
+                    memberId
+                    likeRefId
+                    myFavorite
+                }
+            }
+        }
+    }
+}`;
+
+// export const GET_AGENT_PROPERTIES = gql`
+// 	query GetAgentProperties($input: AgentPropertiesInquiry!) {
+// 		getAgentProperties(input: $input) {
+// 			list {
+// 				_id
+// 				propertyType
+// 				propertyStatus
+// 				propertyLocation
+// 				propertyAddress
+// 				propertyTitle
+// 				propertyPrice
+// 				propertySquare
+// 				propertyBeds
+// 				propertyRooms
+// 				propertyViews
+// 				propertyLikes
+// 				propertyImages
+// 				propertyDesc
+// 				propertyBarter
+// 				propertyRent
+// 				memberId
+// 				soldAt
+// 				deletedAt
+// 				constructedAt
+// 				createdAt
+// 				updatedAt
+// 			}
+// 			metaCounter {
+// 				total
+// 			}
+// 		}
+// 	}
+// `;
 
 export const GET_FAVORITES = gql`
 	query GetFavorites($input: OrdinaryInquiry!) {
