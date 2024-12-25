@@ -104,11 +104,11 @@ const MyMenu = () => {
 							)}
 							{user?.type === 'SELLER' && (
 								<>
-									<ListItem className={pathname === 'addProduct' ? 'focus' : ''}>
+									<ListItem className={pathname === 'addProdcut' ? 'focus' : ''}>
 										<Link
 											href={{
 												pathname: '/mypage',
-												query: { category: 'addProduct' },
+												query: { category: 'addProdcut' },
 											}}
 											scroll={false}
 										>

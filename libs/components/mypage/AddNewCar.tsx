@@ -9,7 +9,7 @@ import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { CREATE_CAR, UPDATE_CAR } from '../../../apollo/user/mutation';
-import { GET_PROPERTY } from '../../../apollo/user/query';
+import { GET_CAR } from '../../../apollo/user/query';
 import { CarInput } from '../../types/car/car.input';
 import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarTransmission, CarTuningType, CarType } from '../../enums/car.enum';
 
@@ -42,7 +42,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 		data: getCarData,
 		error: getCarError,
 		refetch: getCarRefetch,
-	} = useQuery(GET_PROPERTY, {
+	} = useQuery(GET_CAR, {
 		fetchPolicy: 'network-only',
 		variables: {
 			input: router.query.carId,

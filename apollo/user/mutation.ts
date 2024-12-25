@@ -207,6 +207,181 @@ export const LIKE_TARGET_MEMBER = gql`
 `;
 
 /**************************
+ *        PROduct         *
+ *************************/
+
+export const CREATE_PRODUCT = gql`
+mutation CreateProduct($input: ProductInput!) {
+    createProduct(input: $input) {
+        _id
+        productType
+        productStatus
+        productTitle
+        productPrice
+        productQuantity
+        productImages
+        productShortDesc
+        productDesc
+        productViews
+        productLikes
+        productSave
+        productComments
+        productRank
+        memberId
+        deletedAt
+        createdAt
+        updatedAt
+    }
+}`;
+
+export const UPDATE_PRODUCT = gql`
+mutation UpdateProduct($input: ProductUpdate!) {
+    updateProduct(input: $input) {
+        _id
+        productType
+        productStatus
+        productTitle
+        productPrice
+        productQuantity
+        productImages
+        productShortDesc
+        productDesc
+        productViews
+        productLikes
+        productSave
+        productComments
+        productRank
+        memberId
+        deletedAt
+        createdAt
+        updatedAt
+    }
+}`;
+
+export const GET_PRODUCT = gql`
+query GetProduct($input: String!) {
+    getProduct(productId: $input) {
+        _id
+        productType
+        productStatus
+        productTitle
+        productPrice
+        productQuantity
+        productImages
+        productShortDesc
+        productDesc
+        productViews
+        productLikes
+        productSave
+        productComments
+        productRank
+        memberId
+        deletedAt
+        createdAt
+        updatedAt
+        meLiked {
+            memberId
+            likeRefId
+            myFavorite
+        }
+        creatorData {
+            _id
+            type
+            status
+            authType
+            titleNick
+            fullName
+            image
+            images
+            location
+            address
+            shortDesc
+            longDesc
+            phone
+            phone2
+            email
+            kakaoTalk
+            youtube
+            instagram
+            facebook
+            tikTok
+            naverBlog
+            xcom
+            followers
+            followings
+            likes
+            views
+            comments
+            warnings
+            articles
+            blocks
+            memberCars
+            usedCars
+            newCars
+            rank
+            points
+            sellerProducts
+            dealerBrand
+            dealerFinancing
+            dealerCarService
+            dealerTradeIn
+            dealerCustomization
+            dealerWarranties
+            dealerParts
+            dealerAccessories
+            dealerCarDetailing
+            dealerCarWash
+            dealerCarTestDrive
+            dealerCarDelivery
+            dealerPlusService
+            carServiceType
+            carOilChange
+            carAlignment
+            carTireChange
+            carBrakeCheck
+            carBatteryCheck
+            carTireBalance
+            carSuspension
+            carAirCondition
+            carTransmissionCheck
+            carEngineDiagnostic
+            carExhaust
+            carDetailing
+            carWindshield
+            carTimingBelt
+            carChainReplacement
+            comfort
+            performance
+            exterior
+            interior
+            reliability
+            fast
+            openAt
+            closeAt
+            openSunday
+            closeSunday
+            openSaturday
+            closeSaturday
+            publicHolidays
+            deletedAt
+            createdAt
+            updatedAt
+            accessToken
+            meFollowed {
+                followingId
+                followerId
+                myFollowing
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+        }
+    }
+}`;
+
+/**************************
  *        PROPERTY        *
  *************************/
 
