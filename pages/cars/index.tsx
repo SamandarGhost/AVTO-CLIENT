@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { Box, Button, Menu, MenuItem, Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import Filter from '../../libs/components/property/Filter';
+import Filter from '../../libs/components/car/Filter';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
@@ -16,6 +16,7 @@ import { LIKE_CAR, SAVE_CAR } from '../../apollo/user/mutation';
 import { Car } from '../../libs/types/car/car';
 import { CarsInquiry } from '../../libs/types/car/car.input';
 import { CarCard } from '../../libs/components/mypage/CarCard';
+import MainCarCard from '../../libs/components/car/MainCarCard';
 
 export const getStaticProps = async ({ locale }: any) => ({
     props: {
@@ -191,7 +192,7 @@ const CarList: NextPage = ({ initialInput, ...props }: any) => {
                                     </div>
                                 ) : (
                                     cars?.map((car: Car) => {
-                                        return <CarCard car={car} key={car?._id} likeCarHandler={likeCarHandler} saveCarHandler={saveCarHandler} />;
+                                        return <MainCarCard car={car} key={car?._id} likeCarHandler={likeCarHandler} saveCarHandler={saveCarHandler} />;
                                     })
                                 )}
                             </Stack>

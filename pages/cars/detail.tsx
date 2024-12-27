@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Box, Button, Checkbox, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { NextPage } from 'next';
-import Review from '../../libs/components/property/Review';
+import Review from '../../libs/components/car/Review';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 import PropertyBigCard from '../../libs/components/common/PropertyBigCard';

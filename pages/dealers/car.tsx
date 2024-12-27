@@ -17,7 +17,7 @@ import { Message } from '../../libs/enums/common.enum';
 import { Messages } from '../../libs/config';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
 import DealerCard from '../../libs/components/common/DealerCard';
-import PropertyCard from '../../libs/components/property/PropertyCard';
+import PropertyCard from '../../libs/components/car/MainCarCard';
 import { T } from '../../libs/types/common';
 import { Property } from '../../libs/types/property/property';
 

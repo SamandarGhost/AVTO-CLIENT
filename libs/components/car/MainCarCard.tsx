@@ -22,7 +22,7 @@ interface CarCardType {
 	recentlyVisited?: boolean;
 }
 
-const CarCard = (props: CarCardType) => {
+const MainCarCard = (props: CarCardType) => {
 	const { car, likeCarHandler, saveCarHandler, mySaved, myFavorites, recentlyVisited } = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
@@ -150,4 +150,4 @@ const CarCard = (props: CarCardType) => {
 	}
 };
 
-export default CarCard;
+export default MainCarCard;
