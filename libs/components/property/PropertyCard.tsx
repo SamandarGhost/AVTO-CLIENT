@@ -1,37 +1,44 @@
 import React from 'react';
-import { Stack, Typography, Box, Divider, Button } from '@mui/material';
+import { Stack, Typography, Box, Button } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Property } from '../../types/property/property';
 import Link from 'next/link';
-import { formatterStr } from '../../utils';
-import { REACT_APP_API_URL, topPropertyRank } from '../../config';
+import { REACT_APP_API_URL, topCarRank } from '../../config';
 import { useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import SpeedIcon from '@mui/icons-material/Speed';
-import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { Car } from '../../types/car/car';
+import { useRouter } from 'next/router';
 
-interface PropertyCardType {
-	property: Property;
-	likePropertyHandler?: any;
+interface CarCardType {
+	car: Car;
+	likeCarHandler?: any;
+	saveCarHandler?: any;
 	myFavorites?: boolean;
+	mySaved?: boolean;
 	recentlyVisited?: boolean;
 }
 
-const PropertyCard = (props: PropertyCardType) => {
-	const { property, likePropertyHandler, myFavorites, recentlyVisited } = props;
+const CarCard = (props: CarCardType) => {
+	const { car, likeCarHandler, saveCarHandler, mySaved, myFavorites, recentlyVisited } = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
-	const imagePath: string = property?.propertyImages[0]
-		? `${REACT_APP_API_URL}/${property?.propertyImages[0]}`
+	const router = useRouter();
+	const imagePath: string = car?.carImages?.[0]
+		? `${REACT_APP_API_URL}/${car?.carImages?.[0]}`
 		: '/img/banner/header1.svg';
 
+
+	const pushDetailhandler = async (carId: string) => {
+		console.log("carId:", carId);
+		await router.push({ pathname: '/cars/detail', query: { id: carId } })
+	};
+
 	if (device === 'mobile') {
-		return <div>PROPERTY CARD</div>;
+		return <div>CAR CARD</div>;
 	} else {
 		return (
 			<Stack className="card-config">
@@ -39,12 +46,12 @@ const PropertyCard = (props: PropertyCardType) => {
 					<Link
 						href={{
 							pathname: '/cars/detail',
-							query: { id: property?._id },
+							query: { id: car?._id },
 						}}
 					>
 						<img src={imagePath} alt="" />
 					</Link>
-					{property && property?.propertyRank > topPropertyRank && (
+					{car && car?.carRank > topCarRank && (
 						<Box component={'div'} className={'top-badge'}>
 							<img src="/img/icons/electricity.svg" alt="" />
 							<Typography>TOP</Typography>
@@ -56,16 +63,16 @@ const PropertyCard = (props: PropertyCardType) => {
 						<Stack className="name">
 							<Link
 								href={{
-									pathname: '/property/detail',
-									query: { id: property?._id },
+									pathname: '/cars/detail',
+									query: { id: car?._id },
 								}}
 							>
-								<Typography>Mercedes Benz AMG GTR</Typography>
+								<Typography>{car?.carTitle}</Typography>
 							</Link>
 						</Stack>
 						<Stack className="address">
 							<Typography>
-								{property.propertyAddress}, {property.propertyLocation}
+								{car?.carAddress}, {car?.carLocation}
 							</Typography>
 						</Stack>
 					</Stack>
@@ -74,27 +81,27 @@ const PropertyCard = (props: PropertyCardType) => {
 							<Box className={'box'}>
 								<img src="/img/icons/speedb.svg" alt="" /> <Typography>Mileage</Typography>
 							</Box>
-							<Typography>123,500 Mile</Typography>
+							<Typography>{car?.carMileage} Mile</Typography>
 						</Stack>
 						<Stack className="option">
 							<Box className={'box'}>
 								<img src="/img/icons/petrolb.svg" alt="" /> <Typography>Petrol</Typography>
 							</Box>
-							<Typography>GASOLINE</Typography>
+							<Typography>{car?.carFuelType}</Typography>
 						</Stack>
 						<Stack className="option">
 							<Box className={'box'}>
 								<img src="/img/icons/transb.svg" alt="" /> <Typography>Transmission</Typography>
 							</Box>
-							<Typography>AUTOMATIC</Typography>
+							<Typography>{car?.carTransmission}</Typography>
 						</Stack>
 					</Stack>
 					<Stack className="type-buttons">
 						<Stack className="type">
-							<Box className={'feature'}>Rent</Box>
-							<Box className={'feature'}>Barter</Box>
-							<Box className={'feature'}>Keyless Start</Box>
-							<Box className={'feature'}>Bluetooth</Box>
+							{car?.carRent === true && (<Box className={'feature'}>Rent</Box>)}
+							{car?.carBarter === true && (<Box className={'feature'}>Barter</Box>)}
+							{car?.carRemoteKeyless === true && (<Box className={'feature'}>Keyless Start</Box>)}
+							{car?.carBluetoothConnectivity === true && (<Box className={'feature'}>Bluetooth</Box>)}
 						</Stack>
 					</Stack>
 				</Stack>
@@ -105,28 +112,37 @@ const PropertyCard = (props: PropertyCardType) => {
 							<IconButton color={'default'}>
 								<RemoveRedEyeIcon />
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyViews}</Typography>
-							<IconButton color={'default'} onClick={() => likePropertyHandler(user, property?._id)}>
+							<Typography className="view-cnt">{car?.carViews}</Typography>
+							<IconButton color={'default'} onClick={() => likeCarHandler(user, car?._id)}>
 								{myFavorites ? (
 									<FavoriteIcon color="primary" />
-								) : property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+								) : car?.meLiked && car?.meLiked[0]?.myFavorite ? (
 									<FavoriteIcon color="primary" />
 								) : (
 									<FavoriteBorderIcon />
 								)}
 							</IconButton>
-							<Typography className="view-cnt">{property?.propertyLikes}</Typography>
+							<Typography className="view-cnt">{car?.carLikes}</Typography>
 						</Stack>
 					)}
 					<Box className={'save-box'}>
 						<span>Save</span>
-						<div>
-							<BookmarkIcon />
+						<div onClick={() => saveCarHandler(user, car?._id)}>
+							{mySaved ? (
+								<BookmarkIcon color="secondary" />
+
+							) : car?.meSaved && car?.meSaved?.[0]?.mySaved ? (
+
+								<BookmarkIcon color="secondary" />
+
+							) : (
+								<BookmarkIcon />
+							)}
 						</div>
 					</Box>
-					<Typography className={'price'}>$1,000,000</Typography>
+					<Typography className={'price'}>${car?.carPrice}</Typography>
 					<Box className={'btn-box'}>
-						<Button className={'button'}>View Detail</Button>
+						<Button className={'button'} onClick={() => pushDetailhandler(car?._id)}>View Detail</Button>
 					</Box>
 				</Stack>
 			</Stack>
@@ -134,4 +150,4 @@ const PropertyCard = (props: PropertyCardType) => {
 	}
 };
 
-export default PropertyCard;
+export default CarCard;

@@ -7,7 +7,7 @@ import { Property } from '../../types/property/property';
 import { PropertiesInquiry } from '../../types/property/property.input';
 import { T } from '../../types/common';
 import { useRouter } from 'next/router';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
+import { GET_CARS } from '../../../apollo/user/query';
 import { useQuery } from '@apollo/client';
 
 const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
@@ -24,7 +24,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 		data: getPropertiesData,
 		error: getPropertiesError,
 		refetch: getPropertiesRefetch,
-	} = useQuery(GET_PROPERTIES, {
+	} = useQuery(GET_CARS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		skip: !searchFilter?.search?.memberId,

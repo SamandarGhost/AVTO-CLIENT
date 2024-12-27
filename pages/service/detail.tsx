@@ -14,7 +14,7 @@ import { CommentGroup } from '../../libs/enums/comment.enum';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { GET_COMMENTS, GET_PROPERTIES, GET_PROPERTY } from '../../apollo/user/query';
+import { GET_CAR, GET_CARS, GET_COMMENTS } from '../../apollo/user/query';
 import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
@@ -59,7 +59,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         data: getPropertyData,
         error: getPropertyError,
         refetch: getPropertyRefetch
-    } = useQuery(GET_PROPERTY, {
+    } = useQuery(GET_CAR, {
         fetchPolicy: 'network-only',
         variables: { input: propertyId },
         skip: !propertyId,
@@ -75,7 +75,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         data: getPropertiesData,
         error: getPropertiesError,
         refetch: getPropertiesRefetch
-    } = useQuery(GET_PROPERTIES, {
+    } = useQuery(GET_CARS, {
         fetchPolicy: 'cache-and-network',
         variables: {
             input: {

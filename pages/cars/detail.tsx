@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Box, Button, Checkbox, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import { NextPage } from 'next';
 import Review from '../../libs/components/property/Review';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -27,8 +26,8 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { GET_COMMENTS, GET_PROPERTIES, GET_PROPERTY } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
+import { GET_CAR, GET_CARS, GET_COMMENTS } from '../../apollo/user/query';
+import { CREATE_COMMENT, LIKE_CAR, SAVE_CAR } from '../../apollo/user/mutation';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
@@ -93,6 +92,8 @@ import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import FitbitOutlinedIcon from '@mui/icons-material/FitbitOutlined'; // flibit
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 import AlternateEmailOutlinedIcon from '@mui/icons-material/AlternateEmailOutlined';
+import { Car } from '../../libs/types/car/car';
+import { CarType } from '../../libs/enums/car.enum';
 
 
 
@@ -111,44 +112,45 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     const device = useDeviceDetect();
     const router = useRouter();
     const user = useReactiveVar(userVar);
-    const [propertyId, setPropertyId] = useState<string | null>(null);
-    const [property, setProperty] = useState<Property | null>(null);
+    const [carId, setCarId] = useState<string | null>(null);
+    const [car, setCar] = useState<Car | null>(null);
     const [slideImage, setSlideImage] = useState<string>('');
-    const [destinationProperties, setDestinationProperty] = useState<Property[]>([]);
+    const [destinationCars, setDestinationCars] = useState<Car[]>([]);
     const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
     const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
     const [commentTotal, setCommentTotal] = useState<number>(0);
     const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-        commentGroup: CommentGroup.PROPERTY,
+        commentGroup: CommentGroup.CAR,
         commentContent: '',
         commentRefId: '',
     });
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_CAR);
+    const [likeTargetCar] = useMutation(LIKE_CAR);
+    const [saveTargetCar] = useMutation(SAVE_CAR);
     const [createComment] = useMutation(CREATE_COMMENT);
     const {
-        loading: getPropertyLoading,
-        data: getPropertyData,
-        error: getPropertyError,
-        refetch: getPropertyRefetch
-    } = useQuery(GET_PROPERTY, {
+        loading: getCarLoading,
+        data: getCarData,
+        error: getCarError,
+        refetch: getCarRefetch
+    } = useQuery(GET_CAR, {
         fetchPolicy: 'network-only',
-        variables: { input: propertyId },
-        skip: !propertyId,
+        variables: { input: carId },
+        skip: !carId,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperty) setProperty(data?.getProperty);
-            if (data?.getProperty) setSlideImage(data?.getProperty?.propertyImages[0]);
+            if (data?.getCar) setCar(data?.getCar);
+            if (data?.getCar) setSlideImage(data?.getCar?.carImages[0]);
         },
     });
 
     const {
-        loading: getPropertiesLoading,
-        data: getPropertiesData,
-        error: getPropertiesError,
-        refetch: getPropertiesRefetch
-    } = useQuery(GET_PROPERTIES, {
+        loading: getCarsLoading,
+        data: getCarsData,
+        error: getCarsError,
+        refetch: getCarsRefetch
+    } = useQuery(GET_CARS, {
         fetchPolicy: 'cache-and-network',
         variables: {
             input: {
@@ -157,15 +159,15 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                 sort: 'createdAt',
                 direction: Direction.DESC,
                 search: {
-                    locationList: property?.propertyLocation ? [property?.propertyLocation] : [],
+                    locationList: car?.carLocation ? [car?.carLocation] : [],
                 },
 
             },
         },
-        skip: !propertyId && !property,
+        skip: !carId && !car,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperties) setDestinationProperty(data?.getProperties?.list);
+            if (data?.getCars) setDestinationCars(data?.getCars?.list);
         },
     });
 
@@ -188,16 +190,16 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     /** LIFECYCLES **/
     useEffect(() => {
         if (router.query.id) {
-            setPropertyId(router.query.id as string);
+            setCarId(router?.query?.id as string);
             setCommentInquiry({
                 ...commentInquiry,
                 search: {
-                    commentRefId: router.query.id as string,
+                    commentRefId: router?.query?.id as string,
                 },
             });
             setInsertCommentData({
                 ...insertCommentData,
-                commentRefId: router.query.id as string,
+                commentRefId: router?.query?.id as string,
             });
         }
     }, [router]);
@@ -213,34 +215,58 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         setSlideImage(image);
     };
 
-    const likePropertyHandler = async (user: T, id: string) => {
+    const likeCarHandler = async (user: T, id: string) => {
         try {
             if (!id) return;
             if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
-            // execute likePropertyHandler mutation
-
-            await likeTargetProperty({
+            await likeTargetCar({
                 variables: { input: id },
             });
 
-            // execute getPropertiesRefetch
-            await getPropertyRefetch({ input: id });
-            getPropertiesRefetch({
+            await getCarRefetch({ input: id });
+            getCarsRefetch({
                 input: {
                     page: 1,
                     limit: 4,
                     sort: 'createdAt',
                     direction: Direction.DESC,
                     search: {
-                        locationList: [property?.propertyLocation],
+                        locationList: [car?.carLocation],
                     },
                 },
             });
 
             await sweetTopSmallSuccessAlert('seccess', 800);
         } catch (err: any) {
-            console.log('ERROR, likePropertyHandler:', err);
+            sweetMixinErrorAlert(err.message).then;
+        }
+    };
+
+    const saveCarHandler = async (user: T, id: string) => {
+        try {
+            if (!id) return;
+            if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+
+            await saveTargetCar({
+                variables: { input: id },
+            });
+
+            await getCarRefetch({ input: id });
+            getCarsRefetch({
+                input: {
+                    page: 1,
+                    limit: 4,
+                    sort: 'createdAt',
+                    direction: Direction.DESC,
+                    search: {
+                        locationList: [car?.carLocation],
+                    },
+                },
+            });
+
+            await sweetTopSmallSuccessAlert('seccess', 800);
+        } catch (err: any) {
             sweetMixinErrorAlert(err.message).then;
         }
     };
@@ -252,7 +278,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 
     const createCommentHandler = async () => {
         try {
-            if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+            if (!user?._id) throw new Error(Message.NOT_AUTHENTICATED);
             await createComment({ variables: { input: insertCommentData } });
 
             setInsertCommentData({ ...insertCommentData, commentContent: '' });
@@ -263,7 +289,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         }
     };
 
-    if (getPropertyLoading) {
+    if (getCarLoading) {
         return (
             <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
                 <CircularProgress size={'4rem'} />
@@ -272,7 +298,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     };
 
     if (device === 'mobile') {
-        return <div>PROPERTY DETAIL PAGE</div>;
+        return <div>CAR DETAIL PAGE</div>;
     } else {
         return (
             <div id={'property-detail-page'}>
@@ -281,13 +307,13 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                         <Stack className={'property-info-config'}>
                             <Stack className={'info'}>
                                 <Stack className={'left-box'}>
-                                    <Typography className={'title-main'}>Volvo XC90</Typography>
-                                    <Typography className={'title-small'}>Volvo XC90 new car and comfortable</Typography>
+                                    <Typography className={'title-main'}>{car?.carModel}</Typography>
+                                    <Typography className={'title-small'}>{car?.carTitle}</Typography>
                                     <Stack className={'top-box'}>
-                                        <Typography className={'city'}>{property?.propertyLocation}</Typography>
+                                        <Typography className={'city'}>{car?.carLocation}</Typography>
                                         <Stack className={'divider'}></Stack>
                                         <Stack className={'buy-rent-box'}>
-                                            {property?.propertyBarter && (
+                                            {car?.carBarter && (
                                                 <>
                                                     <Stack className={'circle'}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
@@ -298,7 +324,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                 </>
                                             )}
 
-                                            {property?.propertyRent && (
+                                            {car?.carRent && (
                                                 <>
                                                     <Stack className={'circle'}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
@@ -327,20 +353,20 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                 </clipPath>
                                             </defs>
                                         </svg>
-                                        <Typography className={'date'}>{moment().diff(property?.createdAt, 'days')} days ago</Typography>
+                                        <Typography className={'date'}>{moment().diff(car?.createdAt, 'days')} days ago</Typography>
                                     </Stack>
                                     <Stack className={'bottom-box'}>
                                         <Stack className="option">
-                                            <img src="/img/icons/years.svg" alt="" /> <Typography>2023</Typography>
+                                            <img src="/img/icons/years.svg" alt="" /> <Typography>{car?.carYear}</Typography>
                                         </Stack>
                                         <Stack className="option">
-                                            <img src="/img/icons/speeds.svg" alt="" /> <Typography>110,500</Typography>
+                                            <img src="/img/icons/speeds.svg" alt="" /> <Typography>{car?.carMileage}</Typography>
                                         </Stack>
                                         <Stack className="option">
-                                            <img src="/img/icons/transs.svg" alt="" /> <Typography>MANUAL</Typography>
+                                            <img src="/img/icons/transs.svg" alt="" /> <Typography>{car?.carTransmission}</Typography>
                                         </Stack>
                                         <Stack className="option">
-                                            <img src="/img/icons/petrols.svg" alt="" /> <Typography>GASOLINE</Typography>
+                                            <img src="/img/icons/petrols.svg" alt="" /> <Typography>{car?.carFuelType}</Typography>
                                         </Stack>
                                     </Stack>
                                 </Stack>
@@ -348,42 +374,42 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                     <Stack className="buttons">
                                         <Typography>Save</Typography>
                                         <Box className={'save-box'}>
-                                            {property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+                                            {car?.meSaved && car?.meSaved[0]?.mySaved ? (
 
                                                 <BookmarkBorderIcon
                                                     // @ts-ignore
-                                                    onClick={() => likePropertyHandler(user, property?._id)}
-                                                    color="primary" fontSize={'medium'} />
+                                                    onClick={() => saveCarHandler(user, car?._id)}
+                                                    color="secondary" fontSize={'medium'} />
                                             ) : (
                                                 <BookmarkBorderIcon
                                                     fontSize={'medium'}
                                                     // @ts-ignore
-                                                    onClick={() => likePropertyHandler(user, property?._id)}
+                                                    onClick={() => saveCarHandler(user, car?._id)}
                                                 />
                                             )}
                                         </Box>
                                         <Stack className="button-box">
                                             <RemoveRedEyeIcon fontSize="medium" />
-                                            <Typography>{property?.propertyViews}</Typography>
+                                            <Typography>{car?.carViews}</Typography>
                                         </Stack>
                                         <Stack className="button-box">
-                                            {property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+                                            {car?.meLiked && car?.meLiked[0]?.myFavorite ? (
 
                                                 <FavoriteIcon
                                                     // @ts-ignore
-                                                    onClick={() => likePropertyHandler(user, property?._id)}
+                                                    onClick={() => likeCarHandler(user, car?._id)}
                                                     color="primary" fontSize={'medium'} />
                                             ) : (
                                                 <FavoriteBorderIcon
                                                     fontSize={'medium'}
                                                     // @ts-ignore
-                                                    onClick={() => likePropertyHandler(user, property?._id)}
+                                                    onClick={() => likeCarHandler(user, car?._id)}
                                                 />
                                             )}
-                                            <Typography>{property?.propertyLikes}</Typography>
+                                            <Typography>{car?.carLikes}</Typography>
                                         </Stack>
                                     </Stack>
-                                    <Typography>${formatterStr(property?.propertyPrice)}</Typography>
+                                    <Typography>${formatterStr(car?.carPrice)}</Typography>
                                     <Stack className={'offer'}>
                                         <img src="/img/icons/offerb.svg" alt="" /><Typography>Make An Offer Price</Typography>
                                     </Stack>
@@ -400,7 +426,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                     <Stack className={'sub-img-box'}>
                                         <img src={''} alt={'sub-image'} />
                                     </Stack>
-                                    {property?.propertyImages.slice(0, 3).map((subImg: string) => {
+                                    {car?.carImages.slice(0, 3).map((subImg: string) => {
                                         const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
                                         return (
                                             <Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
@@ -419,13 +445,13 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                         <Box className={'under-box'}>
                                             <Typography className={'desc'}>
                                                 <PushPinOutlinedIcon className={'icon'} />
-                                                Address: 300 Olympic-ro, Songpa District, Seoul 405 room
+                                                {car?.carAddress}
                                             </Typography>
                                             <div>
-                                                <span>PERSONALIZATION</span>
+                                                <span>{car?.carTuningType}</span>
                                             </div>
                                             <div>
-                                                <span>SUPER CAR</span>
+                                                <span>{car?.carGroup}</span>
                                             </div>
                                         </Box>
                                     </Stack>
@@ -438,63 +464,63 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                         <img src="/img/icons/carbody.svg" alt="" />
                                                         Body:
                                                     </div>
-                                                    <Typography className={'data'}>SUV</Typography>
+                                                    <Typography className={'data'}>{car?.carBody}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/speedb.svg" alt="" />
                                                         Mile:
                                                     </div>
-                                                    <Typography className={'data'}>110,500</Typography>
+                                                    <Typography className={'data'}>{car?.carMileage}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/petrolb.svg" alt="" />
                                                         Fuel:
                                                     </div>
-                                                    <Typography className={'data'}>GASOLINE</Typography>
+                                                    <Typography className={'data'}>{car?.carFuelType}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/yearb.svg" alt="" />
                                                         Year:
                                                     </div>
-                                                    <Typography className={'data'}>2023</Typography>
+                                                    <Typography className={'data'}>{car?.carYear}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/transb.svg" alt="" />
                                                         Trans:
                                                     </div>
-                                                    <Typography className={'data'}>AUTOMATIC</Typography>
+                                                    <Typography className={'data'}>{car?.carTransmission}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/engineb.svg" alt="" />
                                                         Size:
                                                     </div>
-                                                    <Typography className={'data'}>4.5 L</Typography>
+                                                    <Typography className={'data'}>{car?.carEngineSize}L</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/doorb.svg" alt="" />
                                                         Doors:
                                                     </div>
-                                                    <Typography className={'data'}>4</Typography>
+                                                    <Typography className={'data'}>{car?.carDoor}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/cyldb.svg" alt="" />
                                                         Cylinders
                                                     </div>
-                                                    <Typography className={'data'}>6</Typography>
+                                                    <Typography className={'data'}>{car?.carCylinders}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <img src="/img/icons/driveb.svg" alt="" />
                                                         Drive:
                                                     </div>
-                                                    <Typography className={'data'}>FWD</Typography>
+                                                    <Typography className={'data'}>{car?.carDriveType}</Typography>
                                                 </Box>
                                             </Stack>
                                             <Stack className={'middle'}>
@@ -503,63 +529,63 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                         <img src="/img/icons/conb.svg" alt="" />
                                                         Condition:
                                                     </div>
-                                                    <Typography className={'data'}>USED</Typography>
+                                                    <Typography className={'data'}>{car?.carType}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <LanguageOutlinedIcon className={'icons'} />
                                                         MadeIn:
                                                     </div>
-                                                    <Typography className={'data'}>Sweden</Typography>
+                                                    <Typography className={'data'}>{car?.carMadeIn}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <CarRepairOutlinedIcon className={'icons'} />
                                                         Brand:
                                                     </div>
-                                                    <Typography className={'data'}>Volvo</Typography>
+                                                    <Typography className={'data'}>{car?.carBrand}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <HandymanOutlinedIcon className={'icons'} />
                                                         Repair:
                                                     </div>
-                                                    <Typography className={'data'}>0 repaires</Typography>
+                                                    <Typography className={'data'}>{car?.carRepair}repaires</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <MinorCrashOutlinedIcon className={'icons'} />
                                                         Crush:
                                                     </div>
-                                                    <Typography className={'data'}>0 crushes</Typography>
+                                                    <Typography className={'data'}>{car?.carCrush} crushes</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <ApartmentOutlinedIcon className={'icons'} />
                                                         MpgCity:
                                                     </div>
-                                                    <Typography className={'data'}>500 km</Typography>
+                                                    <Typography className={'data'}>{car?.carMpgCity} km</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <AddRoadOutlinedIcon className={'icons'} />
                                                         MpgHw:
                                                     </div>
-                                                    <Typography className={'data'}>600 km</Typography>
+                                                    <Typography className={'data'}>{car?.carMpgHw} km</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <ScaleOutlinedIcon className={'icons'} />
                                                         Weigth:
                                                     </div>
-                                                    <Typography className={'data'}>900 kg</Typography>
+                                                    <Typography className={'data'}>{car?.carWeigth} kg</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <LocalShippingOutlinedIcon className={'icons'} />
                                                         Load Weigth:
                                                     </div>
-                                                    <Typography className={'data'}>1000 kg</Typography>
+                                                    <Typography className={'data'}>{car?.carLoadWeight} kg</Typography>
                                                 </Box>
                                             </Stack>
                                             <Stack className={'right'}>
@@ -568,63 +594,63 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                         <img src="/img/icons/colorb.svg" alt="" />
                                                         Color:
                                                     </div>
-                                                    <Typography className={'data'}>White</Typography>
+                                                    <Typography className={'data'}>{car?.carColor}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <SpeedOutlinedIcon className={'icons'} />
                                                         Max Speed:
                                                     </div>
-                                                    <Typography className={'data'}>300 km/h</Typography>
+                                                    <Typography className={'data'}>{car?.carMaxSpeed} km/h</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <ElectricBoltOutlinedIcon className={'icons'} />
                                                         100km Speed
                                                     </div>
-                                                    <Typography className={'data'}>4.5 s</Typography>
+                                                    <Typography className={'data'}>{car?.carHundredSpeed} s</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <HeightOutlinedIcon className={'icons'} />
                                                         Heigth:
                                                     </div>
-                                                    <Typography className={'data'}>1.80 m</Typography>
+                                                    <Typography className={'data'}>{car?.carHeigth} m</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <DirectionsCarOutlinedIcon className={'icons'} />
                                                         Width:
                                                     </div>
-                                                    <Typography className={'data'}>2 m</Typography>
+                                                    <Typography className={'data'}>{car?.carWidth} m</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <AirportShuttleOutlinedIcon className={'icons'} />
                                                         Length:
                                                     </div>
-                                                    <Typography className={'data'}>3 m</Typography>
+                                                    <Typography className={'data'}>{car?.carLength} m</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <DonutSmallOutlinedIcon className={'icons'} />
                                                         Tire:
                                                     </div>
-                                                    <Typography className={'data'}>235/50 R18</Typography>
+                                                    <Typography className={'data'}>{car?.carTireSize}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <AirlineSeatReclineNormalOutlinedIcon className={'icons'} />
                                                         Seats:
                                                     </div>
-                                                    <Typography className={'data'}>5 </Typography>
+                                                    <Typography className={'data'}>{car?.carSeatsUp}</Typography>
                                                 </Box>
                                                 <Box component={'div'} className={'info'}>
                                                     <div>
                                                         <SwapHorizontalCircleOutlinedIcon className={'icons'} />
                                                         Wheel Base
                                                     </div>
-                                                    <Typography className={'data'}>112.8 inches</Typography>
+                                                    <Typography className={'data'}>{car?.carWheelBase} inches</Typography>
                                                 </Box>
                                             </Stack>
                                         </Stack>
@@ -634,54 +660,88 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                     <Stack className={'top'}>
                                         <Typography className={'title'}>Car Description</Typography>
                                     </Stack>
-                                    <Stack className={'bottom'}>
-                                        <Typography className={'data'}>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-                                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</Typography>
-                                    </Stack>
+                                    {car?.carDesc !== '' ? (
+                                        <Stack className={'bottom'}>
+                                            <Typography className={'data'}>
+                                                {car?.carDesc}
+                                            </Typography>
+                                        </Stack>
+                                    ) : (
+                                        <Stack className={'bottom'}>
+                                            <Typography className={'data'}>
+                                                No Description
+                                            </Typography>
+                                        </Stack>
+                                    )}
                                 </Stack>
                                 <Stack className={'floor-plans-config'}>
                                     <Typography className={'title'}>Car Crush Parts</Typography>
                                     <Stack className={'image-box'}>
-                                        <div className={'front-bumper'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'rear-bumper'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'bonnet'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'tailgate'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'rf-wing'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'lf-wing'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'rb-wing'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'lb-wing'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'roof'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'rf-door'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'lf-door'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'rb-door'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
-                                        <div className={'lb-door'}>
-                                            <img src="/img/logo/cancle2.svg" alt="" />
-                                        </div>
+                                        {car?.carFrontBumper === true && (
+                                            <div className={'front-bumper'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carBackBumper === true && (
+                                            <div className={'rear-bumper'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carBonnet === true && (
+                                            <div className={'bonnet'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carTailgate === true && (
+                                            <div className={'tailgate'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carRightFrontWing === true && (
+                                            <div className={'rf-wing'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carLeftFrontWing === true && (
+                                            <div className={'lf-wing'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carRightBackWing === true && (
+                                            <div className={'rb-wing'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carLeftBackWing === true && (
+                                            <div className={'lb-wing'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carRoof === true && (
+                                            <div className={'roof'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carRightFrontDoor === true && (
+                                            <div className={'rf-door'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carLeftFrontDoor === true && (
+                                            <div className={'lf-door'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carLeftBackDoor === true && (
+                                            <div className={'rb-door'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
+                                        {car?.carLeftBackDoor === true && (
+                                            <div className={'lb-door'}>
+                                                <img src="/img/logo/cancle2.svg" alt="" />
+                                            </div>
+                                        )}
                                         <img src={'/img/carBody/carbody.jpg'} alt={'image'} />
                                     </Stack>
                                 </Stack>
@@ -777,208 +837,282 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             <PasswordOutlinedIcon className={'icon'} />
                                             We offer all the features of our car here for you
                                         </Typography>
-                                        <Box component={'div'} className={'info'}>
-                                            <DonutSmallOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Auto Brake</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <TimeToLeaveOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Cruise Control</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <SurroundSoundOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Car ESC system</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <NoCrashOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Autonomuos Drive</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <FlashlightOnOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Exterior Light</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <LightModeOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Panoramic Sun Roof</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <AirlineSeatLegroomExtraOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Heated Seats</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <AcUnitOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Cooled Seats</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <SmartDisplayOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Touch Screen</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <HighlightOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Auto Head Light</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <PanToolAltOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Keyless Start/Stop</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <NoiseControlOffOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Noise Cancellation</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <SettingsRemoteOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Remote Keyless</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <SendOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Lane DW System</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <VisibilityOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Blind Monitoring</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <CommuteOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Rear Traffic Alert</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <AirplayOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Apple Play</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <CastOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Android Play</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <RecordVoiceOverOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Voice Control</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <BluetoothConnectedOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Bluetooth</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <ElectricalServicesOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Charging</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <LocalParkingOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Parking Assist</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <ThreeSixtyOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>360 Camera</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <SkipNextOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Front Sensor</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <SkipPreviousOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Rear Sensor</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <CameraOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Front Camera</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <FlipCameraAndroidOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Rear Camera</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <LensBlurOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Heads Up Display</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <ThunderstormOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Climate Control</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <AirlineSeatReclineExtraOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Adjustable Seats</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <PsychologyOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Memory Seats</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <BatteryCharging20OutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Regenerative Braking</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <DeblurOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Traction Control</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <VideoStableOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Stability Control</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <TimelineOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Hill Start Assist</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <TireRepairOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Tire Pressure System</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
-                                        <Box component={'div'} className={'info'}>
-                                            <TouchAppOutlinedIcon className={'icons'} />
-                                            <Typography className={'data'}>Push Button</Typography>
-                                            <DoneAllOutlinedIcon className={'icons'} />
-                                        </Box>
+                                        {car?.carAutoBrake === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <DonutSmallOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Auto Brake</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carCruiseControl === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <TimeToLeaveOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Cruise Control</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carESC === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <SurroundSoundOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Car ESC system</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carAutonomuosDrive === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <NoCrashOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Autonomuos Drive</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carExteriorLight === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <FlashlightOnOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Exterior Light</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carPanoramicSunroof === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <LightModeOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Panoramic Sun Roof</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carHeatedSeats === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <AirlineSeatLegroomExtraOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Heated Seats</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carCooledSeats === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <AcUnitOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Cooled Seats</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carTouchscreenDisplay === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <SmartDisplayOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Touch Screen</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carAutoHeadLight === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <HighlightOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Auto Head Light</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carStarStop === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <PanToolAltOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Keyless Start/Stop</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carNoiseCancellation === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <NoiseControlOffOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Noise Cancellation</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carRemoteKeyless === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <SettingsRemoteOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Remote Keyless</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carLaneDW === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <SendOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Lane DW System</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carBlindSpotMonitoring === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <VisibilityOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Blind Monitoring</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carRearCrossTrafficAlert === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <CommuteOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Rear Traffic Alert</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carApplePlay === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <AirplayOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Apple Play</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carAndroidAuto === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <CastOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Android Play</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carVoiceControl === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <RecordVoiceOverOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Voice Control</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carBluetoothConnectivity === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <BluetoothConnectedOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Bluetooth</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carWirelessCharging === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <ElectricalServicesOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Charging</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carParkingAssist === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <LocalParkingOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Parking Assist</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carSurroundViewCamera === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <ThreeSixtyOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>360 Camera</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carFrontSensors === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <SkipNextOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Front Sensor</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carRearSensors === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <SkipPreviousOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Rear Sensor</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carFrontRecordCamera === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <CameraOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Front Camera</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carRearRecordCamera === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <FlipCameraAndroidOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Rear Camera</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carHeadsUpDisplay === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <LensBlurOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Heads Up Display</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carClimateControl === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <ThunderstormOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Climate Control</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carAdjustableSeats === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <AirlineSeatReclineExtraOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Adjustable Seats</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carMemorySeats === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <PsychologyOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Memory Seats</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carRegenerativeBraking === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <BatteryCharging20OutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Regenerative Braking</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carTractionControl === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <DeblurOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Traction Control</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carStabilityControl === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <VideoStableOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Stability Control</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carHillStartAssist === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <TimelineOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Hill Start Assist</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carTirePressureSystem === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <TireRepairOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Tire Pressure System</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
+                                        {car?.carPushButton === true && (
+                                            <Box component={'div'} className={'info'}>
+                                                <TouchAppOutlinedIcon className={'icons'} />
+                                                <Typography className={'data'}>Push Button</Typography>
+                                                <DoneAllOutlinedIcon className={'icons'} />
+                                            </Box>
+                                        )}
                                     </Stack>
                                 </Stack>
                                 <Stack className={'right-config'}>
                                     <Stack className={'info-box'}>
-                                        <Typography className={'main-title'}>Get More Information</Typography>
+                                        <Typography className={'main-title'}>Send Message Author</Typography>
                                         <Stack className={'image-info'}>
                                             <img
                                                 className={'member-image'}
                                                 src={
-                                                    property?.memberData?.memberImage
-                                                        ? `${REACT_APP_API_URL}/${property?.memberData?.memberImage}`
+                                                    car?.creatorData?.image
+                                                        ? `${REACT_APP_API_URL}/${car?.creatorData?.image}`
                                                         : '/img/profile/defaultUser.svg'
                                                 }
                                             />
                                             <Stack className={'name-phone-listings'}>
-                                                <Link href={`/member?memberId=${property?.memberData?._id}`}>
-                                                    <Typography className={'name'}>{property?.memberData?.memberNick}</Typography>
+                                                <Link href={`/member?memberId=${car?.creatorData?._id}`}>
+                                                    <Typography className={'name'}>{car?.creatorData?.titleNick}</Typography>
                                                 </Link>
                                                 <Stack className={'phone-number'}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
@@ -994,22 +1128,22 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                             </clipPath>
                                                         </defs>
                                                     </svg>
-                                                    <Typography className={'number'}>{property?.memberData?.memberPhone}</Typography>
+                                                    <Typography className={'number'}>{car?.creatorData?.phone}</Typography>
                                                 </Stack>
-                                                <Typography className={'listings'}>View Detail</Typography>
+                                                <Typography className={'listings'}>View Author</Typography>
                                             </Stack>
                                         </Stack>
                                     </Stack>
                                     <Stack className={'info-box'}>
-                                        <Typography className={'sub-title'}>Name</Typography>
+                                        <Typography className={'sub-title'}>Your Name</Typography>
                                         <input type={'text'} placeholder={'Enter your name'} />
                                     </Stack>
                                     <Stack className={'info-box'}>
-                                        <Typography className={'sub-title'}>Phone</Typography>
+                                        <Typography className={'sub-title'}>Your Phone</Typography>
                                         <input type={'text'} placeholder={'Enter your phone'} />
                                     </Stack>
                                     <Stack className={'info-box'}>
-                                        <Typography className={'sub-title'}>Email</Typography>
+                                        <Typography className={'sub-title'}>Your Email</Typography>
                                         <input type={'text'} placeholder={'creativelayers088'} />
                                     </Stack>
                                     <Stack className={'info-box'}>
@@ -1037,7 +1171,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                 </Stack>
                             </Stack>
                         </Stack>
-                        {destinationProperties.length !== 0 && (
+                        {destinationCars?.length !== 0 && (
                             <Stack className={'similar-properties-config'}>
                                 <Stack className={'title-pagination-box'}>
                                     <Stack className={'title-box'}>
@@ -1064,10 +1198,10 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             el: '.swiper-similar-pagination',
                                         }}
                                     >
-                                        {destinationProperties.map((property: Property) => {
+                                        {destinationCars?.map((car: Car) => {
                                             return (
-                                                <SwiperSlide className={'similar-homes-slide'} key={property.propertyTitle}>
-                                                    <TrendPropertyCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />
+                                                <SwiperSlide className={'similar-homes-slide'} key={car?.carTitle}>
+                                                    <TrendPropertyCard car={car} likeCarHandler={likeCarHandler} key={car?._id} />
                                                 </SwiperSlide>
                                             );
                                         })}

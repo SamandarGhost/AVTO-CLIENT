@@ -295,7 +295,7 @@ export const LIKE_TARGET_MEMBER = gql`
 `;
 
 /**************************
- *        PROduct         *
+ *        PRODUCT         *
  *************************/
 
 export const CREATE_PRODUCT = gql`
@@ -347,7 +347,7 @@ mutation UpdateProduct($input: ProductUpdate!) {
 }`;
 
 /**************************
- *        PROPERTY        *
+ *          CAR           *
  *************************/
 
 export const CREATE_CAR = gql`
@@ -776,6 +776,119 @@ mutation LikeTargetCar($input: String!) {
 // 		}
 // 	}
 // `;
+
+export const SAVE_CAR = gql`
+mutation SaveTargetCar($input: String!) {
+    saveTargetCar(carId: $input) {
+        _id
+        carType
+        carTitle
+        carBody
+        carStatus
+        carSort
+        carGroup
+        carMadeIn
+        carBrand
+        carModel
+        carPrice
+        carImages
+        carVideo
+        carLocation
+        carAddress
+        carDesc
+        carBarter
+        carRent
+        carYear
+        carTuning
+        carTuningType
+        carMileage
+        carFuelType
+        carDriveType
+        carTransmission
+        carEngineSize
+        carColor
+        carFullFuel
+        carMpgHw
+        carMpgCity
+        carDoor
+        carCylinders
+        carMaxSpeed
+        carHundredSpeed
+        carHorsePower
+        carTorque
+        carLength
+        carHeigth
+        carWidth
+        carSeatsUp
+        carWeigth
+        carLoadWeight
+        carTireSize
+        carWheelBase
+        carAutoBrake
+        carCruiseControl
+        carESC
+        carAutonomuosDrive
+        carExteriorLight
+        carPanoramicSunroof
+        carHeatedSeats
+        carCooledSeats
+        carTouchscreenDisplay
+        carAutoHeadLight
+        carStarStop
+        carNoiseCancellation
+        carRemoteKeyless
+        carLaneDW
+        carBlindSpotMonitoring
+        carRearCrossTrafficAlert
+        carApplePlay
+        carAndroidAuto
+        carVoiceControl
+        carBluetoothConnectivity
+        carWirelessCharging
+        carParkingAssist
+        carSurroundViewCamera
+        carFrontSensors
+        carRearSensors
+        carFrontRecordCamera
+        carRearRecordCamera
+        carHeadsUpDisplay
+        carClimateControl
+        carAdjustableSeats
+        carMemorySeats
+        carPowerTrain
+        carRegenerativeBraking
+        carTractionControl
+        carStabilityControl
+        carHillStartAssist
+        carTirePressureSystem
+        carPushButton
+        carCrush
+        carRepair
+        carFrontBumper
+        carBackBumper
+        carBonnet
+        carTailgate
+        carRightFrontWing
+        carLeftFrontWing
+        carRightBackWing
+        carLeftBackWing
+        carRoof
+        carRightFrontDoor
+        carLeftFrontDoor
+        carRightBackDoor
+        carLeftBackDoor
+        carViews
+        carLikes
+        carSave
+        carComments
+        carRank
+        memberId
+        soldAt
+        deletedAt
+        createdAt
+        updatedAt
+    }
+}`;
 
 /**************************
  *      BOARD-ARTICLE     *

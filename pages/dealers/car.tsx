@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Member } from '../../libs/types/member/member';
 import { useMutation, useQuery } from '@apollo/client';
 import { LIKE_CAR, LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
-import { GET_AGENTS, GET_PROPERTIES } from '../../apollo/user/query';
+import { GET_AGENTS, GET_CARS } from '../../apollo/user/query';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
 import { Messages } from '../../libs/config';
@@ -68,7 +68,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
         data: getPropertiesData,
         error: getPropertiesError,
         refetch: getPropertiesRefetch
-    } = useQuery(GET_PROPERTIES, {
+    } = useQuery(GET_CARS, {
         fetchPolicy: 'network-only',
         variables: { input: searchFilter },
         notifyOnNetworkStatusChange: true,

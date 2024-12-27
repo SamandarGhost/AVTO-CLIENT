@@ -19,7 +19,7 @@ import { CommentGroup } from '../../libs/enums/comment.enum';
 import { Messages, REACT_APP_API_URL } from '../../libs/config';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
-import { GET_COMMENTS, GET_MEMBER, GET_PROPERTIES } from '../../apollo/user/query';
+import { GET_CARS, GET_COMMENTS, GET_MEMBER } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import TrendPropertyCard from '../../libs/components/homepage/ReccomendedCarsCard';
 import TopPropertyCard from '../../libs/components/homepage/FindingCarCard';
@@ -92,7 +92,7 @@ const AgentDetail: NextPage = ({ initialInput, initialComment, ...props }: any) 
 		data: getPropertiesData,
 		error: getPropertiesError,
 		refetch: getPropertiesRefetch
-	} = useQuery(GET_PROPERTIES, {
+	} = useQuery(GET_CARS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		skip: !searchFilter.search.memberId,

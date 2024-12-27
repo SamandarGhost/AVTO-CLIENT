@@ -15,6 +15,8 @@ interface CarCardProps {
 	deleteCarHandler?: any;
 	memberPage?: boolean;
 	updateCarHandler?: any;
+	likeCarHandler?: any;
+	saveCarHandler?: any;
 }
 
 export const CarCard = (props: CarCardProps) => {

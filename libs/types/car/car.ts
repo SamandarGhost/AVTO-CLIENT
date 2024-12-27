@@ -1,7 +1,7 @@
 import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarStatus, CarTransmission, CarTuningType, CarType } from "../../enums/car.enum";
-import { Dealer } from "../dealer/dealer";
 import { MeLiked } from "../like/like";
 import { Member, TotalCounter } from "../member/member";
+import { MeSaved } from "../save/save";
 
 export interface Car {
     _id: string;
@@ -111,8 +111,9 @@ export interface Car {
     deletedAt?: Date;
     createdAt: Date;
     updatedAt: Date;
-    creatorData?: Member | Dealer;
+    creatorData?: Member;
     meLiked?: MeLiked[];
+    meSaved?: MeSaved[];
 }
 
 export interface Cars {

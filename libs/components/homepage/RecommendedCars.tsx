@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import TrendPropertyCard from './ReccomendedCarsCard';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
+import { GET_CARS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
@@ -31,7 +31,7 @@ const RecommendedCars = (props: RecommendedCarsProps) => {
 		data: getCarsData,
 		error: getCarsError,
 		refetch: getCarsRefetch
-	} = useQuery(GET_PROPERTIES, {
+	} = useQuery(GET_CARS, {
 		fetchPolicy: 'cache-and-network',
 		variables: { input: initialInput },
 		notifyOnNetworkStatusChange: true,

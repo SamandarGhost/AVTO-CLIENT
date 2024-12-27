@@ -10,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../apollo/user/query';
+import { GET_CARS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
 import Filter from '../../libs/components/shop/Filter';
@@ -43,7 +43,7 @@ const PropertyList: NextPage = ({ initialInput, ...props }: any) => {
 		data: getPropertiesData,
 		error: getPropertiesError,
 		refetch: getPropertiesRefetch
-	} = useQuery(GET_PROPERTIES, {
+	} = useQuery(GET_CARS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,

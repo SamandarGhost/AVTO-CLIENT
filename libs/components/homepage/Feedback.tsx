@@ -7,7 +7,7 @@ import TopPropertyCard from './FindingCarCard';
 import { PropertiesInquiry } from '../../types/property/property.input';
 import { Property } from '../../types/property/property';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_PROPERTIES } from '../../../apollo/user/query';
+import { GET_CARS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
@@ -34,7 +34,7 @@ const Feedback = (props: TopPropertiesProps) => {
         data: getPropertiesData,
         error: getPropertiesError,
         refetch: getPropertiesRefetch
-    } = useQuery(GET_PROPERTIES, {
+    } = useQuery(GET_CARS, {
         fetchPolicy: 'cache-and-network',
         variables: { input: initialInput },
         notifyOnNetworkStatusChange: true,
