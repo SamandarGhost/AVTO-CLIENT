@@ -11,12 +11,12 @@ import { userVar } from '../../../apollo/store';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { Car } from '../../types/car/car';
 
-interface TopPropertyCardProps {
+interface FinndingCarCardProps {
 	car: Car;
 	likeCarHandler: any;
 }
 
-const FindingCarCard = (props: TopPropertyCardProps) => {
+const FindingCarCard = (props: FinndingCarCardProps) => {
 	const { car, likeCarHandler } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
@@ -106,28 +106,27 @@ const FindingCarCard = (props: TopPropertyCardProps) => {
 					<strong className={'title'}
 						onClick={() => {
 							pushDetailhandler(car?._id);
-						}}>{car?.carTitle}Merc</strong>
-					<p className={'desc'}>{car?.carAddress}Seoul, Iteawon</p>
+						}}>{car?.carTitle}</strong>
+					<p className={'desc'}>{car?.carAddress}</p>
 					<Divider sx={{ mt: '2px', mb: '2px' }} />
 					<div className={'options'}>
 						<div>
 							<img src="/img/icons/speed.svg" alt="" />
-							<span>{car?.carMileage}100,000 Mile </span>
+							<span>{car?.carMileage} Mile </span>
 						</div>
 						<div>
 							<img src="/img/icons/petrol.svg" alt="" />
-							<span>{car?.carFuelType}Gasoline</span>
+							<span>{car?.carFuelType}</span>
 						</div>
 						<div>
 							<img src="/img/icons/trans.svg" alt="" />
-							<span>{car?.carTransmission}Automatic</span>
+							<span>{car?.carTransmission}</span>
 						</div>
 					</div>
 					<Divider sx={{ mt: '5px', mb: '5px' }} />
 					<div className={'bott'}>
 						<p>
-							{car?.carPrice}
-							$ 90,000
+							${car?.carPrice}
 						</p>
 						<div className="view-like-box">
 							<IconButton color={'default'}>

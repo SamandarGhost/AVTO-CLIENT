@@ -18,8 +18,8 @@ const Review = (props: ReviewProps) => {
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
 	const [value, setValue] = React.useState<number | null>(2);
-	const imagePath: string = comment?.memberData?.memberImage
-		? `${REACT_APP_API_URL}/${comment?.memberData?.memberImage}`
+	const imagePath: string = comment?.creatorData?.image
+		? `${REACT_APP_API_URL}/${comment?.creatorData?.image}`
 		: '/img/profile/defaultUser.svg';
 
 	/** HANDLERS **/
@@ -36,8 +36,8 @@ const Review = (props: ReviewProps) => {
 					<Stack className={'img-name-box'}>
 						<img src={imagePath} alt="" className={'img-box'} />
 						<Stack>
-							<Typography className={'name'} onClick={() => goMemberPage(comment?.memberData?._id as string)}>
-								{comment.memberData?.memberNick}
+							<Typography className={'name'} onClick={() => goMemberPage(comment?.creatorData?._id as string)}>
+								{comment.creatorData?.titleNick}
 							</Typography>
 							<Typography className={'date'}>
 								<Moment format={'DD MMMM, YYYY'}>{comment.createdAt}</Moment>

@@ -12,8 +12,8 @@ interface ReviewCardProps {
 const ReviewCard = (props: ReviewCardProps) => {
 	const { fromMyPage, comment } = props;
 	const device = useDeviceDetect();
-	const imagePath: string = comment?.memberData?.memberImage
-		? `${REACT_APP_API_URL}/${comment?.memberData?.memberImage}`
+	const imagePath: string = comment?.creatorData?.image
+		? `${REACT_APP_API_URL}/${comment?.creatorData?.image}`
 		: '/img/profile/defaultUser.svg';
 
 	if (device === 'mobile') {
@@ -25,7 +25,7 @@ const ReviewCard = (props: ReviewCardProps) => {
 					<div className={'left'}>
 						<img src={imagePath} alt="" />
 						<div>
-							<strong>{comment.memberData?.memberNick}</strong>
+							<strong>{comment.creatorData?.titleNick}</strong>
 							<span>
 								<Moment format={'DD MMMM'}>{comment.createdAt}</Moment>
 							</span>

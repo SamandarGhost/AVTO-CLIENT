@@ -44,7 +44,7 @@ const AgentCard = (props: AgentCardProps) => {
 							backgroundRepeat: 'no-repeat',
 						}}
 					>
-						<div>{agent?.memberProperties} properties</div>
+						<div>{agent?.memberCars} cars</div>
 					</Box>
 				</Link>
 
@@ -56,23 +56,23 @@ const AgentCard = (props: AgentCardProps) => {
 								query: { agentId: 'id' },
 							}}
 						>
-							<strong>{agent?.memberFullName ?? agent?.memberNick}</strong>
+							<strong>{agent?.fullName ?? agent?.titleNick}</strong>
 						</Link>
-						<span>Agent</span>
+						<span>{agent?.type}</span>
 					</Box>
 					<Box component={'div'} className={'buttons'}>
 						<IconButton color={'default'}>
 							<RemoveRedEyeIcon className={'icon'} />
 						</IconButton>
-						<Typography className="view-cnt">{agent?.memberViews}</Typography>
+						<Typography className="view-cnt">{agent?.views}</Typography>
 						<IconButton color={'default'} onClick={() => likeMemberHandler(user, agent?._id)}>
 							{agent?.meLiked && agent?.meLiked[0]?.myFavorite ? (
-								<FavoriteIcon color={'primary'} />
+								<FavoriteIcon color={'secondary'} />
 							) : (
 								<FavoriteBorderIcon className={'icon'} />
 							)}
 						</IconButton>
-						<Typography className="view-cnt">{agent?.memberLikes}</Typography>
+						<Typography className="view-cnt">{agent?.likes}</Typography>
 					</Box>
 				</Stack>
 			</Stack>

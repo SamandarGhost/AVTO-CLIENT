@@ -8,14 +8,13 @@ import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownR
 import AgentCard from '../../libs/components/common/AgentCard';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Member } from '../../libs/types/member/member';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
 import { GET_AGENTS } from '../../apollo/user/query';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
-import { Message } from '../../libs/enums/common.enum';
 import { Messages } from '../../libs/config';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
+import { LIKE_MEMBER } from '../../apollo/user/mutation';
+import { Member } from '../../libs/types/member/member';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -39,7 +38,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 	const [searchText, setSearchText] = useState<string>('');
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
+	const [likeTargetMember] = useMutation(LIKE_MEMBER);
 
 	const {
 		loading: getAgentsLoading,
@@ -122,7 +121,6 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 			await getAgentsRefetch({ input: searchFilter });
 			await sweetMixinSuccessAlert('success', 800);
 		} catch (err: any) {
-			console.log('Error, likeMemberHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	}
@@ -183,14 +181,14 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 								<p>No Agents found!</p>
 							</div>
 						) : (
-							agents.map((agent: Member) => {
+							agents?.map((agent: Member) => {
 								return <AgentCard likeMemberHandler={likeMemberHandler} agent={agent} key={agent._id} />;
 							})
 						)}
 					</Stack>
 					<Stack className={'pagination'}>
 						<Stack className="pagination-box">
-							{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
+							{agents?.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
 								<Stack className="pagination-box">
 									<Pagination
 										page={currentPage}

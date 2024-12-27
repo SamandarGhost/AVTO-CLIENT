@@ -5,78 +5,269 @@ import { gql } from '@apollo/client';
  *************************/
 
 export const GET_AGENTS = gql`
-	query GetAgents($input: AgentsInquiry!) {
-		getAgents(input: $input) {
-			list {
-				_id
-				memberType
-				memberStatus
-				memberAuthType
-				memberPhone
-				memberNick
-				memberFullName
-				memberImage
-				memberAddress
-				memberDesc
-				memberWarnings
-				memberBlocks
-				memberProperties
-				memberRank
-				memberPoints
-				memberLikes
-				memberViews
-				deletedAt
-				createdAt
-				updatedAt
-				accessToken
-				meLiked {
-					memberId
-					likeRefId
-					myFavorite
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
+query GetAgents($input: ADSInquiry!) {
+    getAgents(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            type
+            status
+            authType
+            titleNick
+            fullName
+            image
+            images
+            location
+            address
+            shortDesc
+            longDesc
+            phone
+            phone2
+            email
+            kakaoTalk
+            youtube
+            instagram
+            facebook
+            tikTok
+            naverBlog
+            xcom
+            followers
+            followings
+            likes
+            views
+            comments
+            warnings
+            articles
+            blocks
+            memberCars
+            usedCars
+            newCars
+            rank
+            points
+            sellerProducts
+            dealerBrand
+            dealerFinancing
+            dealerCarService
+            dealerTradeIn
+            dealerCustomization
+            dealerWarranties
+            dealerParts
+            dealerAccessories
+            dealerCarDetailing
+            dealerCarWash
+            dealerCarTestDrive
+            dealerCarDelivery
+            dealerPlusService
+            carServiceType
+            carOilChange
+            carAlignment
+            carTireChange
+            carBrakeCheck
+            carBatteryCheck
+            carTireBalance
+            carSuspension
+            carAirCondition
+            carTransmissionCheck
+            carEngineDiagnostic
+            carExhaust
+            carDetailing
+            carWindshield
+            carTimingBelt
+            carChainReplacement
+            comfort
+            performance
+            exterior
+            interior
+            reliability
+            fast
+            openAt
+            closeAt
+            openSunday
+            closeSunday
+            openSaturday
+            closeSaturday
+            publicHolidays
+            deletedAt
+            createdAt
+            updatedAt
+            accessToken
+        }
+    }
+}`;
 
-export const GET_MEMBER = gql(`
+// export const GET_AGENTS = gql`
+// 	query GetAgents($input: AgentsInquiry!) {
+// 		getAgents(input: $input) {
+// 			list {
+// 				_id
+// 				memberType
+// 				memberStatus
+// 				memberAuthType
+// 				memberPhone
+// 				memberNick
+// 				memberFullName
+// 				memberImage
+// 				memberAddress
+// 				memberDesc
+// 				memberWarnings
+// 				memberBlocks
+// 				memberProperties
+// 				memberRank
+// 				memberPoints
+// 				memberLikes
+// 				memberViews
+// 				deletedAt
+// 				createdAt
+// 				updatedAt
+// 				accessToken
+// 				meLiked {
+// 					memberId
+// 					likeRefId
+// 					myFavorite
+// 				}
+// 			}
+// 			metaCounter {
+// 				total
+// 			}
+// 		}
+// 	}
+// `;
+
+export const GET_MEMBER = gql`
 query GetMember($input: String!) {
     getMember(memberId: $input) {
         _id
-        memberType
-        memberStatus
-        memberAuthType
-        memberPhone
-        memberNick
-        memberFullName
-        memberImage
-        memberAddress
-        memberDesc
-        memberProperties
-        memberArticles
-        memberPoints
-        memberLikes
-        memberViews
-        memberFollowings
-				memberFollowers
-        memberRank
-        memberWarnings
-        memberBlocks
+        type
+        status
+        authType
+        titleNick
+        fullName
+        image
+        images
+        location
+        address
+        shortDesc
+        longDesc
+        phone
+        phone2
+        email
+        kakaoTalk
+        youtube
+        instagram
+        facebook
+        tikTok
+        naverBlog
+        xcom
+        followers
+        followings
+        likes
+        views
+        comments
+        warnings
+        articles
+        blocks
+        memberCars
+        usedCars
+        newCars
+        rank
+        points
+        sellerProducts
+        dealerBrand
+        dealerFinancing
+        dealerCarService
+        dealerTradeIn
+        dealerCustomization
+        dealerWarranties
+        dealerParts
+        dealerAccessories
+        dealerCarDetailing
+        dealerCarWash
+        dealerCarTestDrive
+        dealerCarDelivery
+        dealerPlusService
+        carServiceType
+        carOilChange
+        carAlignment
+        carTireChange
+        carBrakeCheck
+        carBatteryCheck
+        carTireBalance
+        carSuspension
+        carAirCondition
+        carTransmissionCheck
+        carEngineDiagnostic
+        carExhaust
+        carDetailing
+        carWindshield
+        carTimingBelt
+        carChainReplacement
+        comfort
+        performance
+        exterior
+        interior
+        reliability
+        fast
+        openAt
+        closeAt
+        openSunday
+        closeSunday
+        openSaturday
+        closeSaturday
+        publicHolidays
         deletedAt
         createdAt
         updatedAt
         accessToken
         meFollowed {
-					followingId
-					followerId
-					myFollowing
-				}
+            followingId
+            followerId
+            myFollowing
+        }
+        meLiked {
+            memberId
+            likeRefId
+            myFavorite
+        }
     }
-}
-`);
+}`;
+
+// export const GET_MEMBER = gql(`
+// query GetMember($input: String!) {
+//     getMember(memberId: $input) {
+//         _id
+//         memberType
+//         memberStatus
+//         memberAuthType
+//         memberPhone
+//         memberNick
+//         memberFullName
+//         memberImage
+//         memberAddress
+//         memberDesc
+//         memberProperties
+//         memberArticles
+//         memberPoints
+//         memberLikes
+//         memberViews
+//         memberFollowings
+// 				memberFollowers
+//         memberRank
+//         memberWarnings
+//         memberBlocks
+//         deletedAt
+//         createdAt
+//         updatedAt
+//         accessToken
+//         meFollowed {
+// 					followingId
+// 					followerId
+// 					myFollowing
+// 				}
+//     }
+// }
+// `);
 
 /**************************
  *        PRODUCT         *
