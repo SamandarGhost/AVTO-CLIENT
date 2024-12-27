@@ -1,4 +1,4 @@
-import { AuthType, Brand, CarServiceType, Status, Type } from "../../enums/member.enum";
+import { AuthType, Brand, CarServiceType, Location, Status, Type } from "../../enums/member.enum";
 
 export interface MemberUpdate {
     _id: string;

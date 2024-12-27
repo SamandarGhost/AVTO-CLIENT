@@ -150,33 +150,121 @@ export const LOGIN = gql`
 `;
 
 export const UPDATE_MEMBER = gql`
-	mutation UpdateMember($input: MemberUpdate!) {
-		updateMember(input: $input) {
-			_id
-			memberType
-			memberStatus
-			memberAuthType
-			memberPhone
-			memberNick
-			memberFullName
-			memberImage
-			memberAddress
-			memberDesc
-			memberProperties
-			memberRank
-			memberArticles
-			memberPoints
-			memberLikes
-			memberViews
-			memberWarnings
-			memberBlocks
-			deletedAt
-			createdAt
-			updatedAt
-			accessToken
-		}
-	}
-`;
+mutation UpdateMember($input: MemberUpdate!) {
+    updateMember(input: $input) {
+        _id
+        type
+        status
+        authType
+        titleNick
+        fullName
+        image
+        images
+        location
+        address
+        shortDesc
+        longDesc
+        phone
+        phone2
+        email
+        kakaoTalk
+        youtube
+        instagram
+        facebook
+        tikTok
+        naverBlog
+        xcom
+        followers
+        followings
+        likes
+        views
+        comments
+        warnings
+        articles
+        blocks
+        memberCars
+        usedCars
+        newCars
+        rank
+        points
+        sellerProducts
+        dealerBrand
+        dealerFinancing
+        dealerCarService
+        dealerTradeIn
+        dealerCustomization
+        dealerWarranties
+        dealerParts
+        dealerAccessories
+        dealerCarDetailing
+        dealerCarWash
+        dealerCarTestDrive
+        dealerCarDelivery
+        dealerPlusService
+        carServiceType
+        carOilChange
+        carAlignment
+        carTireChange
+        carBrakeCheck
+        carBatteryCheck
+        carTireBalance
+        carSuspension
+        carAirCondition
+        carTransmissionCheck
+        carEngineDiagnostic
+        carExhaust
+        carDetailing
+        carWindshield
+        carTimingBelt
+        carChainReplacement
+        comfort
+        performance
+        exterior
+        interior
+        reliability
+        fast
+        openAt
+        closeAt
+        openSunday
+        closeSunday
+        openSaturday
+        closeSaturday
+        publicHolidays
+        deletedAt
+        createdAt
+        updatedAt
+        accessToken
+    }
+}`;
+
+// export const UPDATE_MEMBER = gql`
+// 	mutation UpdateMember($input: MemberUpdate!) {
+// 		updateMember(input: $input) {
+// 			_id
+// 			memberType
+// 			memberStatus
+// 			memberAuthType
+// 			memberPhone
+// 			memberNick
+// 			memberFullName
+// 			memberImage
+// 			memberAddress
+// 			memberDesc
+// 			memberProperties
+// 			memberRank
+// 			memberArticles
+// 			memberPoints
+// 			memberLikes
+// 			memberViews
+// 			memberWarnings
+// 			memberBlocks
+// 			deletedAt
+// 			createdAt
+// 			updatedAt
+// 			accessToken
+// 		}
+// 	}
+// `;
 
 export const LIKE_TARGET_MEMBER = gql`
 	mutation LikeTargetMember($input: String!) {
@@ -255,129 +343,6 @@ mutation UpdateProduct($input: ProductUpdate!) {
         deletedAt
         createdAt
         updatedAt
-    }
-}`;
-
-export const GET_PRODUCT = gql`
-query GetProduct($input: String!) {
-    getProduct(productId: $input) {
-        _id
-        productType
-        productStatus
-        productTitle
-        productPrice
-        productQuantity
-        productImages
-        productShortDesc
-        productDesc
-        productViews
-        productLikes
-        productSave
-        productComments
-        productRank
-        memberId
-        deletedAt
-        createdAt
-        updatedAt
-        meLiked {
-            memberId
-            likeRefId
-            myFavorite
-        }
-        creatorData {
-            _id
-            type
-            status
-            authType
-            titleNick
-            fullName
-            image
-            images
-            location
-            address
-            shortDesc
-            longDesc
-            phone
-            phone2
-            email
-            kakaoTalk
-            youtube
-            instagram
-            facebook
-            tikTok
-            naverBlog
-            xcom
-            followers
-            followings
-            likes
-            views
-            comments
-            warnings
-            articles
-            blocks
-            memberCars
-            usedCars
-            newCars
-            rank
-            points
-            sellerProducts
-            dealerBrand
-            dealerFinancing
-            dealerCarService
-            dealerTradeIn
-            dealerCustomization
-            dealerWarranties
-            dealerParts
-            dealerAccessories
-            dealerCarDetailing
-            dealerCarWash
-            dealerCarTestDrive
-            dealerCarDelivery
-            dealerPlusService
-            carServiceType
-            carOilChange
-            carAlignment
-            carTireChange
-            carBrakeCheck
-            carBatteryCheck
-            carTireBalance
-            carSuspension
-            carAirCondition
-            carTransmissionCheck
-            carEngineDiagnostic
-            carExhaust
-            carDetailing
-            carWindshield
-            carTimingBelt
-            carChainReplacement
-            comfort
-            performance
-            exterior
-            interior
-            reliability
-            fast
-            openAt
-            closeAt
-            openSunday
-            closeSunday
-            openSaturday
-            closeSaturday
-            publicHolidays
-            deletedAt
-            createdAt
-            updatedAt
-            accessToken
-            meFollowed {
-                followingId
-                followerId
-                myFollowing
-            }
-            meLiked {
-                memberId
-                likeRefId
-                myFavorite
-            }
-        }
     }
 }`;
 
