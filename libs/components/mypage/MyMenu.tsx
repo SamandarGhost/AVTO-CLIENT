@@ -60,7 +60,7 @@ const MyMenu = () => {
 				<Stack className={'sections'}>
 					<Stack className={'section'} style={{ height: user.type === 'AGENT' ? '228px' : '153px' }}>
 						<List className={'sub-section'}>
-							{user.type === 'AGENT' && (
+							{['AGENT', 'DEALER'].includes(user?.type) && (
 								<>
 									<ListItem className={pathname === 'addCar' ? 'focus' : ''}>
 										<Link
@@ -176,22 +176,24 @@ const MyMenu = () => {
 									</div>
 								</Link>
 							</ListItem>
-							<ListItem className={pathname === 'recentlyVisited' ? 'focus' : ''}>
-								<Link
-									href={{
-										pathname: '/mypage',
-										query: { category: 'recentlyVisited' },
-									}}
-									scroll={false}
-								>
-									<div className={'flex-box'}>
-										<img className={'com-icon'} src={'/img/icons/searchWhite.svg'} alt={'com-icon'} />
-										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-											Visited
-										</Typography>
-									</div>
-								</Link>
-							</ListItem>
+							{['USER', 'AGENT'].includes(user?.type) && (
+								<ListItem className={pathname === 'recentlyVisited' ? 'focus' : ''}>
+									<Link
+										href={{
+											pathname: '/mypage',
+											query: { category: 'recentlyVisited' },
+										}}
+										scroll={false}
+									>
+										<div className={'flex-box'}>
+											<img className={'com-icon'} src={'/img/icons/searchWhite.svg'} alt={'com-icon'} />
+											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
+												Visited
+											</Typography>
+										</div>
+									</Link>
+								</ListItem>
+							)}
 							<ListItem className={pathname === 'followers' ? 'focus' : ''}>
 								<Link
 									href={{
@@ -208,22 +210,24 @@ const MyMenu = () => {
 									</div>
 								</Link>
 							</ListItem>
-							<ListItem className={pathname === 'followings' ? 'focus' : ''}>
-								<Link
-									href={{
-										pathname: '/mypage',
-										query: { category: 'followings' },
-									}}
-									scroll={false}
-								>
-									<div className={'flex-box'}>
-										<GroupAddOutlinedIcon className={'icon'} />
-										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-											Followings
-										</Typography>
-									</div>
-								</Link>
-							</ListItem>
+							{['DEALER', 'AGENT'].includes(user?.type) && (
+								<ListItem className={pathname === 'followings' ? 'focus' : ''}>
+									<Link
+										href={{
+											pathname: '/mypage',
+											query: { category: 'followings' },
+										}}
+										scroll={false}
+									>
+										<div className={'flex-box'}>
+											<GroupAddOutlinedIcon className={'icon'} />
+											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
+												Followings
+											</Typography>
+										</div>
+									</Link>
+								</ListItem>
+							)}
 						</List>
 					</Stack>
 					<Stack className={'section'} sx={{ marginTop: '10px' }}>
