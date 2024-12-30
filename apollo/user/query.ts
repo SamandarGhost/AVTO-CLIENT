@@ -97,6 +97,212 @@ query GetAgents($input: ADSInquiry!) {
     }
 }`;
 
+export const GET_DEALERS = gql`
+query GetDealers($input: ADSInquiry!) {
+    getDealers(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            type
+            status
+            authType
+            titleNick
+            fullName
+            image
+            images
+            location
+            address
+            shortDesc
+            longDesc
+            phone
+            phone2
+            email
+            kakaoTalk
+            youtube
+            instagram
+            facebook
+            tikTok
+            naverBlog
+            xcom
+            followers
+            followings
+            likes
+            views
+            comments
+            warnings
+            articles
+            blocks
+            memberCars
+            usedCars
+            newCars
+            rank
+            points
+            sellerProducts
+            dealerBrand
+            dealerFinancing
+            dealerCarService
+            dealerTradeIn
+            dealerCustomization
+            dealerWarranties
+            dealerParts
+            dealerAccessories
+            dealerCarDetailing
+            dealerCarWash
+            dealerCarTestDrive
+            dealerCarDelivery
+            dealerPlusService
+            carServiceType
+            carOilChange
+            carAlignment
+            carTireChange
+            carBrakeCheck
+            carBatteryCheck
+            carTireBalance
+            carSuspension
+            carAirCondition
+            carTransmissionCheck
+            carEngineDiagnostic
+            carExhaust
+            carDetailing
+            carWindshield
+            carTimingBelt
+            carChainReplacement
+            comfort
+            performance
+            exterior
+            interior
+            reliability
+            fast
+            openAt
+            closeAt
+            openSunday
+            closeSunday
+            openSaturday
+            closeSaturday
+            publicHolidays
+            deletedAt
+            createdAt
+            updatedAt
+            accessToken
+            meFollowed {
+                followingId
+                followerId
+                myFollowing
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+        }
+    }
+}`;
+
+export const GET_SERVICES = gql`
+query GetServices($input: ADSInquiry!) {
+    getServices(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            type
+            status
+            authType
+            titleNick
+            fullName
+            image
+            images
+            location
+            address
+            shortDesc
+            longDesc
+            phone
+            phone2
+            email
+            kakaoTalk
+            youtube
+            instagram
+            facebook
+            tikTok
+            naverBlog
+            xcom
+            followers
+            followings
+            likes
+            views
+            comments
+            warnings
+            articles
+            blocks
+            memberCars
+            usedCars
+            newCars
+            rank
+            points
+            sellerProducts
+            dealerBrand
+            dealerFinancing
+            dealerCarService
+            dealerTradeIn
+            dealerCustomization
+            dealerWarranties
+            dealerParts
+            dealerAccessories
+            dealerCarDetailing
+            dealerCarWash
+            dealerCarTestDrive
+            dealerCarDelivery
+            dealerPlusService
+            carServiceType
+            carOilChange
+            carAlignment
+            carTireChange
+            carBrakeCheck
+            carBatteryCheck
+            carTireBalance
+            carSuspension
+            carAirCondition
+            carTransmissionCheck
+            carEngineDiagnostic
+            carExhaust
+            carDetailing
+            carWindshield
+            carTimingBelt
+            carChainReplacement
+            comfort
+            performance
+            exterior
+            interior
+            reliability
+            fast
+            openAt
+            closeAt
+            openSunday
+            closeSunday
+            openSaturday
+            closeSaturday
+            publicHolidays
+            deletedAt
+            createdAt
+            updatedAt
+            accessToken
+            meFollowed {
+                followingId
+                followerId
+                myFollowing
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+        }
+    }
+}`;
+
 // export const GET_AGENTS = gql`
 // 	query GetAgents($input: AgentsInquiry!) {
 // 		getAgents(input: $input) {

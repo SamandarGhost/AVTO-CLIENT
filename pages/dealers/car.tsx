@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Member } from '../../libs/types/member/member';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_CAR, LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
+import { LIKE_CAR, LIKE_MEMBER } from '../../apollo/user/mutation';
 import { GET_AGENTS, GET_CARS } from '../../apollo/user/query';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
@@ -20,6 +20,7 @@ import DealerCard from '../../libs/components/common/DealerCard';
 import PropertyCard from '../../libs/components/car/MainCarCard';
 import { T } from '../../libs/types/common';
 import { Property } from '../../libs/types/property/property';
+import { Car } from '../../libs/types/car/car';
 
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -32,33 +33,33 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
     const device = useDeviceDetect();
     const router = useRouter();
     const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
-    const [properties, setProperties] = useState<Property[]>([]);
+    const [cars, setCars] = useState<Car[]>([]);
     const [filterSortName, setFilterSortName] = useState('Recent');
     const [sortingOpen, setSortingOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [searchFilter, setSearchFilter] = useState<any>(
         router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
     );
-    const [agents, setAgents] = useState<Member[]>([]);
+    const [members, setMembers] = useState<Member[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchText, setSearchText] = useState<string>('');
 
     /** APOLLO REQUESTS **/
-    const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
+    const [likeTargetCar] = useMutation(LIKE_MEMBER);
 
     const {
-        loading: getAgentsLoading,
-        data: getAgentsData,
-        error: getAgentsError,
-        refetch: getAgentsRefetch,
-    } = useQuery(GET_AGENTS, {
+        loading: getCarsLoading,
+        data: getCarsData,
+        error: getCarsError,
+        refetch: getCarsRefetch,
+    } = useQuery(GET_CARS, {
         fetchPolicy: 'network-only',
         variables: { input: searchFilter },
         notifyOnNetworkStatusChange: true,
         onCompleted: (data) => {
-            setAgents(data?.getAgents?.list);
-            setTotal(data?.getAgents?.metaCounter[0]?.total);
+            setCars(data?.getCars?.list);
+            setTotal(data?.getCars?.metaCounter[0]?.total);
         },
     });
 
@@ -214,7 +215,9 @@ AgentList.defaultProps = {
         limit: 10,
         sort: 'createdAt',
         direction: 'DESC',
-        search: {},
+        search: {
+
+        },
     },
 };
 

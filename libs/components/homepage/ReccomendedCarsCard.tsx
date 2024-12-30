@@ -12,7 +12,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { Car } from '../../types/car/car';
 
 interface RecommendedCarCardProps {
-	car: Car;
+	car: any;
 	likeCarHandler: any;
 }
 

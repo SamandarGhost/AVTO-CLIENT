@@ -1,40 +1,34 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Box, Button, Checkbox, CircularProgress, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import { NextPage } from 'next';
 import Review from '../../libs/components/car/Review';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
-import PropertyBigCard from '../../libs/components/common/PropertyBigCard';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Property } from '../../libs/types/property/property';
-import moment from 'moment';
-import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
 import { userVar } from '../../apollo/store';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { Comment } from '../../libs/types/comment/comment';
 import { CommentGroup } from '../../libs/enums/comment.enum';
 import { Pagination as MuiPagination } from '@mui/material';
-import Link from 'next/link';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { GET_CAR, GET_CARS, GET_COMMENTS } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
+import { GET_CARS, GET_COMMENTS, GET_MEMBER } from '../../apollo/user/query';
+import { CREATE_COMMENT, LIKE_CAR, LIKE_MEMBER } from '../../apollo/user/mutation';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import TrendPropertyCard from '../../libs/components/homepage/ReccomendedCarsCard';
 import StarPurple500OutlinedIcon from '@mui/icons-material/StarPurple500Outlined';
+import { Car } from '../../libs/types/car/car';
+import { Member } from '../../libs/types/member/member';
+import RecommendedCarCard from '../../libs/components/homepage/ReccomendedCarsCard';
+import { Search } from '@mui/icons-material';
 
 
 
@@ -49,47 +43,48 @@ export const getStaticProps = async ({ locale }: any) => ({
     },
 });
 
-const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
+const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
     const device = useDeviceDetect();
     const router = useRouter();
     const user = useReactiveVar(userVar);
-    const [propertyId, setPropertyId] = useState<string | null>(null);
-    const [property, setProperty] = useState<Property | null>(null);
+    const [dealerId, setDealerId] = useState<string | null>(null);
+    const [dealer, setDealer] = useState<Member | null>(null);
     const [slideImage, setSlideImage] = useState<string>('');
-    const [destinationProperties, setDestinationProperty] = useState<Property[]>([]);
+    const [destinationCars, setDestinationCars] = useState<Car[]>([]);
     const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-    const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
+    const [dealerComments, setDealerComments] = useState<Comment[]>([]);
     const [commentTotal, setCommentTotal] = useState<number>(0);
     const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-        commentGroup: CommentGroup.CAR,
+        commentGroup: CommentGroup.DEALER,
         commentContent: '',
         commentRefId: '',
     });
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_CAR);
+    const [likeTargetMember] = useMutation(LIKE_MEMBER);
+    const [likeTargetCar] = useMutation(LIKE_CAR);
     const [createComment] = useMutation(CREATE_COMMENT);
     const {
-        loading: getPropertyLoading,
-        data: getPropertyData,
-        error: getPropertyError,
-        refetch: getPropertyRefetch
-    } = useQuery(GET_CAR, {
+        loading: getMemberLoading,
+        data: getMemberData,
+        error: getMemberError,
+        refetch: getMemberRefetch
+    } = useQuery(GET_MEMBER, {
         fetchPolicy: 'network-only',
-        variables: { input: propertyId },
-        skip: !propertyId,
+        variables: { input: dealerId },
+        skip: !dealerId,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperty) setProperty(data?.getProperty);
-            if (data?.getProperty) setSlideImage(data?.getProperty?.propertyImages[0]);
+            setDealer(data?.getMember);
+            setSlideImage(data?.getMember?.images[0]);
         },
     });
 
     const {
-        loading: getPropertiesLoading,
-        data: getPropertiesData,
-        error: getPropertiesError,
-        refetch: getPropertiesRefetch
+        loading: getCarsLoading,
+        data: getCarsData,
+        error: getCarsError,
+        refetch: getCarsRefetch
     } = useQuery(GET_CARS, {
         fetchPolicy: 'cache-and-network',
         variables: {
@@ -99,15 +94,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                 sort: 'createdAt',
                 direction: Direction.DESC,
                 search: {
-                    locationList: property?.propertyLocation ? [property?.propertyLocation] : [],
-                },
-
+                    memberId: dealer?._id
+                }
             },
         },
-        skip: !propertyId && !property,
+        skip: !dealerId && !dealer,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperties) setDestinationProperty(data?.getProperties?.list);
+            if (data?.getCars) setDestinationCars(data?.getCars?.list);
         },
     });
 
@@ -122,19 +116,18 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         skip: !commentInquiry.search.commentRefId,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getComments?.list) setPropertyComments(data?.getComments?.list);
+            if (data?.getComments?.list) setDealerComments(data?.getComments?.list);
             setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
         },
     });
 
     /** LIFECYCLES **/
     useEffect(() => {
-        if (router.query.id) {
-            setPropertyId(router.query.id as string);
+        if (router?.query?.id) {
             setCommentInquiry({
                 ...commentInquiry,
                 search: {
-                    commentRefId: router.query.id as string,
+                    commentRefId: router?.query?.id as string,
                 },
             });
             setInsertCommentData({
@@ -143,6 +136,12 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
             });
         }
     }, [router]);
+
+    useEffect(() => {
+        if (router?.query?.dealerId) {
+            setDealerId(router?.query?.dealerId as string);
+        }
+    }, [router])
 
     useEffect(() => {
         if (commentInquiry.search.commentRefId) {
@@ -155,34 +154,44 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         setSlideImage(image);
     };
 
-    const likePropertyHandler = async (user: T, id: string) => {
+    const likeMemberHandler = async (user: T, id: string) => {
         try {
             if (!id) return;
             if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
-            // execute likePropertyHandler mutation
-
-            await likeTargetProperty({
+            await likeTargetMember({
                 variables: { input: id },
             });
 
-            // execute getPropertiesRefetch
-            await getPropertyRefetch({ input: id });
-            getPropertiesRefetch({
+            await getMemberRefetch({ input: id });
+
+            await sweetTopSmallSuccessAlert('seccess', 800);
+        } catch (err: any) {
+            sweetMixinErrorAlert(err.message).then;
+        }
+    };
+
+    const likeCarHandler = async (user: T, id: string) => {
+        try {
+            if (!id) return;
+            if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
+
+            await likeTargetCar({
+                variables: { input: id },
+            });
+
+            getMemberRefetch({
                 input: {
                     page: 1,
                     limit: 4,
                     sort: 'createdAt',
                     direction: Direction.DESC,
-                    search: {
-                        locationList: [property?.propertyLocation],
-                    },
+                    search: {},
                 },
             });
 
             await sweetTopSmallSuccessAlert('seccess', 800);
         } catch (err: any) {
-            console.log('ERROR, likePropertyHandler:', err);
             sweetMixinErrorAlert(err.message).then;
         }
     };
@@ -205,7 +214,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         }
     };
 
-    if (getPropertyLoading) {
+    if (getMemberLoading) {
         return (
             <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
                 <CircularProgress size={'4rem'} />
@@ -214,7 +223,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     };
 
     if (device === 'mobile') {
-        return <div>PROPERTY DETAIL PAGE</div>;
+        return <div>DEALER DETAIL PAGE</div>;
     } else {
         return (
             <div id={'dealer-detail-page'}>
@@ -223,47 +232,47 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                         <Stack className={'property-info-config'}>
                             <Stack className={'info'}>
                                 <Stack className={'left-box'}>
-                                    <Typography className={'title-main'}>KIA London Branch</Typography>
+                                    <Typography className={'title-main'}>{dealer?.titleNick}</Typography>
                                     <Stack className={'bottom-box'}>
                                         <Stack className="option">
                                             <img src="/img/icons/perb.svg" alt="" />
                                             <Typography className={'icon'}>Performance:</Typography>
-                                            <Typography>Good</Typography>
+                                            <Typography>{dealer?.performance}</Typography>
                                         </Stack>
                                         <Stack className="option">
                                             <img src="/img/icons/comfortb.svg" alt="" />
                                             <Typography className={'icon'}>Comfort:</Typography>
-                                            <Typography>Perfect</Typography>
+                                            <Typography>{dealer?.comfort}</Typography>
                                         </Stack>
                                         <Stack className="option">
                                             <img src="/img/icons/extb.svg" alt="" />
                                             <Typography className={'icon'}>Exteriror:</Typography>
-                                            <Typography>Good</Typography>
+                                            <Typography>{dealer?.exterior}</Typography>
                                         </Stack>
                                         <Stack className="option">
                                             <img src="/img/icons/intb.svg" alt="" />
                                             <Typography className={'icon'}>Interior:</Typography>
-                                            <Typography>Nice</Typography>
+                                            <Typography>{dealer?.interior}</Typography>
                                         </Stack>
                                         <Stack className="option">
                                             <img src="/img/icons/relb.svg" alt="" />
                                             <Typography className={'icon'}>Realibility:</Typography>
-                                            <Typography>Perfect</Typography>
+                                            <Typography>{dealer?.reliability}</Typography>
                                         </Stack>
                                         <Stack className="option">
                                             <img src="/img/icons/fastb.svg" alt="" />
                                             <Typography className={'icon'}>Fast:</Typography>
-                                            <Typography>Wow</Typography>
+                                            <Typography>{dealer?.fast}</Typography>
                                         </Stack>
                                     </Stack>
                                     <Stack className={'bottom-box'} sx={{ marginTop: '10px' }}>
                                         <Stack className="option">
                                             <Typography className={'icon'} sx={{ color: 'red' }}>Used Cars:</Typography>
-                                            <Typography sx={{ color: 'red' }}>200</Typography>
+                                            <Typography sx={{ color: 'red' }}>{dealer?.usedCars}</Typography>
                                         </Stack>
                                         <Stack className="option">
                                             <Typography className={'icon'} sx={{ color: 'blue' }}>New Cars:</Typography>
-                                            <Typography sx={{ color: 'blue' }}>300</Typography>
+                                            <Typography sx={{ color: 'blue' }}>{dealer?.newCars}</Typography>
                                         </Stack>
                                     </Stack>
                                 </Stack>
@@ -278,35 +287,74 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                 <Stack className={'right'}>
                                     <Stack className={'config'}>
                                         <Stack className={'right'}>
-                                            <Typography className={'main-title'}>BMW</Typography>
+                                            <Typography className={'main-title'}>{dealer?.titleNick}</Typography>
                                             <Typography className={'small-title'}>
-                                                Award-winning, family owned dealership of new and pre-owned vehicles. Lowest prices and the best customer service guaranteed.
+                                                {dealer?.shortDesc}
                                             </Typography>
                                             <Box component={'div'} className={'social'}>
-                                                <img src="/img/icons/addressb.svg" alt="" />
-                                                <Typography className={'data'}>Melbourne VIC3051, Australia.</Typography>
-                                                <img src="/img/icons/mailb.svg" alt="" />
-                                                <Typography className={'data'}>bmwlondon@gamil.com</Typography>
+                                                {dealer?.address?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/addressb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer.address}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.email?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/mailb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.email}</Typography></>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'social'}>
-                                                <img src="/img/icons/phoneb.svg" alt="" />
-                                                <Typography className={'data'}>01048675455</Typography>
-                                                <img src="/img/icons/callb.svg" alt="" />
-                                                <Typography className={'data'}>01007078899</Typography>
-                                                <img src="/img/icons/youtubeb.svg" alt="" />
-                                                <Typography className={'data'}>bmw london branch</Typography>
-                                                <img src="/img/icons/instab.svg" alt="" />
-                                                <Typography className={'data'}>bmwlondon</Typography>
+                                                {dealer?.phone?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/phoneb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.phone}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.phone2?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/callb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.phone2}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.youtube?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/youtubeb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.youtube}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.instagram?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/instab.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.instagram}</Typography>
+                                                    </>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'social'}>
-                                                <img src="/img/icons/nb.svg" alt="" />
-                                                <Typography className={'data'}>kr blog bmw</Typography>
-                                                <img src="/img/icons/tiktokb.svg" alt="" />
-                                                <Typography className={'data'}>bmw tik tok</Typography>
-                                                <img src="/img/icons/kakaotalkb.svg" alt="" />
-                                                <Typography className={'data'}>bmw kakao</Typography>
-                                                <img src="/img/icons/xcomb.svg" alt="" />
-                                                <Typography className={'data'}>bmw xcom</Typography>
+                                                {dealer?.naverBlog?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/nb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.naverBlog}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.tikTok?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/tiktokb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.tikTok}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.kakaoTalk?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/kakaotalkb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.kakaoTalk}</Typography>
+                                                    </>
+                                                )}
+                                                {dealer?.xcom?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/xcomb.svg" alt="" />
+                                                        <Typography className={'data'}>{dealer?.xcom}</Typography>
+                                                    </>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>View All Cars</Typography>
@@ -320,19 +368,41 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             <Typography className={'main-title'}>Opening Hours</Typography>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>Mon-Fri</Typography>
-                                                <Typography className={'icons'}>10:00 - 17:00</Typography>
+                                                {(dealer?.openAt?.trim() || dealer?.closeAt?.trim()) ? (
+                                                    <Typography className={'icons'}>
+                                                        {`${dealer?.openAt || 'N/A'} - ${dealer?.closeAt || 'N/A'}`}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Not Yet</Typography>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>Saturday</Typography>
-                                                <Typography className={'icons'}>10:00 - 14:00</Typography>
+                                                {(dealer?.openSaturday?.trim() || dealer?.closeSaturday?.trim()) ? (
+                                                    <Typography className={'icons'}>
+                                                        {`${dealer?.openSaturday || 'N/A'} - ${dealer?.closeSaturday || 'N/A'}`}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Not Yet</Typography>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>Sunday</Typography>
-                                                <Typography className={'icons'}>Closed</Typography>
+                                                {(dealer?.openSunday?.trim() || dealer?.closeSunday?.trim()) ? (
+                                                    <Typography className={'icons'}>
+                                                        {`${dealer?.openSunday || 'N/A'} - ${dealer?.closeSunday || 'N/A'}`}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Not Yet</Typography>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>Public Holdiays</Typography>
-                                                <Typography className={'icons'}>Closed</Typography>
+                                                {dealer?.publicHolidays === true ? (
+                                                    <Typography className={'icons'}>Open</Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Closed</Typography>
+                                                )}
                                             </Box>
                                         </Stack>
                                     </Stack>
@@ -340,7 +410,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                             </Stack>
                             <Stack className={'images'}>
                                 <Stack className={'sub-images'}>
-                                    {property?.propertyImages.slice(0, 4).map((subImg: string) => {
+                                    {dealer?.images?.slice(0, 4).map((subImg: string) => {
                                         const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
                                         return (
                                             <Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
@@ -364,9 +434,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                         <Typography className={'title'}>Description</Typography>
                                     </Stack>
                                     <Stack className={'bottom'}>
-                                        <Typography className={'data'}>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-                                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</Typography>
+                                        <Typography className={'data'}>
+                                            {dealer?.longDesc}
+                                        </Typography>
                                     </Stack>
                                 </Stack>
                                 <Stack className={'prop-desc-config'}>
@@ -374,61 +444,87 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                         <Typography className={'title'}>Our Service</Typography>
                                         <Stack className={'info-box'}>
                                             <Stack className={'right'}>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/fincb.svg" alt="" />
-                                                    <Typography className={'data'}>Financing</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/serb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Service</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/tradeb.svg" alt="" />
-                                                    <Typography className={'data'}>Trade In</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/custom.svg" alt="" />
-                                                    <Typography className={'data'}>Customization</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/warb.svg" alt="" />
-                                                    <Typography className={'data'}>Warranties</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/partb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Parts</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/accb.svg" alt="" />
-                                                    <Typography className={'data'}>Accessories</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/detailb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Detailing</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/washb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Wash</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/testb.svg" alt="" />
-                                                    <Typography className={'data'}>Test Drive</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/delb.svg" alt="" />
-                                                    <Typography className={'data'}>Delivery</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/plus.svg" alt="" />
-                                                    <Typography className={'data'}>Plus Service</Typography>
-                                                </Box>
+                                                {dealer?.dealerFinancing === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/fincb.svg" alt="" />
+                                                        <Typography className={'data'}>Financing</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerCarService === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/serb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Service</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerTradeIn === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/tradeb.svg" alt="" />
+                                                        <Typography className={'data'}>Trade In</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerCustomization === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/custom.svg" alt="" />
+                                                        <Typography className={'data'}>Customization</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerWarranties === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/warb.svg" alt="" />
+                                                        <Typography className={'data'}>Warranties</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerParts === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/partb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Parts</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerAccessories === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/accb.svg" alt="" />
+                                                        <Typography className={'data'}>Accessories</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerCarDetailing === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/detailb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Detailing</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerCarWash === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/washb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Wash</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerCarTestDrive === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/testb.svg" alt="" />
+                                                        <Typography className={'data'}>Test Drive</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerCarDelivery === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/delb.svg" alt="" />
+                                                        <Typography className={'data'}>Delivery</Typography>
+                                                    </Box>
+                                                )}
+                                                {dealer?.dealerPlusService !== '' ? (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/plus.svg" alt="" />
+                                                        <Typography className={'data'}>Plus Service</Typography>
+                                                    </Box>
+                                                ) : (
+                                                    null
+                                                )}
                                             </Stack>
                                         </Stack>
                                     </Stack>
                                 </Stack>
                                 <Stack className={'address-config'}>
                                     <Typography className={'title'}>Our Location</Typography>
-                                    <Typography className={'address'}>United Kingdom, London City, London Street, BMW Branch 234-12</Typography>
+                                    <Typography className={'address'}>{dealer?.address}</Typography>
                                     <Stack className={'map-box'}>
                                         <iframe
                                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25867.098915951767!2d128.68632810247993!3d35.86402299180927!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35660bba427bf179%3A0x1fc02da732b9072f!2sGeumhogangbyeon-ro%2C%20Dong-gu%2C%20Daegu!5e0!3m2!1suz!2skr!4v1695537640704!5m2!1suz!2skr"
@@ -462,7 +558,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             </Stack>
                                         </Stack>
                                         <Stack className={'review-list'}>
-                                            {propertyComments?.map((comment: Comment) => {
+                                            {dealerComments?.map((comment: Comment) => {
                                                 return <Review comment={comment} key={comment?._id} />;
                                             })}
                                             <Box component={'div'} className={'pagination-box'}>
@@ -692,7 +788,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                 </Stack>
                             </Stack>
                         </Stack>
-                        {destinationProperties.length !== 0 && (
+                        {destinationCars?.length !== 0 && (
                             <Stack className={'similar-properties-config'}>
                                 <Stack className={'title-pagination-box'}>
                                     <Stack className={'title-box'}>
@@ -719,10 +815,10 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             el: '.swiper-similar-pagination',
                                         }}
                                     >
-                                        {destinationProperties.map((property: Property) => {
+                                        {destinationCars?.map((car: Car) => {
                                             return (
-                                                <SwiperSlide className={'similar-homes-slide'} key={property.propertyTitle}>
-                                                    <TrendPropertyCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />
+                                                <SwiperSlide className={'similar-homes-slide'} key={car?.carTitle}>
+                                                    <RecommendedCarCard car={car} likeCarHandler={likeCarHandler} key={car?._id} />
                                                 </SwiperSlide>
                                             );
                                         })}
@@ -737,7 +833,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     }
 };
 
-PropertyDetail.defaultProps = {
+DealerDetail.defaultProps = {
     initialComment: {
         page: 1,
         limit: 5,
@@ -749,4 +845,4 @@ PropertyDetail.defaultProps = {
     },
 };
 
-export default withLayoutBasic(PropertyDetail);
+export default withLayoutBasic(DealerDetail);
