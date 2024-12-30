@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Link, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { NextPage } from 'next';
 import Review from '../../libs/components/car/Review';
@@ -150,6 +150,11 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
     }, [commentInquiry]);
 
     /** HANDLERS **/
+
+    const pushIdHandler = (id: string) => {
+        router.push(`/dealers/car=${id}`)
+    }
+
     const changeImageHandler = (image: string) => {
         setSlideImage(image);
     };
@@ -357,7 +362,11 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                 )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
-                                                <Typography className={'data'}>View All Cars</Typography>
+                                                <Typography
+                                                    onClick={() => pushIdHandler(dealer?._id as string)}
+                                                    className={'data'}>
+                                                    View All Cars
+                                                </Typography>
                                             </Box>
                                         </Stack>
                                     </Stack>

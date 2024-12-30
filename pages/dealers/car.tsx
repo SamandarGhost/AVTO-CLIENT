@@ -11,9 +11,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Member } from '../../libs/types/member/member';
 import { useMutation, useQuery } from '@apollo/client';
 import { LIKE_CAR, LIKE_MEMBER } from '../../apollo/user/mutation';
-import { GET_AGENTS, GET_CARS } from '../../apollo/user/query';
+import { GET_AGENTS, GET_CARS, GET_MEMBER } from '../../apollo/user/query';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
-import { Message } from '../../libs/enums/common.enum';
+import { Direction, Message } from '../../libs/enums/common.enum';
 import { Messages } from '../../libs/config';
 import TravelExploreOutlinedIcon from '@mui/icons-material/TravelExploreOutlined';
 import DealerCard from '../../libs/components/common/DealerCard';
@@ -21,6 +21,7 @@ import PropertyCard from '../../libs/components/car/MainCarCard';
 import { T } from '../../libs/types/common';
 import { Property } from '../../libs/types/property/property';
 import { Car } from '../../libs/types/car/car';
+import MainCarCard from '../../libs/components/car/MainCarCard';
 
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -29,7 +30,7 @@ export const getStaticProps = async ({ locale }: any) => ({
     },
 });
 
-const AgentList: NextPage = ({ initialInput, ...props }: any) => {
+const DealerCarsList: NextPage = ({ initialInput, ...props }: any) => {
     const device = useDeviceDetect();
     const router = useRouter();
     const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
@@ -38,15 +39,15 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
     const [sortingOpen, setSortingOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [searchFilter, setSearchFilter] = useState<any>(
-        router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
+        router?.query?.input ? JSON.parse(router?.query?.input as string) : '',
     );
-    const [members, setMembers] = useState<Member[]>([]);
+    const [member, setMember] = useState<Member>();
+    const [dealerId, setDealerId] = useState<string | null>(null);
     const [total, setTotal] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchText, setSearchText] = useState<string>('');
 
     /** APOLLO REQUESTS **/
-    const [likeTargetCar] = useMutation(LIKE_MEMBER);
+    const [likeTargetCar] = useMutation(LIKE_CAR);
 
     const {
         loading: getCarsLoading,
@@ -55,7 +56,17 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
         refetch: getCarsRefetch,
     } = useQuery(GET_CARS, {
         fetchPolicy: 'network-only',
-        variables: { input: searchFilter },
+        variables: {
+            input: {
+                page: 1,
+                limit: 4,
+                sort: 'createdAt',
+                direction: Direction.DESC,
+                search: {
+                    memberId: member?._id
+                }
+            },
+        },
         notifyOnNetworkStatusChange: true,
         onCompleted: (data) => {
             setCars(data?.getCars?.list);
@@ -63,19 +74,17 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
         },
     });
 
-    const [likeTargetProperty] = useMutation(LIKE_CAR);
     const {
-        loading: getPropertiesLoading,
-        data: getPropertiesData,
-        error: getPropertiesError,
-        refetch: getPropertiesRefetch
-    } = useQuery(GET_CARS, {
+        loading: getMemberLoading,
+        data: getMemberData,
+        error: getMemberError,
+        refetch: getMemberRefetch
+    } = useQuery(GET_MEMBER, {
         fetchPolicy: 'network-only',
-        variables: { input: searchFilter },
+        variables: { input: dealerId },
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            setProperties(data?.getProperties?.list);
-            setTotal(data?.getProperties?.metaCounter[0]?.total);
+            setMember(data?.getMember?.list);
         },
     });
     /** LIFECYCLES **/
@@ -86,6 +95,12 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
         } else
             setCurrentPage(searchFilter.page === undefined ? 1 : searchFilter.page);
     }, [router]);
+
+    useEffect(() => {
+        if (router?.query?.dealerId) {
+            setDealerId(router?.query?.dealerId as string);
+        }
+    }, [router])
 
     /** HANDLERS **/
     const sortingClickHandler = (e: MouseEvent<HTMLElement>) => {
@@ -109,11 +124,11 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
                 setFilterSortName('Oldest order');
                 break;
             case 'likes':
-                setSearchFilter({ ...searchFilter, sort: 'memberLikes', direction: 'DESC' });
+                setSearchFilter({ ...searchFilter, sort: 'carLikes', direction: 'DESC' });
                 setFilterSortName('Likes');
                 break;
             case 'views':
-                setSearchFilter({ ...searchFilter, sort: 'memberViews', direction: 'DESC' });
+                setSearchFilter({ ...searchFilter, sort: 'carViews', direction: 'DESC' });
                 setFilterSortName('Views');
                 break;
         }
@@ -123,83 +138,67 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 
     const paginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
         searchFilter.page = value;
-        await router.push(`/dealers?input=${JSON.stringify(searchFilter)}`, `/dealers?input=${JSON.stringify(searchFilter)}`, {
+        await router.push(`/dealers/car?input=${JSON.stringify(searchFilter)}`, `/dealers/car?input=${JSON.stringify(searchFilter)}`, {
             scroll: false,
         });
         setCurrentPage(value);
     };
 
-    const likeMemberHandler = async (user: any, id: string) => {
+    const likeCarHandler = async (user: any, id: string) => {
         try {
             if (!id) return;
             if (!user._id) throw new Error(Messages.error2);
 
-            await likeTargetMember({
+            await likeTargetCar({
                 variables: {
                     input: id,
                 },
             });
 
-            await getAgentsRefetch({ input: searchFilter });
+            await getCarsRefetch({ input: searchFilter });
             await sweetMixinSuccessAlert('success', 800);
         } catch (err: any) {
-            console.log('Error, likeMemberHandler', err.message);
-            sweetMixinErrorAlert(err.message).then();
-        }
-    }
-
-    const likePropertyHandler = async (user: T, id: string) => {
-        try {
-            if (!id) return;
-            if (!user._id) throw new Error(Message.SOMETHING_WENT_WRONG);
-
-            await likeTargetProperty({
-                variables: { input: id },
-            });
-            await getPropertiesRefetch({ input: initialInput });
-        } catch (err: any) {
-            console.log('Error, likePropertyHandler:', err.message);
             sweetMixinErrorAlert(err.message).then();
         }
     }
 
 
     if (device === 'mobile') {
-        return <h1>AGENTS PAGE MOBILE</h1>;
+        return <h1>DEALER CARS PAGE MOBILE</h1>;
     } else {
         return (
             <Stack className={'car-page'}>
                 <Stack className={'container'}>
                     <Stack className={'card-wrap'}>
-                        {properties?.length === 0 ? (
+                        {cars?.length === 0 ? (
                             <div className={'no-data'}>
                                 <img src="/img/icons/icoAlert.svg" alt="" />
-                                <p>No Dealers found!</p>
+                                <p>No Dealer Cars found!</p>
                             </div>
                         ) : (
-                            properties.map((property: Property) => {
-                                return <PropertyCard property={property} key={property?._id} likePropertyHandler={likePropertyHandler} />;
+                            cars?.map((car: Car) => {
+                                return <MainCarCard car={car} key={car?._id} likeCarHandler={likeCarHandler} />;
                             })
                         )}
                     </Stack>
                     <Stack className={'pagination'}>
                         <Stack className="pagination-box">
-                            {agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
+                            {cars?.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
                                 <Stack className="pagination-box">
                                     <Pagination
                                         page={currentPage}
                                         count={Math.ceil(total / searchFilter.limit)}
                                         onChange={paginationChangeHandler}
-                                        shape="circular"
-                                        color="primary"
+                                        shape="rounded"
+                                        color="secondary"
                                     />
                                 </Stack>
                             )}
                         </Stack>
 
-                        {agents.length !== 0 && (
+                        {cars?.length !== 0 && (
                             <span>
-                                Total {total} dealer{total > 1 ? 's' : ''} available
+                                Total {total} car{total > 1 ? 's' : ''} available
                             </span>
                         )}
                     </Stack>
@@ -209,16 +208,4 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
     }
 };
 
-AgentList.defaultProps = {
-    initialInput: {
-        page: 1,
-        limit: 10,
-        sort: 'createdAt',
-        direction: 'DESC',
-        search: {
-
-        },
-    },
-};
-
-export default withLayoutBasic(AgentList);
+export default withLayoutBasic(DealerCarsList);
