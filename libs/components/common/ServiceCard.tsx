@@ -12,16 +12,16 @@ import { userVar } from '../../../apollo/store';
 import NorthEastOutlinedIcon from '@mui/icons-material/NorthEastOutlined';
 
 interface AgentCardProps {
-	agent: any;
+	service: any;
 	likeMemberHandler: any;
 }
 
 const ServiceCard = (props: AgentCardProps) => {
-	const { agent, likeMemberHandler } = props;
+	const { service, likeMemberHandler } = props;
 	const device = useDeviceDetect();
 	const user = useReactiveVar(userVar);
-	const imagePath: string = agent?.memberImage
-		? `${REACT_APP_API_URL}/${agent?.memberImage}`
+	const imagePath: string = service?.memberImage
+		? `${REACT_APP_API_URL}/${service?.memberImage}`
 		: '/img/profile/defaultUser.svg';
 
 	if (device === 'mobile') {
@@ -32,16 +32,16 @@ const ServiceCard = (props: AgentCardProps) => {
 				<Link
 					href={{
 						pathname: '/service/detail',
-						query: { agentId: agent?._id },
+						query: { serviceId: service?._id },
 					}}
 				>
 					<img src="/img/icons/kiad.svg" className={'agent-img'} alt="" />
 				</Link>
 				<Stack className={'agent-desc'}>
 					<Box component={'div'} className={'agent-info'}>
-						<strong>KIA London Branch</strong>
+						<strong>{service?.titleNick}</strong>
 					</Box>
-					<Typography className="view-cnt">Nottingham Road, Alfreton, Derbyshire, DE55 4GR</Typography>
+					<Typography className="view-cnt">{service?.address}</Typography>
 				</Stack>
 
 				<Stack className={'button'}>
@@ -49,7 +49,7 @@ const ServiceCard = (props: AgentCardProps) => {
 						<Link
 							href={{
 								pathname: '/service/detail',
-								query: { agentId: 'id' },
+								query: { serviceId: 'id' },
 							}}
 						>
 							<strong>See More About</strong>

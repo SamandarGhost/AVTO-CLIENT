@@ -14,15 +14,14 @@ import { CommentGroup } from '../../libs/enums/comment.enum';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { GET_CAR, GET_CARS, GET_COMMENTS } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
+import { GET_CAR, GET_CARS, GET_COMMENTS, GET_MEMBER } from '../../apollo/user/query';
+import { CREATE_COMMENT, LIKE_CAR, LIKE_MEMBER } from '../../apollo/user/mutation';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-
-
-
+import { Member } from '../../libs/types/member/member';
+import Link from 'next/link';
 
 
 
@@ -38,159 +37,58 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     const device = useDeviceDetect();
     const router = useRouter();
     const user = useReactiveVar(userVar);
-    const [propertyId, setPropertyId] = useState<string | null>(null);
-    const [property, setProperty] = useState<Property | null>(null);
+    const [serviceId, setServiceId] = useState<string | null>(null);
+    const [service, setService] = useState<Member | null>(null);
     const [slideImage, setSlideImage] = useState<string>('');
-    const [destinationProperties, setDestinationProperty] = useState<Property[]>([]);
-    const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-    const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
-    const [commentTotal, setCommentTotal] = useState<number>(0);
-    const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-        commentGroup: CommentGroup.CAR,
-        commentContent: '',
-        commentRefId: '',
-    });
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_CAR);
+    const [likeTargetMember] = useMutation(LIKE_MEMBER);
     const [createComment] = useMutation(CREATE_COMMENT);
     const {
-        loading: getPropertyLoading,
-        data: getPropertyData,
-        error: getPropertyError,
-        refetch: getPropertyRefetch
-    } = useQuery(GET_CAR, {
+        loading: getMemberLoading,
+        data: getMmeberData,
+        error: getMemberError,
+        refetch: getMemberRefetch
+    } = useQuery(GET_MEMBER, {
         fetchPolicy: 'network-only',
-        variables: { input: propertyId },
-        skip: !propertyId,
+        variables: { input: serviceId },
+        skip: !serviceId,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperty) setProperty(data?.getProperty);
-            if (data?.getProperty) setSlideImage(data?.getProperty?.propertyImages[0]);
-        },
-    });
-
-    const {
-        loading: getPropertiesLoading,
-        data: getPropertiesData,
-        error: getPropertiesError,
-        refetch: getPropertiesRefetch
-    } = useQuery(GET_CARS, {
-        fetchPolicy: 'cache-and-network',
-        variables: {
-            input: {
-                page: 1,
-                limit: 4,
-                sort: 'createdAt',
-                direction: Direction.DESC,
-                search: {
-                    locationList: property?.propertyLocation ? [property?.propertyLocation] : [],
-                },
-
-            },
-        },
-        skip: !propertyId && !property,
-        notifyOnNetworkStatusChange: true,
-        onCompleted: (data: T) => {
-            if (data?.getProperties) setDestinationProperty(data?.getProperties?.list);
-        },
-    });
-
-    const {
-        loading: getCommentsLoading,
-        data: getCommentsData,
-        error: getCommentsError,
-        refetch: getCommentsRefetch
-    } = useQuery(GET_COMMENTS, {
-        fetchPolicy: 'cache-and-network',
-        variables: { input: initialComment },
-        skip: !commentInquiry.search.commentRefId,
-        notifyOnNetworkStatusChange: true,
-        onCompleted: (data: T) => {
-            if (data?.getComments?.list) setPropertyComments(data?.getComments?.list);
-            setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
+            if (data?.getMember) setService(data?.getMember);
+            if (data?.getMember) setSlideImage(data?.getMember?.images?.[0]);
         },
     });
 
     /** LIFECYCLES **/
     useEffect(() => {
-        if (router.query.id) {
-            setPropertyId(router.query.id as string);
-            setCommentInquiry({
-                ...commentInquiry,
-                search: {
-                    commentRefId: router.query.id as string,
-                },
-            });
-            setInsertCommentData({
-                ...insertCommentData,
-                commentRefId: router.query.id as string,
-            });
+        if (router?.query?.serviceId) {
+            setServiceId(router.query.serviceId as string);
         }
     }, [router]);
-
-    useEffect(() => {
-        if (commentInquiry.search.commentRefId) {
-            getCommentsRefetch({ input: commentInquiry });
-        }
-    }, [commentInquiry]);
 
     /** HANDLERS **/
     const changeImageHandler = (image: string) => {
         setSlideImage(image);
     };
 
-    const likePropertyHandler = async (user: T, id: string) => {
+    const likeServiceHandler = async (user: T, id: string) => {
         try {
             if (!id) return;
             if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-
-            // execute likePropertyHandler mutation
-
-            await likeTargetProperty({
+            await likeTargetMember({
                 variables: { input: id },
             });
 
-            // execute getPropertiesRefetch
-            await getPropertyRefetch({ input: id });
-            getPropertiesRefetch({
-                input: {
-                    page: 1,
-                    limit: 4,
-                    sort: 'createdAt',
-                    direction: Direction.DESC,
-                    search: {
-                        locationList: [property?.propertyLocation],
-                    },
-                },
-            });
+            await getMemberRefetch({ input: id });
 
             await sweetTopSmallSuccessAlert('seccess', 800);
         } catch (err: any) {
-            console.log('ERROR, likePropertyHandler:', err);
             sweetMixinErrorAlert(err.message).then;
         }
     };
 
-    const commentPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
-        commentInquiry.page = value;
-        setCommentInquiry({ ...commentInquiry });
-    };
-
-    const createCommentHandler = async () => {
-        try {
-            if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
-            await createComment({ variables: { input: insertCommentData } });
-
-            setInsertCommentData({ ...insertCommentData, commentContent: '' });
-
-            await getCommentsRefetch({ input: commentInquiry });
-        } catch (err: any) {
-            await sweetErrorHandling(err);
-        }
-    };
-
-    if (getPropertyLoading) {
+    if (getMemberLoading) {
         return (
             <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
                 <CircularProgress size={'4rem'} />
@@ -199,7 +97,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     };
 
     if (device === 'mobile') {
-        return <div>PROPERTY DETAIL PAGE</div>;
+        return <div>SERVICE DETAIL PAGE</div>;
     } else {
         return (
             <div id={'service-detail-page'}>
@@ -208,33 +106,56 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                         <Stack className={'property-info-config'}>
                             <Stack className={'info'}>
                                 <Stack className={'left-box'}>
-                                    <Typography className={'title-main'}>KIA London Branch</Typography>
+                                    <Typography className={'title-main'}>{service?.titleNick}</Typography>
                                 </Stack>
                             </Stack>
                             <Stack className={'brand-img'}>
                                 <Stack className={'right'}>
                                     <Stack className={'config'}>
                                         <Stack className={'right'}>
-                                            <Typography className={'main-title'}>BMW</Typography>
+                                            <Typography className={'main-title'}>{service?.carServiceType}</Typography>
                                             <Typography className={'small-title'}>
-                                                Award-winning, family owned dealership of new and pre-owned vehicles. Lowest prices and the best customer service guaranteed.
+                                                {service?.shortDesc}
                                             </Typography>
                                             <Box component={'div'} className={'social'}>
-                                                <img src="/img/icons/addressb.svg" alt="" />
-                                                <Typography className={'data'}>Melbourne VIC3051, Australia.</Typography>
-                                                <img src="/img/icons/mailb.svg" alt="" />
-                                                <Typography className={'data'}>bmwlondon@gamil.com</Typography>
+                                                {service?.address?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/addressb.svg" alt="" />
+                                                        <Typography className={'data'}>{service?.address}</Typography>
+                                                    </>
+                                                )}
+                                                {service?.email?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/mailb.svg" alt="" />
+                                                        <Typography className={'data'}>{service?.email}</Typography>
+                                                    </>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'social'}>
-                                                <img src="/img/icons/phoneb.svg" alt="" />
-                                                <Typography className={'data'}>01048675455</Typography>
-                                                <img src="/img/icons/callb.svg" alt="" />
-                                                <Typography className={'data'}>01007078899</Typography>
-                                                <img src="/img/icons/kakaotalkb.svg" alt="" />
-                                                <Typography className={'data'}>bmw kakao</Typography>
+                                                {service?.phone.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/phoneb.svg" alt="" />
+                                                        <Typography className={'data'}>{service?.phone}</Typography>
+                                                    </>
+                                                )}
+                                                {service?.phone2?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/callb.svg" alt="" />
+                                                        <Typography className={'data'}>{service?.phone2}</Typography>
+                                                    </>
+                                                )}
+                                                {service?.kakaoTalk?.trim() && (
+                                                    <>
+                                                        <img src="/img/icons/kakaotalkb.svg" alt="" />
+                                                        <Typography className={'data'}>{service?.kakaoTalk}</Typography>
+                                                    </>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
-                                                <Typography className={'data'}>Join For Membership</Typography>
+                                                <Link
+                                                    href={'/service/membership'}
+                                                    className={'data'}>Join For Membership
+                                                </Link>
                                             </Box>
                                         </Stack>
                                     </Stack>
@@ -263,15 +184,41 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             <Typography className={'main-title'}>Opening Hours</Typography>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>Mon-Fri</Typography>
-                                                <Typography className={'icons'}>10:00 - 17:00</Typography>
+                                                {(service?.openAt?.trim() || service?.closeAt?.trim()) ? (
+                                                    <Typography className={'icons'}>
+                                                        {`${service?.openAt || 'N/A'} - ${service?.closeAt || 'N/A'}`}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Not Yet</Typography>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
-                                                <Typography className={'data'}>Weekend</Typography>
-                                                <Typography className={'icons'}>10:00 - 14:00</Typography>
+                                                <Typography className={'data'}>Saturday</Typography>
+                                                {(service?.openSaturday?.trim() || service?.closeSaturday?.trim()) ? (
+                                                    <Typography className={'icons'}>
+                                                        {`${service?.openSaturday || 'N/A'} - ${service?.closeSaturday || 'N/A'}`}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Not Yet</Typography>
+                                                )}
+                                            </Box>
+                                            <Box component={'div'} className={'info'}>
+                                                <Typography className={'data'}>Sunday</Typography>
+                                                {(service?.openSunday?.trim() || service?.closeSunday?.trim()) ? (
+                                                    <Typography className={'icons'}>
+                                                        {`${service?.openSunday || 'N/A'} - ${service?.closeSunday || 'N/A'}`}
+                                                    </Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Not Yet</Typography>
+                                                )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
                                                 <Typography className={'data'}>Public Holdiays</Typography>
-                                                <Typography className={'icons'}>Closed</Typography>
+                                                {service?.publicHolidays === true ? (
+                                                    <Typography className={'icons'}>Open</Typography>
+                                                ) : (
+                                                    <Typography className={'icons'}>Closed</Typography>
+                                                )}
                                             </Box>
                                         </Stack>
                                     </Stack>
@@ -297,9 +244,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                         <Typography className={'title'}>Description</Typography>
                                     </Stack>
                                     <Stack className={'bottom'}>
-                                        <Typography className={'data'}>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-                                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</Typography>
+                                        <Typography className={'data'}>
+                                            {service?.longDesc}
+                                        </Typography>
                                     </Stack>
                                 </Stack>
                                 <Stack className={'prop-desc-config'}>
@@ -307,54 +254,96 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                         <Typography className={'title'}>Our Service</Typography>
                                         <Stack className={'info-box'}>
                                             <Stack className={'left'}>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/fincb.svg" alt="" />
-                                                    <Typography className={'data'}>Financing</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/serb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Service</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/tradeb.svg" alt="" />
-                                                    <Typography className={'data'}>Trade In</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/custom.svg" alt="" />
-                                                    <Typography className={'data'}>Customization</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/warb.svg" alt="" />
-                                                    <Typography className={'data'}>Warranties</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/partb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Parts</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/accb.svg" alt="" />
-                                                    <Typography className={'data'}>Accessories</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/detailb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Detailing</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/washb.svg" alt="" />
-                                                    <Typography className={'data'}>Car Wash</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/testb.svg" alt="" />
-                                                    <Typography className={'data'}>Test Drive</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/delb.svg" alt="" />
-                                                    <Typography className={'data'}>Delivery</Typography>
-                                                </Box>
-                                                <Box component={'div'} className={'info'}>
-                                                    <img src="/img/icons/plus.svg" alt="" />
-                                                    <Typography className={'data'}>Plus Service</Typography>
-                                                </Box>
+                                                {service?.carOilChange === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/fincb.svg" alt="" />
+                                                        <Typography className={'data'}>Oil Change</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carAlignment === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/serb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Alignment</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carTireChange === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/tradeb.svg" alt="" />
+                                                        <Typography className={'data'}>Tire Change</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carTireBalance === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/partb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Parts</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carBrakeCheck === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/custom.svg" alt="" />
+                                                        <Typography className={'data'}>Brake Check</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carBatteryCheck === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/custom.svg" alt="" />
+                                                        <Typography className={'data'}>Battery Check</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carSuspension === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/accb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Suspension</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carAirCondition === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/detailb.svg" alt="" />
+                                                        <Typography className={'data'}>Air Condition</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carTransmissionCheck === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/washb.svg" alt="" />
+                                                        <Typography className={'data'}>Tarnsmission Check</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carEngineDiagnostic === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/testb.svg" alt="" />
+                                                        <Typography className={'data'}>Engine Diagnostic</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carExhaust === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/delb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Exhaust</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.dealerCarDetailing === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/detailb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Detailing</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carTimingBelt === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/detailb.svg" alt="" />
+                                                        <Typography className={'data'}>Timing Belt</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carChainReplacement === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/detailb.svg" alt="" />
+                                                        <Typography className={'data'}>Chain Replacement</Typography>
+                                                    </Box>
+                                                )}
+                                                {service?.carWindshield === true && (
+                                                    <Box component={'div'} className={'info'}>
+                                                        <img src="/img/icons/detailb.svg" alt="" />
+                                                        <Typography className={'data'}>Car Windshield</Typography>
+                                                    </Box>
+                                                )}
                                             </Stack>
                                         </Stack>
                                     </Stack>
@@ -389,7 +378,6 @@ PropertyDetail.defaultProps = {
         sort: 'createdAt',
         direction: 'DESC',
         search: {
-            commentRefId: '',
         },
     },
 };

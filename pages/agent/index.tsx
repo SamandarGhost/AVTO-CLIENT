@@ -87,11 +87,11 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 				setFilterSortName('Oldest order');
 				break;
 			case 'likes':
-				setSearchFilter({ ...searchFilter, sort: 'memberLikes', direction: 'DESC' });
+				setSearchFilter({ ...searchFilter, sort: 'likes', direction: 'DESC' });
 				setFilterSortName('Likes');
 				break;
 			case 'views':
-				setSearchFilter({ ...searchFilter, sort: 'memberViews', direction: 'DESC' });
+				setSearchFilter({ ...searchFilter, sort: 'views', direction: 'DESC' });
 				setFilterSortName('Views');
 				break;
 		}

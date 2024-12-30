@@ -10,8 +10,8 @@ import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Member } from '../../libs/types/member/member';
 import { useMutation, useQuery } from '@apollo/client';
-import { LIKE_TARGET_MEMBER } from '../../apollo/user/mutation';
-import { GET_AGENTS } from '../../apollo/user/query';
+import { LIKE_MEMBER } from '../../apollo/user/mutation';
+import { GET_AGENTS, GET_SERVICES } from '../../apollo/user/query';
 import { sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../libs/sweetAlert';
 import { Message } from '../../libs/enums/common.enum';
 import { Messages } from '../../libs/config';
@@ -26,7 +26,7 @@ export const getStaticProps = async ({ locale }: any) => ({
 	},
 });
 
-const AgentList: NextPage = ({ initialInput, ...props }: any) => {
+const ServiceList: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
@@ -36,26 +36,26 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 	const [searchFilter, setSearchFilter] = useState<any>(
 		router?.query?.input ? JSON.parse(router?.query?.input as string) : initialInput,
 	);
-	const [agents, setAgents] = useState<Member[]>([]);
+	const [services, setServices] = useState<Member[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [searchText, setSearchText] = useState<string>('');
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetMember] = useMutation(LIKE_TARGET_MEMBER);
+	const [likeTargetMember] = useMutation(LIKE_MEMBER);
 
 	const {
-		loading: getAgentsLoading,
-		data: getAgentsData,
-		error: getAgentsError,
-		refetch: getAgentsRefetch,
-	} = useQuery(GET_AGENTS, {
+		loading: getServicesLoading,
+		data: getServicesData,
+		error: getServicesError,
+		refetch: getServicesRefetch,
+	} = useQuery(GET_SERVICES, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data) => {
-			setAgents(data?.getAgents?.list);
-			setTotal(data?.getAgents?.metaCounter[0]?.total);
+			setServices(data?.getServices?.list);
+			setTotal(data?.getServices?.metaCounter[0]?.total);
 		},
 	});
 	/** LIFECYCLES **/
@@ -91,11 +91,11 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 				setFilterSortName('Oldest order');
 				break;
 			case 'likes':
-				setSearchFilter({ ...searchFilter, sort: 'memberLikes', direction: 'DESC' });
+				setSearchFilter({ ...searchFilter, sort: 'likes', direction: 'DESC' });
 				setFilterSortName('Likes');
 				break;
 			case 'views':
-				setSearchFilter({ ...searchFilter, sort: 'memberViews', direction: 'DESC' });
+				setSearchFilter({ ...searchFilter, sort: 'views', direction: 'DESC' });
 				setFilterSortName('Views');
 				break;
 		}
@@ -122,17 +122,16 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 				},
 			});
 
-			await getAgentsRefetch({ input: searchFilter });
+			await getServicesRefetch({ input: searchFilter });
 			await sweetMixinSuccessAlert('success', 800);
 		} catch (err: any) {
-			console.log('Error, likeMemberHandler', err.message);
 			sweetMixinErrorAlert(err.message).then();
 		}
 	}
 
 
 	if (device === 'mobile') {
-		return <h1>AGENTS PAGE MOBILE</h1>;
+		return <h1>SERVICES PAGE MOBILE</h1>;
 	} else {
 		return (
 			<Stack className={'dealer-page'}>
@@ -140,7 +139,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 					<Stack className={'filter'}>
 						<Box component={'div'} className={'left'}>
 							<TravelExploreOutlinedIcon className={'icon'} />
-							<Typography>Dealers Page</Typography>
+							<Typography>Service Page</Typography>
 						</Box>
 						<Box component={'div'} className={'right'}>
 							<span>Sort by</span>
@@ -166,35 +165,35 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 						</Box>
 					</Stack>
 					<Stack className={'card-wrap'}>
-						{agents?.length === 0 ? (
+						{services?.length === 0 ? (
 							<div className={'no-data'}>
 								<img src="/img/icons/icoAlert.svg" alt="" />
-								<p>No Dealers found!</p>
+								<p>No Services found!</p>
 							</div>
 						) : (
-							agents.map((agent: Member) => {
-								return <ServiceCard likeMemberHandler={likeMemberHandler} agent={agent} key={agent._id} />;
+							services?.map((service: Member) => {
+								return <ServiceCard likeMemberHandler={likeMemberHandler} service={service} key={service?._id} />;
 							})
 						)}
 					</Stack>
 					<Stack className={'pagination'}>
 						<Stack className="pagination-box">
-							{agents.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
+							{services?.length !== 0 && Math.ceil(total / searchFilter.limit) > 1 && (
 								<Stack className="pagination-box">
 									<Pagination
 										page={currentPage}
 										count={Math.ceil(total / searchFilter.limit)}
 										onChange={paginationChangeHandler}
-										shape="circular"
+										shape="rounded"
 										color="primary"
 									/>
 								</Stack>
 							)}
 						</Stack>
 
-						{agents.length !== 0 && (
+						{services?.length !== 0 && (
 							<span>
-								Total {total} dealer{total > 1 ? 's' : ''} available
+								Total {total} service{total > 1 ? 's' : ''} available
 							</span>
 						)}
 					</Stack>
@@ -204,7 +203,7 @@ const AgentList: NextPage = ({ initialInput, ...props }: any) => {
 	}
 };
 
-AgentList.defaultProps = {
+ServiceList.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 10,
@@ -214,4 +213,4 @@ AgentList.defaultProps = {
 	},
 };
 
-export default withLayoutBasic(AgentList);
+export default withLayoutBasic(ServiceList);
