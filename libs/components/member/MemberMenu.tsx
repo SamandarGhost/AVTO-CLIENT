@@ -46,17 +46,17 @@ const MemberMenu = (props: MemberMenuProps) => {
 				<Stack className={'profile'}>
 					<Box component={'div'} className={'profile-img'}>
 						<img
-							src={member?.memberImage ? `${REACT_APP_API_URL}/${member?.memberImage}` : '/img/profile/defaultUser.svg'}
+							src={member?.image ? `${REACT_APP_API_URL}/${member?.image}` : '/img/profile/defaultUser.svg'}
 							alt={'member-photo'}
 						/>
 					</Box>
 					<Stack className={'user-info'}>
-						<Typography className={'user-name'}>{member?.memberNick}</Typography>
+						<Typography className={'user-name'}>{member?.titleNick}</Typography>
 						<Box component={'div'} className={'user-phone'}>
 							<img src={'/img/icons/call.svg'} alt={'icon'} />
-							<Typography className={'p-number'}>{member?.memberPhone}</Typography>
+							<Typography className={'p-number'}>{member?.phone}</Typography>
 						</Box>
-						<Typography className={'view-list'}>{member?.memberType}</Typography>
+						<Typography className={'view-list'}>{member?.type}</Typography>
 					</Stack>
 				</Stack>
 				<Stack className="follow-button-box">
@@ -87,27 +87,27 @@ const MemberMenu = (props: MemberMenuProps) => {
 							Details
 						</Typography>
 						<List className={'sub-section'}>
-							{member?.memberType === 'AGENT' && (
-								<ListItem className={category === 'properties' ? 'focus' : ''}>
+							{member?.type === 'AGENT' && (
+								<ListItem className={category === 'cars' ? 'focus' : ''}>
 									<Link
 										href={{
 											pathname: '/member',
-											query: { ...router.query, category: 'properties' },
+											query: { ...router.query, category: 'cars' },
 										}}
 										scroll={false}
 										style={{ width: '100%' }}
 									>
 										<div className={'flex-box'}>
-											{category === 'properties' ? (
+											{category === 'cars' ? (
 												<img className={'com-icon'} src={'/img/icons/homeWhite.svg'} alt={'com-icon'} />
 											) : (
 												<img className={'com-icon'} src={'/img/icons/home.svg'} alt={'com-icon'} />
 											)}
 											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-												Properties
+												Cars
 											</Typography>
 											<Typography className="count-title" variant="subtitle1">
-												{member?.memberProperties}
+												{member?.memberCars}
 											</Typography>
 										</div>
 									</Link>
@@ -159,7 +159,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 											Followers
 										</Typography>
 										<Typography className="count-title" variant="subtitle1">
-											{member?.memberFollowers}
+											{member?.followers}
 										</Typography>
 									</div>
 								</Link>
@@ -210,7 +210,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 											Followings
 										</Typography>
 										<Typography className="count-title" variant="subtitle1">
-											{member?.memberFollowings}
+											{member?.followings}
 										</Typography>
 									</div>
 								</Link>
@@ -243,7 +243,7 @@ const MemberMenu = (props: MemberMenuProps) => {
 												Articles
 											</Typography>
 											<Typography className="count-title" variant="subtitle1">
-												{member?.memberArticles}
+												{member?.articles}
 											</Typography>
 										</div>
 									</Link>
