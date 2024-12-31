@@ -22,14 +22,16 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { GET_CAR, GET_CARS, GET_COMMENTS } from '../../apollo/user/query';
-import { CREATE_COMMENT, LIKE_CAR } from '../../apollo/user/mutation';
+import { GET_COMMENTS, GET_PRODUCT, GET_PRODUCTS } from '../../apollo/user/query';
+import { CREATE_COMMENT, LIKE_CAR, LIKE_PRODUCT } from '../../apollo/user/mutation';
 import { T } from '../../libs/types/common';
 import { Direction, Message } from '../../libs/enums/common.enum';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
 import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import PropertyCard from '../../libs/components/shop/PropertyCard';
+import PropertyCard from '../../libs/components/shop/ProductCard';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { Product } from '../../libs/types/product/product';
+import ProductCard from '../../libs/components/shop/ProductCard';
 
 
 
@@ -43,48 +45,48 @@ export const getStaticProps = async ({ locale }: any) => ({
     },
 });
 
-const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
+const ProductDetail: NextPage = ({ initialComment, ...props }: any) => {
     const device = useDeviceDetect();
     const router = useRouter();
     const user = useReactiveVar(userVar);
-    const [propertyId, setPropertyId] = useState<string | null>(null);
-    const [property, setProperty] = useState<Property | null>(null);
+    const [productId, setProductId] = useState<string | null>(null);
+    const [product, setProduct] = useState<Product | null>(null);
     const [slideImage, setSlideImage] = useState<string>('');
-    const [destinationProperties, setDestinationProperty] = useState<Property[]>([]);
+    const [destinationProducts, setDestinationProducts] = useState<Product[]>([]);
     const [commentInquiry, setCommentInquiry] = useState<CommentsInquiry>(initialComment);
-    const [propertyComments, setPropertyComments] = useState<Comment[]>([]);
+    const [productComments, setProductComments] = useState<Comment[]>([]);
     const [commentTotal, setCommentTotal] = useState<number>(0);
     const [insertCommentData, setInsertCommentData] = useState<CommentInput>({
-        commentGroup: CommentGroup.CAR,
+        commentGroup: CommentGroup.PRODUCT,
         commentContent: '',
         commentRefId: '',
     });
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_CAR);
+    const [likeTargetProduct] = useMutation(LIKE_PRODUCT);
     const [createComment] = useMutation(CREATE_COMMENT);
     const {
-        loading: getPropertyLoading,
-        data: getPropertyData,
-        error: getPropertyError,
-        refetch: getPropertyRefetch
-    } = useQuery(GET_CAR, {
+        loading: getProductLoading,
+        data: getProductData,
+        error: getProductError,
+        refetch: getProductRefetch
+    } = useQuery(GET_PRODUCT, {
         fetchPolicy: 'network-only',
-        variables: { input: propertyId },
-        skip: !propertyId,
+        variables: { input: productId },
+        skip: !productId,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperty) setProperty(data?.getProperty);
-            if (data?.getProperty) setSlideImage(data?.getProperty?.propertyImages[0]);
+            if (data?.getProduct) setProduct(data?.getProduct);
+            if (data?.getProduct) setSlideImage(data?.getProduct?.productImages?.[0]);
         },
     });
 
     const {
-        loading: getPropertiesLoading,
-        data: getPropertiesData,
-        error: getPropertiesError,
-        refetch: getPropertiesRefetch
-    } = useQuery(GET_CARS, {
+        loading: getProductsLoading,
+        data: getProductsData,
+        error: getProductsError,
+        refetch: getProductsRefetch
+    } = useQuery(GET_PRODUCTS, {
         fetchPolicy: 'cache-and-network',
         variables: {
             input: {
@@ -93,15 +95,14 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                 sort: 'createdAt',
                 direction: Direction.DESC,
                 search: {
-                    locationList: property?.propertyLocation ? [property?.propertyLocation] : [],
-                },
-
-            },
+                    typeList: product?.productType ? [product?.productType] : [],
+                }
+            }
         },
-        skip: !propertyId && !property,
+        skip: !productId && !product,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getProperties) setDestinationProperty(data?.getProperties?.list);
+            if (data?.getProducts) setDestinationProducts(data?.getProducts?.list);
         },
     });
 
@@ -116,7 +117,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         skip: !commentInquiry.search.commentRefId,
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            if (data?.getComments?.list) setPropertyComments(data?.getComments?.list);
+            if (data?.getComments?.list) setProductComments(data?.getComments?.list);
             setCommentTotal(data?.getComments?.metaCounter[0]?.total ?? 0);
         },
     });
@@ -124,7 +125,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     /** LIFECYCLES **/
     useEffect(() => {
         if (router.query.id) {
-            setPropertyId(router.query.id as string);
+            setProductId(router.query.id as string);
             setCommentInquiry({
                 ...commentInquiry,
                 search: {
@@ -149,27 +150,27 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         setSlideImage(image);
     };
 
-    const likePropertyHandler = async (user: T, id: string) => {
+    const likeProductHandler = async (user: T, id: string) => {
         try {
             if (!id) return;
             if (!user._id) throw new Error(Message.NOT_AUTHENTICATED);
 
             // execute likePropertyHandler mutation
 
-            await likeTargetProperty({
+            await likeTargetProduct({
                 variables: { input: id },
             });
 
             // execute getPropertiesRefetch
-            await getPropertyRefetch({ input: id });
-            getPropertiesRefetch({
+            await getProductRefetch({ input: id });
+            getProductsRefetch({
                 input: {
                     page: 1,
                     limit: 4,
                     sort: 'createdAt',
                     direction: Direction.DESC,
                     search: {
-                        locationList: [property?.propertyLocation],
+                        typeList: [product?.productType],
                     },
                 },
             });
@@ -199,7 +200,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
         }
     };
 
-    if (getPropertyLoading) {
+    if (getProductLoading) {
         return (
             <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '1080px' }}>
                 <CircularProgress size={'4rem'} />
@@ -208,7 +209,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     };
 
     if (device === 'mobile') {
-        return <div>PROPERTY DETAIL PAGE</div>;
+        return <div>PRODUCT DETAIL PAGE</div>;
     } else {
         return (
             <div id={'shop-detail-page'}>
@@ -221,23 +222,23 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                     <Stack className="buttons">
                                         <Stack className="button-box">
                                             <RemoveRedEyeIcon fontSize="medium" />
-                                            <Typography>{property?.propertyViews}</Typography>
+                                            <Typography>{product?.productViews}</Typography>
                                         </Stack>
                                         <Stack className="button-box">
-                                            {property?.meLiked && property?.meLiked[0]?.myFavorite ? (
+                                            {product?.meLiked && product?.meLiked[0]?.myFavorite ? (
 
                                                 <FavoriteIcon
                                                     // @ts-ignore
-                                                    onClick={() => likePropertyHandler(user, property?._id)}
+                                                    onClick={() => likePropertyHandler(user, product?._id)}
                                                     color="primary" fontSize={'medium'} />
                                             ) : (
                                                 <FavoriteBorderIcon
                                                     fontSize={'medium'}
                                                     // @ts-ignore
-                                                    onClick={() => likePropertyHandler(user, property?._id)}
+                                                    onClick={() => likePropertyHandler(user, product?._id)}
                                                 />
                                             )}
-                                            <Typography>{property?.propertyLikes}</Typography>
+                                            <Typography>{product?.productLikes}</Typography>
                                         </Stack>
                                     </Stack>
                                 </Stack>
@@ -245,7 +246,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                             <Stack className={'images'}>
                                 <Stack className={'main-image'}>
                                     <Stack className={'sub-images'}>
-                                        {property?.propertyImages.map((subImg: string) => {
+                                        {Array.isArray(product?.productImages) && product?.productImages?.map((subImg: string) => {
                                             const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
                                             return (
                                                 <Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
@@ -264,18 +265,20 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                 <Stack className={'right-frame'}>
                                     <Stack className={'right-config'}>
                                         <Stack className={'text'}>
-                                            <Typography className={'main-title'}>Kit Brembo DT BMW</Typography>
+                                            <Typography className={'main-title'}>{product?.productTitle}</Typography>
                                         </Stack>
                                         <Stack className={'info-box'}>
-                                            <Typography className={'title'}>$399</Typography>
+                                            <Typography className={'title'}>${product?.productPrice}</Typography>
                                         </Stack>
                                         <Stack className={'info-box'}>
-                                            <Typography className={'sub-title'}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tempus nulla faucibus viverra nisl non senectus tortor. </Typography>
+                                            <Typography className={'sub-title'}>
+                                                {product?.productShortDesc}
+                                            </Typography>
                                         </Stack>
                                         <Stack className={'info'}>
                                             <Box className={'box'}>
                                                 <Typography className={'quantity'}>-</Typography>
-                                                12
+                                                {product?.productQuantity}
                                                 <Typography className={'quantity'}>+</Typography>
                                             </Box>
                                             <Button className={'add'}>
@@ -284,9 +287,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             </Button>
                                         </Stack>
                                         <Stack className={'info-box'}>
-                                            <Typography className={'cat-title'}>Catergory: Oil</Typography>
-                                            <Typography className={'cat-title'}>$399</Typography>
-                                            <Typography className={'cat-title'}>$399</Typography>
+                                            <Typography className={'cat-title'}>Catergory: {product?.productType}</Typography>
+                                            <Typography className={'cat-title'}>${product?.productPrice}</Typography>
+                                            <Typography className={'cat-title'}>{product?.productQuantity}</Typography>
                                         </Stack>
                                     </Stack>
                                 </Stack>
@@ -310,12 +313,12 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                             <Stack className={'left-config'}>
                                 <Stack className={'prop-desc-config'}>
                                     <Stack className={'top'}>
-                                        <Typography className={'title'}>Car Description</Typography>
+                                        <Typography className={'title'}>Product Description</Typography>
                                     </Stack>
                                     <Stack className={'bottom'}>
-                                        <Typography className={'data'}>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-                                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</Typography>
+                                        <Typography className={'data'}>
+                                            {product?.productDesc}
+                                        </Typography>
                                     </Stack>
                                 </Stack>
                                 {commentTotal !== 0 && (
@@ -339,7 +342,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             </Stack>
                                         </Stack>
                                         <Stack className={'review-list'}>
-                                            {propertyComments?.map((comment: Comment) => {
+                                            {productComments?.map((comment: Comment) => {
                                                 return <Review comment={comment} key={comment?._id} />;
                                             })}
                                             <Box component={'div'} className={'pagination-box'}>
@@ -347,7 +350,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                     page={commentInquiry.page}
                                                     count={Math.ceil(commentTotal / commentInquiry.limit)}
                                                     onChange={commentPaginationChangeHandler}
-                                                    shape="circular"
+                                                    shape="rounded"
                                                     color="secondary"
                                                 />
                                             </Box>
@@ -388,7 +391,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                 </Stack>
                             </Stack>
                         </Stack>
-                        {destinationProperties.length !== 0 && (
+                        {destinationProducts.length !== 0 && (
                             <Stack className={'similar-properties-config'}>
                                 <Stack className={'title-pagination-box'}>
                                     <Stack className={'title-box'}>
@@ -415,10 +418,10 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                             el: '.swiper-similar-pagination',
                                         }}
                                     >
-                                        {destinationProperties.map((property: Property) => {
+                                        {destinationProducts.map((product: Product) => {
                                             return (
-                                                <SwiperSlide className={'similar-homes-slide'} key={property.propertyTitle}>
-                                                    <PropertyCard property={property} likePropertyHandler={likePropertyHandler} key={property?._id} />
+                                                <SwiperSlide className={'similar-homes-slide'} key={product?.productTitle}>
+                                                    <ProductCard product={product} likeProductHandler={likeProductHandler} key={product?._id} />
                                                 </SwiperSlide>
                                             );
                                         })}
@@ -433,7 +436,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
     }
 };
 
-PropertyDetail.defaultProps = {
+ProductDetail.defaultProps = {
     initialComment: {
         page: 1,
         limit: 5,
@@ -445,4 +448,4 @@ PropertyDetail.defaultProps = {
     },
 };
 
-export default withLayoutBasic(PropertyDetail);
+export default withLayoutBasic(ProductDetail);

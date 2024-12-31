@@ -979,6 +979,34 @@ mutation SaveTargetCar($input: String!) {
 }`;
 
 /**************************
+ *         PRODUCT        *
+ *************************/
+
+export const LIKE_PRODUCT = gql`
+mutation LikeTargetProduct($input: String!) {
+    likeTargetProduct(productId: $input) {
+        _id
+        productType
+        productStatus
+        productTitle
+        productPrice
+        productQuantity
+        productImages
+        productShortDesc
+        productDesc
+        productViews
+        productLikes
+        productSave
+        productComments
+        productRank
+        memberId
+        deletedAt
+        createdAt
+        updatedAt
+    }
+}`;
+
+/**************************
  *      BOARD-ARTICLE     *
  *************************/
 

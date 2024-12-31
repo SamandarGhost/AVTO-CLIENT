@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Box, Button, CircularProgress, Link, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { NextPage } from 'next';
 import Review from '../../libs/components/car/Review';
@@ -29,6 +29,7 @@ import { Car } from '../../libs/types/car/car';
 import { Member } from '../../libs/types/member/member';
 import RecommendedCarCard from '../../libs/components/homepage/ReccomendedCarsCard';
 import { Search } from '@mui/icons-material';
+import Link from 'next/link';
 
 
 
@@ -150,11 +151,6 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
     }, [commentInquiry]);
 
     /** HANDLERS **/
-
-    const pushIdHandler = (id: string) => {
-        router.push(`/dealers/car=${id}`)
-    }
-
     const changeImageHandler = (image: string) => {
         setSlideImage(image);
     };
@@ -362,11 +358,14 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                 )}
                                             </Box>
                                             <Box component={'div'} className={'info'}>
-                                                <Typography
-                                                    onClick={() => pushIdHandler(dealer?._id as string)}
+                                                <Link
+                                                    href={{
+                                                        pathname: '/dealers/car',
+                                                        query: { dealerId: dealer?._id },
+                                                    }}
                                                     className={'data'}>
                                                     View All Cars
-                                                </Typography>
+                                                </Link>
                                             </Box>
                                         </Stack>
                                     </Stack>

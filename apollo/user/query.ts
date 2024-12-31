@@ -2557,47 +2557,155 @@ query GetArticles($input: ArticlesInquiry!) {
  *************************/
 
 export const GET_COMMENTS = gql`
-	query GetComments($input: CommentsInquiry!) {
-		getComments(input: $input) {
-			list {
-				_id
-				commentStatus
-				commentGroup
-				commentContent
-				commentRefId
-				memberId
-				createdAt
-				updatedAt
-				memberData {
-					_id
-					memberType
-					memberStatus
-					memberAuthType
-					memberPhone
-					memberNick
-					memberFullName
-					memberImage
-					memberAddress
-					memberDesc
-					memberWarnings
-					memberBlocks
-					memberProperties
-					memberRank
-					memberPoints
-					memberLikes
-					memberViews
-					deletedAt
-					createdAt
-					updatedAt
-					accessToken
-				}
-			}
-			metaCounter {
-				total
-			}
-		}
-	}
-`;
+query GetComments($input: CommentsInquiry!) {
+    getComments(input: $input) {
+        metaCounter {
+            total
+        }
+        list {
+            _id
+            commentStatus
+            commentGroup
+            commentContent
+            commentRefId
+            memberId
+            createdAt
+            updatedAt
+            creatorData {
+                _id
+                type
+                status
+                authType
+                titleNick
+                fullName
+                image
+                images
+                location
+                address
+                shortDesc
+                longDesc
+                phone
+                phone2
+                email
+                kakaoTalk
+                youtube
+                instagram
+                facebook
+                tikTok
+                naverBlog
+                xcom
+                followers
+                followings
+                likes
+                views
+                comments
+                warnings
+                articles
+                blocks
+                memberCars
+                usedCars
+                newCars
+                rank
+                points
+                sellerProducts
+                dealerBrand
+                dealerFinancing
+                dealerCarService
+                dealerTradeIn
+                dealerCustomization
+                dealerWarranties
+                dealerParts
+                dealerAccessories
+                dealerCarDetailing
+                dealerCarWash
+                dealerCarTestDrive
+                dealerCarDelivery
+                dealerPlusService
+                carServiceType
+                carOilChange
+                carAlignment
+                carTireChange
+                carBrakeCheck
+                carBatteryCheck
+                carTireBalance
+                carSuspension
+                carAirCondition
+                carTransmissionCheck
+                carEngineDiagnostic
+                carExhaust
+                carDetailing
+                carWindshield
+                carTimingBelt
+                carChainReplacement
+                comfort
+                performance
+                exterior
+                interior
+                reliability
+                fast
+                openAt
+                closeAt
+                openSunday
+                closeSunday
+                openSaturday
+                closeSaturday
+                publicHolidays
+                deletedAt
+                createdAt
+                updatedAt
+                accessToken
+            }
+            meLiked {
+                memberId
+                likeRefId
+                myFavorite
+            }
+        }
+    }
+}`;
+
+// export const GET_COMMENTS = gql`
+// 	query GetComments($input: CommentsInquiry!) {
+// 		getComments(input: $input) {
+// 			list {
+// 				_id
+// 				commentStatus
+// 				commentGroup
+// 				commentContent
+// 				commentRefId
+// 				memberId
+// 				createdAt
+// 				updatedAt
+// 				memberData {
+// 					_id
+// 					memberType
+// 					memberStatus
+// 					memberAuthType
+// 					memberPhone
+// 					memberNick
+// 					memberFullName
+// 					memberImage
+// 					memberAddress
+// 					memberDesc
+// 					memberWarnings
+// 					memberBlocks
+// 					memberProperties
+// 					memberRank
+// 					memberPoints
+// 					memberLikes
+// 					memberViews
+// 					deletedAt
+// 					createdAt
+// 					updatedAt
+// 					accessToken
+// 				}
+// 			}
+// 			metaCounter {
+// 				total
+// 			}
+// 		}
+// 	}
+// `;
 
 /**************************
  *         FOLLOW        *
