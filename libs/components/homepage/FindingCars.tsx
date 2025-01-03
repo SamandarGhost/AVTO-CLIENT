@@ -16,18 +16,20 @@ import { sweetMixinErrorAlert } from '../../sweetAlert';
 import NorthEastRoundedIcon from '@mui/icons-material/NorthEastRounded';
 import FindingCarCard from './FindingCarCard';
 import { LIKE_CAR } from '../../../apollo/user/mutation';
+import { CarsInquiry } from '../../types/car/car.input';
+import { Car } from '../../types/car/car';
 
-interface TopPropertiesProps {
-	initialInput: PropertiesInquiry;
+interface FindingCars {
+	initialInput: CarsInquiry;
 }
 
-const TopProperties = (props: TopPropertiesProps) => {
+const FindingCars = (props: FindingCars) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [topProperties, setTopProperties] = useState<Property[]>([]);
-	const [propertyTotal, setPropertyTotal] = useState<number>(0);
-	const [searchFilter, setSearchFilter] = useState<PropertiesInquiry>(initialInput);
-	const propertyPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
+	const [topCars, setTopCars] = useState<Car[]>([]);
+	const [carTotal, setCarTotal] = useState<number>(0);
+	const [searchFilter, setSearchFilter] = useState<CarsInquiry>(initialInput);
+	const carPaginationChangeHandler = async (event: ChangeEvent<unknown>, value: number) => {
 		searchFilter.page = value;
 		setSearchFilter({ ...searchFilter });
 	};
@@ -36,31 +38,31 @@ const TopProperties = (props: TopPropertiesProps) => {
 
 
 	/** APOLLO REQUESTS **/
-	const [likeTargetProperty] = useMutation(LIKE_CAR);
+	const [likeTargetCar] = useMutation(LIKE_CAR);
 
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch
+		loading: getCarsLoading,
+		data: getCarsData,
+		error: getCarsError,
+		refetch: getCarsRefetch
 	} = useQuery(GET_CARS, {
 		fetchPolicy: 'cache-and-network',
 		variables: { input: initialInput },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setTopProperties(data?.getProperties?.list);
+			setTopCars(data?.getCars?.list);
 		},
 	});
 	/** HANDLERS **/
-	const likePropertyHandler = async (user: T, id: string) => {
+	const likeCarHandler = async (user: T, id: string) => {
 		try {
 			if (!id) return;
 			if (!user._id) throw new Error(Message.SOMETHING_WENT_WRONG);
 
-			await likeTargetProperty({
+			await likeTargetCar({
 				variables: { input: id },
 			});
-			await getPropertiesRefetch({ input: initialInput });
+			await getCarsRefetch({ input: initialInput });
 		} catch (err: any) {
 			console.log('Error, likePropertyHandler:', err.message);
 			sweetMixinErrorAlert(err.message).then();
@@ -82,10 +84,10 @@ const TopProperties = (props: TopPropertiesProps) => {
 							spaceBetween={15}
 							modules={[Autoplay]}
 						>
-							{topProperties.map((property: Property) => {
+							{topCars.map((car: Car) => {
 								return (
-									<SwiperSlide className={'top-property-slide'} key={property?._id}>
-										<TopPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+									<SwiperSlide className={'top-property-slide'} key={car?._id}>
+										<FindingCarCard car={car} likeCarHandler={likeCarHandler} />
 									</SwiperSlide>
 								);
 							})}
@@ -148,35 +150,35 @@ const TopProperties = (props: TopPropertiesProps) => {
 				</Stack>
 				<Stack className={'agent-home-list'}>
 					<Stack className={'card-wrap'}>
-						{topProperties?.map((property: Property) => {
+						{topCars?.map((car: Car) => {
 							return (
-								<div className={'wrap-main'} key={property?._id}>
-									<FindingCarCard property={property} key={property?._id} likePropertyHandler={likePropertyHandler} />
+								<div className={'wrap-main'} key={car?._id}>
+									<FindingCarCard car={car} key={car?._id} likeCarHandler={likeCarHandler} />
 								</div>
 							);
 						})}
 					</Stack>
 					<Stack className={'pagination'}>
-						{propertyTotal ? (
+						{carTotal ? (
 							<>
 								<Stack className="pagination-box">
 									<Pagination
 										page={searchFilter.page}
-										count={Math.ceil(propertyTotal / searchFilter.limit) || 1}
-										onChange={propertyPaginationChangeHandler}
-										shape="circular"
+										count={Math.ceil(carTotal / searchFilter.limit) || 1}
+										onChange={carPaginationChangeHandler}
+										shape="rounded"
 										color="secondary"
 									/>
 								</Stack>
 								<span>
-									Total {propertyTotal} propert{propertyTotal > 1 ? 'ies' : 'y'} available
+									Total {carTotal} car{carTotal > 1 ? 's' : ''} available
 								</span>
 							</>
 						) : (
 							null
 							// <div className={'no-data'}>
 							// 	<img src="/img/icons/icoAlert.svg" alt="" />
-							// 	<p>No properties found!</p>
+							// 	<p>No cars found!</p>
 							// </div>
 						)}
 					</Stack>
@@ -186,14 +188,14 @@ const TopProperties = (props: TopPropertiesProps) => {
 	}
 };
 
-TopProperties.defaultProps = {
+FindingCars.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 8,
-		sort: 'propertyRank',
+		sort: 'carRank',
 		direction: 'DESC',
 		search: {},
 	},
 };
 
-export default TopProperties;
+export default FindingCars;

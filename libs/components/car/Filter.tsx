@@ -20,6 +20,9 @@ import { useRouter } from 'next/router';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { propertySquare } from '../../config';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { CarsInquiry } from '../../types/car/car.input';
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarTransmission, CarTuningType, CarType } from '../../enums/car.enum';
+import { group } from 'console';
 
 const MenuProps = {
 	PaperProps: {
@@ -30,17 +33,27 @@ const MenuProps = {
 };
 
 interface FilterType {
-	searchFilter: PropertiesInquiry;
+	searchFilter: CarsInquiry;
 	setSearchFilter: any;
-	initialInput: PropertiesInquiry;
+	initialInput: CarsInquiry;
 }
 
 const Filter = (props: FilterType) => {
 	const { searchFilter, setSearchFilter, initialInput } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const [propertyLocation, setPropertyLocation] = useState<PropertyLocation[]>(Object.values(PropertyLocation));
-	const [propertyType, setPropertyType] = useState<PropertyType[]>(Object.values(PropertyType));
+	const [carLocation, setCarLocation] = useState<CarLocation[]>(Object.values(CarLocation));
+	const [carType, setCarType] = useState<CarType[]>(Object.values(CarType));
+	const [carBody, setCarBody] = useState<CarBody[]>(Object.values(CarBody));
+	const [carSort, setCarSort] = useState<CarSort[]>(Object.values(CarSort));
+	const [carGroup, setCarGroup] = useState<CarGroup[]>(Object.values(CarGroup));
+	const [carMadeIn, setCarMadeIn] = useState<CarMadeIn[]>(Object.values(CarMadeIn));
+	const [carBrand, setCarBrand] = useState<CarBrand[]>(Object.values(CarBrand));
+	const [carTuning, setCarTuning] = useState<CarTuningType[]>(Object.values(CarTuningType));
+	const [carFuel, setCarFuel] = useState<CarFuelType[]>(Object.values(CarFuelType));
+	const [carDrive, setCarDrive] = useState<CarDriveType[]>(Object.values(CarDriveType));
+	const [carTrans, setCarTrans] = useState<CarTransmission[]>(Object.values(CarTransmission));
+	const [carColor, setCarColor] = useState<CarColor[]>(Object.values(CarColor));
 	const [searchText, setSearchText] = useState<string>('');
 	const [showMore, setShowMore] = useState<boolean>(false);
 
@@ -49,12 +62,12 @@ const Filter = (props: FilterType) => {
 		if (searchFilter?.search?.locationList?.length == 0) {
 			delete searchFilter.search.locationList;
 			setShowMore(false);
-			router.push(`/property?input=${JSON.stringify({
+			router.push(`/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
 				},
-			})}`, `/property?input=${JSON.stringify({
+			})}`, `/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
@@ -64,12 +77,12 @@ const Filter = (props: FilterType) => {
 
 		if (searchFilter?.search?.typeList?.length == 0) {
 			delete searchFilter.search.typeList;
-			router.push(`/property?input=${JSON.stringify({
+			router.push(`/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
 				},
-			})}`, `/property?input=${JSON.stringify({
+			})}`, `/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
@@ -77,14 +90,149 @@ const Filter = (props: FilterType) => {
 			})}`, { scroll: false }).then();
 		}
 
-		if (searchFilter?.search?.roomsList?.length == 0) {
-			delete searchFilter.search.roomsList;
-			router.push(`/property?input=${JSON.stringify({
+		if (searchFilter?.search?.bodyList?.length == 0) {
+			delete searchFilter.search.bodyList;
+			router.push(`/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
 				},
-			})}`, `/property?input=${JSON.stringify({
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.sortList?.length == 0) {
+			delete searchFilter.search.sortList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.groupList?.length == 0) {
+			delete searchFilter.search.groupList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.madeInList?.length == 0) {
+			delete searchFilter.search.madeInList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.brandList?.length == 0) {
+			delete searchFilter.search.brandList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.tuningTypeList?.length == 0) {
+			delete searchFilter.search.tuningTypeList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.fuelTypeList?.length == 0) {
+			delete searchFilter.search.fuelTypeList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.driveTypeList?.length == 0) {
+			delete searchFilter.search.driveTypeList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.transmissionList?.length == 0) {
+			delete searchFilter.search.transmissionList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, { scroll: false }).then();
+		}
+
+		if (searchFilter?.search?.colorList?.length == 0) {
+			delete searchFilter.search.colorList;
+			router.push(`/cars?input=${JSON.stringify({
+				...searchFilter,
+				search: {
+					...searchFilter.search,
+				},
+			})}`, `/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
@@ -94,27 +242,12 @@ const Filter = (props: FilterType) => {
 
 		if (searchFilter?.search?.options?.length == 0) {
 			delete searchFilter.search.options;
-			router.push(`/property?input=${JSON.stringify({
+			router.push(`/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
 				},
-			})}`, `/property?input=${JSON.stringify({
-				...searchFilter,
-				search: {
-					...searchFilter.search,
-				},
-			})}`, { scroll: false }).then();
-		}
-
-		if (searchFilter?.search?.bedsList?.length == 0) {
-			delete searchFilter.search.bedsList;
-			router.push(`/property?input=${JSON.stringify({
-				...searchFilter,
-				search: {
-					...searchFilter.search,
-				},
-			})}`, `/property?input=${JSON.stringify({
+			})}`, `/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
 					...searchFilter.search,
@@ -126,18 +259,18 @@ const Filter = (props: FilterType) => {
 	}, [searchFilter]);
 
 	/** HANDLERS **/
-	const propertyLocationSelectHandler = useCallback(
+	const carLocationSelectHandler = useCallback(
 		async (e: any) => {
 			try {
 				const isChecked = e.target.checked;
 				const value = e.target.value;
 				if (isChecked) {
 					await router.push(
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: { ...searchFilter.search, locationList: [...(searchFilter?.search?.locationList || []), value] },
 						})}`,
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: { ...searchFilter.search, locationList: [...(searchFilter?.search?.locationList || []), value] },
 						})}`,
@@ -145,14 +278,14 @@ const Filter = (props: FilterType) => {
 					);
 				} else if (searchFilter?.search?.locationList?.includes(value)) {
 					await router.push(
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: {
 								...searchFilter.search,
 								locationList: searchFilter?.search?.locationList?.filter((item: string) => item !== value),
 							},
 						})}`,
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: {
 								...searchFilter.search,
@@ -175,18 +308,18 @@ const Filter = (props: FilterType) => {
 		[searchFilter],
 	);
 
-	const propertyTypeSelectHandler = useCallback(
+	const carTypeSelectHandler = useCallback(
 		async (e: any) => {
 			try {
 				const isChecked = e.target.checked;
 				const value = e.target.value;
 				if (isChecked) {
 					await router.push(
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: { ...searchFilter.search, typeList: [...(searchFilter?.search?.typeList || []), value] },
 						})}`,
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: { ...searchFilter.search, typeList: [...(searchFilter?.search?.typeList || []), value] },
 						})}`,
@@ -194,14 +327,14 @@ const Filter = (props: FilterType) => {
 					);
 				} else if (searchFilter?.search?.typeList?.includes(value)) {
 					await router.push(
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: {
 								...searchFilter.search,
 								typeList: searchFilter?.search?.typeList?.filter((item: string) => item !== value),
 							},
 						})}`,
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: {
 								...searchFilter.search,
@@ -224,81 +357,508 @@ const Filter = (props: FilterType) => {
 		[searchFilter],
 	);
 
-	const propertyRoomSelectHandler = useCallback(
-		async (number: Number) => {
-			try {
-				if (number != 0) {
-					if (searchFilter?.search?.roomsList?.includes(number)) {
-						await router.push(
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: {
-									...searchFilter.search,
-									roomsList: searchFilter?.search?.roomsList?.filter((item: Number) => item !== number),
-								},
-							})}`,
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: {
-									...searchFilter.search,
-									roomsList: searchFilter?.search?.roomsList?.filter((item: Number) => item !== number),
-								},
-							})}`,
-							{ scroll: false },
-						);
-					} else {
-						await router.push(
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: { ...searchFilter.search, roomsList: [...(searchFilter?.search?.roomsList || []), number] },
-							})}`,
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: { ...searchFilter.search, roomsList: [...(searchFilter?.search?.roomsList || []), number] },
-							})}`,
-							{ scroll: false },
-						);
-					}
-				} else {
-					delete searchFilter?.search.roomsList;
-					setSearchFilter({ ...searchFilter });
-					await router.push(
-						`/property?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-							},
-						})}`,
-						`/property?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-							},
-						})}`,
-						{ scroll: false },
-					);
-				}
-
-				console.log('propertyRoomSelectHandler:', number);
-			} catch (err: any) {
-				console.log('ERROR, propertyRoomSelectHandler:', err);
-			}
-		},
-		[searchFilter],
-	);
-
-	const propertyOptionSelectHandler = useCallback(
+	const carBodySelectHandler = useCallback(
 		async (e: any) => {
 			try {
 				const isChecked = e.target.checked;
 				const value = e.target.value;
 				if (isChecked) {
 					await router.push(
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, bodyList: [...(searchFilter?.search?.bodyList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, bodyList: [...(searchFilter?.search?.bodyList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.bodyList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								bodyList: searchFilter?.search?.bodyList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								bodyList: searchFilter?.search?.bodyList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.bodyList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carSortSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, sortList: [...(searchFilter?.search?.sortList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, sortList: [...(searchFilter?.search?.sortList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.sortList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								sortList: searchFilter?.search?.sortList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								sortList: searchFilter?.search?.sortList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.sortList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carGroupSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, groupList: [...(searchFilter?.search?.groupList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, groupList: [...(searchFilter?.search?.groupList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.groupList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								groupList: searchFilter?.search?.groupList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								groupList: searchFilter?.search?.groupList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.groupList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carMadeInSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (value) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, madeInList: [...(searchFilter?.search?.madeInList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, madeInList: [...(searchFilter?.search?.madeInList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.madeInList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								madeInList: searchFilter?.search?.madeInList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								madeInList: searchFilter?.search?.madeInList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.madeInList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carBrandSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, brandList: [...(searchFilter?.search?.brandList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, brandList: [...(searchFilter?.search?.brandList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.brandList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								brandList: searchFilter?.search?.brandList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								brandList: searchFilter?.search?.brandList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.brandList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carTuningSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, tuningTypeList: [...(searchFilter?.search?.tuningTypeList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, tuningTypeList: [...(searchFilter?.search?.tuningTypeList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.tuningTypeList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								tuningTypeList: searchFilter?.search?.tuningTypeList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								tuningTypeList: searchFilter?.search?.tuningTypeList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.tuningTypeList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carFuelSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, fuelTypeList: [...(searchFilter?.search?.fuelTypeList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, fuelTypeList: [...(searchFilter?.search?.fuelTypeList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.fuelTypeList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								fuelTypeList: searchFilter?.search?.fuelTypeList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								fuelTypeList: searchFilter?.search?.fuelTypeList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.fuelTypeList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carDriveSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, driveTypeList: [...(searchFilter?.search?.driveTypeList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, driveTypeList: [...(searchFilter?.search?.driveTypeList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.driveTypeList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								driveTypeList: searchFilter?.search?.driveTypeList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								driveTypeList: searchFilter?.search?.driveTypeList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.driveTypeList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carTransSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, transmissionList: [...(searchFilter?.search?.transmissionList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, transmissionList: [...(searchFilter?.search?.transmissionList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.transmissionList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								transmissionList: searchFilter?.search?.transmissionList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								transmissionList: searchFilter?.search?.transmissionList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.transmissionList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carColorSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, colorList: [...(searchFilter?.search?.colorList || []), value] },
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: { ...searchFilter.search, colorList: [...(searchFilter?.search?.colorList || []), value] },
+						})}`,
+						{ scroll: false },
+					);
+				} else if (searchFilter?.search?.colorList?.includes(value)) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								colorList: searchFilter?.search?.colorList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						`/cars?input=${JSON.stringify({
+							...searchFilter,
+							search: {
+								...searchFilter.search,
+								colorList: searchFilter?.search?.colorList?.filter((item: string) => item !== value),
+							},
+						})}`,
+						{ scroll: false },
+					);
+				}
+
+				if (searchFilter?.search?.colorList?.length == 0) {
+					alert('error');
+				}
+
+				console.log('propertyTypeSelectHandler:', e.target.value);
+			} catch (err: any) {
+				console.log('ERROR, propertyTypeSelectHandler:', err);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carOptionSelectHandler = useCallback(
+		async (e: any) => {
+			try {
+				const isChecked = e.target.checked;
+				const value = e.target.value;
+				if (isChecked) {
+					await router.push(
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: { ...searchFilter.search, options: [...(searchFilter?.search?.options || []), value] },
 						})}`,
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: { ...searchFilter.search, options: [...(searchFilter?.search?.options || []), value] },
 						})}`,
@@ -306,14 +866,14 @@ const Filter = (props: FilterType) => {
 					);
 				} else if (searchFilter?.search?.options?.includes(value)) {
 					await router.push(
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: {
 								...searchFilter.search,
 								options: searchFilter?.search?.options?.filter((item: string) => item !== value),
 							},
 						})}`,
-						`/property?input=${JSON.stringify({
+						`/cars?input=${JSON.stringify({
 							...searchFilter,
 							search: {
 								...searchFilter.search,
@@ -332,148 +892,126 @@ const Filter = (props: FilterType) => {
 		[searchFilter],
 	);
 
-	const propertyBedSelectHandler = useCallback(
-		async (number: Number) => {
-			try {
-				if (number != 0) {
-					if (searchFilter?.search?.bedsList?.includes(number)) {
-						await router.push(
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: {
-									...searchFilter.search,
-									bedsList: searchFilter?.search?.bedsList?.filter((item: Number) => item !== number),
-								},
-							})}`,
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: {
-									...searchFilter.search,
-									bedsList: searchFilter?.search?.bedsList?.filter((item: Number) => item !== number),
-								},
-							})}`,
-							{ scroll: false },
-						);
-					} else {
-						await router.push(
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: { ...searchFilter.search, bedsList: [...(searchFilter?.search?.bedsList || []), number] },
-							})}`,
-							`/property?input=${JSON.stringify({
-								...searchFilter,
-								search: { ...searchFilter.search, bedsList: [...(searchFilter?.search?.bedsList || []), number] },
-							})}`,
-							{ scroll: false },
-						);
-					}
-				} else {
-					delete searchFilter?.search.bedsList;
-					setSearchFilter({ ...searchFilter });
-					await router.push(
-						`/property?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-							},
-						})}`,
-						`/property?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-							},
-						})}`,
-						{ scroll: false },
-					);
-				}
-
-				console.log('propertyBedSelectHandler:', number);
-			} catch (err: any) {
-				console.log('ERROR, propertyBedSelectHandler:', err);
-			}
-		},
-		[searchFilter],
-	);
-
-	const propertySquareHandler = useCallback(
-		async (e: any, type: string) => {
-			const value = e.target.value;
-
-			if (type == 'start') {
-				await router.push(
-					`/property?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							squaresRange: { ...searchFilter.search.squaresRange, start: value },
-						},
-					})}`,
-					`/property?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							squaresRange: { ...searchFilter.search.squaresRange, start: value },
-						},
-					})}`,
-					{ scroll: false },
-				);
-			} else {
-				await router.push(
-					`/property?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							squaresRange: { ...searchFilter.search.squaresRange, end: value },
-						},
-					})}`,
-					`/property?input=${JSON.stringify({
-						...searchFilter,
-						search: {
-							...searchFilter.search,
-							squaresRange: { ...searchFilter.search.squaresRange, end: value },
-						},
-					})}`,
-					{ scroll: false },
-				);
-			}
-		},
-		[searchFilter],
-	);
-
-	const propertyPriceHandler = useCallback(
+	const carPriceHandler = useCallback(
 		async (value: number, type: string) => {
 			if (type == 'start') {
 				await router.push(
-					`/property?input=${JSON.stringify({
+					`/cars?input=${JSON.stringify({
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, start: value * 1 },
+							pricesRange: { ...searchFilter.search.priceRange, min: value * 1 },
 						},
 					})}`,
-					`/property?input=${JSON.stringify({
+					`/cars?input=${JSON.stringify({
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, start: value * 1 },
+							pricesRange: { ...searchFilter.search.priceRange, min: value * 1 },
 						},
 					})}`,
 					{ scroll: false },
 				);
 			} else {
 				await router.push(
-					`/property?input=${JSON.stringify({
+					`/cars?input=${JSON.stringify({
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, end: value * 1 },
+							pricesRange: { ...searchFilter.search.priceRange, max: value * 1 },
 						},
 					})}`,
-					`/property?input=${JSON.stringify({
+					`/cars?input=${JSON.stringify({
 						...searchFilter,
 						search: {
 							...searchFilter.search,
-							pricesRange: { ...searchFilter.search.pricesRange, end: value * 1 },
+							pricesRange: { ...searchFilter.search.priceRange, max: value * 1 },
+						},
+					})}`,
+					{ scroll: false },
+				);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carYearHandler = useCallback(
+		async (value: number, type: string) => {
+			if (type == 'start') {
+				await router.push(
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							yearRange: { ...searchFilter.search.yearRange, min: value * 1 },
+						},
+					})}`,
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							yearRange: { ...searchFilter.search.yearRange, min: value * 1 },
+						},
+					})}`,
+					{ scroll: false },
+				);
+			} else {
+				await router.push(
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							yearRange: { ...searchFilter.search.yearRange, max: value * 1 },
+						},
+					})}`,
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							yearRange: { ...searchFilter.search.yearRange, max: value * 1 },
+						},
+					})}`,
+					{ scroll: false },
+				);
+			}
+		},
+		[searchFilter],
+	);
+
+	const carMileageHandler = useCallback(
+		async (value: number, type: string) => {
+			if (type == 'start') {
+				await router.push(
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							mileageRange: { ...searchFilter.search.mileageRange, min: value * 1 },
+						},
+					})}`,
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							mileageRange: { ...searchFilter.search.mileageRange, min: value * 1 },
+						},
+					})}`,
+					{ scroll: false },
+				);
+			} else {
+				await router.push(
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							mileageRange: { ...searchFilter.search.mileageRange, max: value * 1 },
+						},
+					})}`,
+					`/cars?input=${JSON.stringify({
+						...searchFilter,
+						search: {
+							...searchFilter.search,
+							mileageRange: { ...searchFilter.search.mileageRange, max: value * 1 },
 						},
 					})}`,
 					{ scroll: false },
@@ -487,8 +1025,8 @@ const Filter = (props: FilterType) => {
 		try {
 			setSearchText('');
 			await router.push(
-				`/property?input=${JSON.stringify(initialInput)}`,
-				`/property?input=${JSON.stringify(initialInput)}`,
+				`/cars?input=${JSON.stringify(initialInput)}`,
+				`/cars?input=${JSON.stringify(initialInput)}`,
 				{ scroll: false },
 			);
 		} catch (err: any) {
@@ -497,7 +1035,7 @@ const Filter = (props: FilterType) => {
 	};
 
 	if (device === 'mobile') {
-		return <div>PROPERTIES FILTER</div>;
+		return <div>CARS FILTER</div>;
 	} else {
 		return (
 			<Stack className={'filter-main'}>
@@ -541,58 +1079,47 @@ const Filter = (props: FilterType) => {
 				</Stack>
 				<Stack className={'find-your-home'} mb={'30px'}>
 					<Typography className={'title'}>Car Condition</Typography>
-					<Stack className={'input-box'}>
-						<Checkbox
-							id={'Barter'}
-							className="property-checkbox"
-							color="default"
-							size="small"
-							value={'propertyBarter'}
-							checked={(searchFilter?.search?.options || []).includes('propertyBarter')}
-							onChange={propertyOptionSelectHandler}
-						/>
-						<label htmlFor={'Barter'} style={{ cursor: 'pointer' }}>
-							<Typography className="propert-type">New Cars</Typography>
-						</label>
-					</Stack>
-					<Stack className={'input-box'}>
-						<Checkbox
-							id={'Rent'}
-							className="property-checkbox"
-							color="default"
-							size="small"
-							value={'propertyRent'}
-							checked={(searchFilter?.search?.options || []).includes('propertyRent')}
-							onChange={propertyOptionSelectHandler}
-						/>
-						<label htmlFor={'Rent'} style={{ cursor: 'pointer' }}>
-							<Typography className="propert-type">Used Cars</Typography>
-						</label>
-					</Stack>
+					{carType.map((type: string) => (
+						<Stack className={'input-box'} key={type}>
+							<Checkbox
+								id={type}
+								className="property-checkbox"
+								color="default"
+								size="small"
+								value={type}
+								onChange={carTypeSelectHandler}
+								checked={(searchFilter?.search?.typeList || []).includes(type as CarType)}
+							/>
+							<label style={{ cursor: 'pointer' }}>
+								<Typography className="property_type">{type}</Typography>
+							</label>
+						</Stack>
+					))}
 				</Stack>
 				<div className={'divider'}></div>
 				<Stack className={'madein'}>
-					<FormControl>
-						<InputLabel id="demo-simple-select-label">Made In</InputLabel>
+					<FormControl fullWidth margin="normal">
+						<InputLabel id="made-in-select-label">Made In</InputLabel>
 						<Select
-							labelId="demo-simple-select-required-label"
-							id="demo-simple-select"
-							value={searchFilter?.search?.squaresRange?.start ?? 0}
-							label="Made In"
-							onChange={(e: any) => propertySquareHandler(e, 'start')}
-							MenuProps={MenuProps}
+							labelId="made-in-select-label"
+							id="made-in-select"
+							multiple
+							value={searchFilter?.search?.madeInList || []}
+							onChange={carMadeInSelectHandler}
+							renderValue={(selected) => (selected as string[]).join(', ')} // Tanlangan qiymatlarni ko'rsatish
 						>
-							{propertySquare.map((square: number) => (
+							{carMadeIn.map((made: string) => (
 								<MenuItem
-									value={square}
-									disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
-									key={square}
+									key={made}
+									value={made}
 								>
-									{square}
+									{made}
 								</MenuItem>
 							))}
 						</Select>
 					</FormControl>
+
+
 				</Stack>
 				<div className={'divider'}></div>
 				<Stack>
@@ -601,18 +1128,19 @@ const Filter = (props: FilterType) => {
 						<Select
 							labelId="demo-simple-select-label"
 							id="demo-simple-select"
-							value={searchFilter?.search?.squaresRange?.start ?? 0}
+							value={searchFilter?.search?.brandList || []}
 							label="Brand"
-							onChange={(e: any) => propertySquareHandler(e, 'start')}
-							MenuProps={MenuProps}
+							multiple
+							onChange={carMadeInSelectHandler}
+							renderValue={(selected) => selected.join(', ')}
 						>
-							{propertySquare.map((square: number) => (
+							{carBrand.map((brand: any) => (
 								<MenuItem
-									value={square}
-									disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
-									key={square}
+									value={brand}
+									disabled={searchFilter?.search?.madeInList?.includes(brand)}
+									key={brand}
 								>
-									{square}
+									{brand}
 								</MenuItem>
 							))}
 						</Select>
@@ -621,19 +1149,19 @@ const Filter = (props: FilterType) => {
 				<div className={'divider'}></div>
 				<Stack className={'find-your-home'} mb={'30px'}>
 					<Typography className={'title'}>Drive Type</Typography>
-					{propertyType.map((type: string) => (
-						<Stack className={'input-box'} key={type}>
+					{carDrive.map((drive: string) => (
+						<Stack className={'input-box'} key={drive}>
 							<Checkbox
-								id={type}
+								id={drive}
 								className="property-checkbox"
 								color="default"
 								size="small"
-								value={type}
-								onChange={propertyTypeSelectHandler}
-								checked={(searchFilter?.search?.typeList || []).includes(type as PropertyType)}
+								value={drive}
+								onChange={carDriveSelectHandler}
+								checked={(searchFilter?.search?.driveTypeList || []).includes(drive as CarDriveType)}
 							/>
 							<label style={{ cursor: 'pointer' }}>
-								<Typography className="property_type">{type}</Typography>
+								<Typography className="property_type">{drive}</Typography>
 							</label>
 						</Stack>
 					))}
@@ -645,18 +1173,19 @@ const Filter = (props: FilterType) => {
 						<Select
 							labelId="demo-simple-select-label"
 							id="demo-simple-select"
-							value={searchFilter?.search?.squaresRange?.start ?? 0}
+							value={searchFilter?.search?.sortList || []}
 							label="Recommended"
-							onChange={(e: any) => propertySquareHandler(e, 'start')}
-							MenuProps={MenuProps}
+							multiple
+							onChange={carSortSelectHandler}
+							renderValue={(selected) => selected.join(', ')}
 						>
-							{propertySquare.map((square: number) => (
+							{carSort.map((sort: string) => (
 								<MenuItem
-									value={square}
-									disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
-									key={square}
+									value={sort}
+									disabled={searchFilter?.search?.sortList?.includes(sort as CarSort)}
+									key={sort}
 								>
-									{square}
+									{sort}
 								</MenuItem>
 							))}
 						</Select>
@@ -670,18 +1199,19 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.start ?? 0}
+								value={searchFilter?.search?.groupList || []}
 								label="Group"
-								onChange={(e: any) => propertySquareHandler(e, 'start')}
-								MenuProps={MenuProps}
+								multiple
+								onChange={carGroupSelectHandler}
+								renderValue={(selected) => selected.join(', ')}
 							>
-								{propertySquare.map((square: number) => (
+								{carGroup.map((group: string) => (
 									<MenuItem
-										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
-										key={square}
+										value={group}
+										disabled={searchFilter?.search?.groupList?.includes(group as CarGroup)}
+										key={group}
 									>
-										{square}
+										{group}
 									</MenuItem>
 								))}
 							</Select>
@@ -691,18 +1221,18 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.end ?? 500}
-								label="Body"
-								onChange={(e: any) => propertySquareHandler(e, 'end')}
-								MenuProps={MenuProps}
+								value={searchFilter?.search?.bodyList || []}
+								multiple
+								onChange={carBodySelectHandler}
+								renderValue={(selected) => selected.join(', ')}
 							>
-								{propertySquare.map((square: number) => (
+								{carBody.map((body: string) => (
 									<MenuItem
-										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.start || 0) > square}
-										key={square}
+										value={body}
+										disabled={searchFilter?.search?.bodyList?.includes(body as CarBody)}
+										key={body}
 									>
-										{square}
+										{body}
 									</MenuItem>
 								))}
 							</Select>
@@ -724,7 +1254,7 @@ const Filter = (props: FilterType) => {
 							}
 						}}
 					>
-						{propertyLocation.map((location: string) => {
+						{carLocation.map((location: any) => {
 							return (
 								<Stack className={'input-box'} key={location}>
 									<Checkbox
@@ -733,8 +1263,8 @@ const Filter = (props: FilterType) => {
 										color="default"
 										size="small"
 										value={location}
-										checked={(searchFilter?.search?.locationList || []).includes(location as PropertyLocation)}
-										onChange={propertyLocationSelectHandler}
+										checked={(searchFilter?.search?.locationList || []).includes(location as CarLocation)}
+										onChange={carLocationSelectHandler}
 									/>
 									<label htmlFor={location} style={{ cursor: 'pointer' }}>
 										<Typography className="property-type">{location}</Typography>
@@ -751,18 +1281,19 @@ const Filter = (props: FilterType) => {
 						<Select
 							labelId="demo-simple-select-label"
 							id="demo-simple-select"
-							value={searchFilter?.search?.squaresRange?.start ?? 0}
+							value={searchFilter?.search?.tuningTypeList || []}
 							label="Min"
-							onChange={(e: any) => propertySquareHandler(e, 'start')}
-							MenuProps={MenuProps}
+							multiple
+							onChange={carTuningSelectHandler}
+							renderValue={(selected) => selected.join(', ')}
 						>
-							{propertySquare.map((square: number) => (
+							{carTuning.map((tuning: string) => (
 								<MenuItem
-									value={square}
-									disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
-									key={square}
+									value={tuning}
+									disabled={searchFilter?.search?.tuningTypeList?.includes(tuning as CarTuningType)}
+									key={tuning}
 								>
-									{square}
+									{tuning}
 								</MenuItem>
 							))}
 						</Select>
@@ -776,18 +1307,19 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.start ?? 0}
+								value={searchFilter?.search?.fuelTypeList || []}
 								label="Fuel"
-								onChange={(e: any) => propertySquareHandler(e, 'start')}
-								MenuProps={MenuProps}
+								multiple
+								onChange={carFuelSelectHandler}
+								renderValue={(selected) => selected.join(', ')}
 							>
-								{propertySquare.map((square: number) => (
+								{carFuel.map((fuel: string) => (
 									<MenuItem
-										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
-										key={square}
+										value={fuel}
+										disabled={searchFilter?.search?.fuelTypeList?.includes(fuel as CarFuelType)}
+										key={fuel}
 									>
-										{square}
+										{fuel}
 									</MenuItem>
 								))}
 							</Select>
@@ -797,18 +1329,19 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.end ?? 500}
+								value={searchFilter?.search?.colorList || []}
 								label="Color"
-								onChange={(e: any) => propertySquareHandler(e, 'end')}
-								MenuProps={MenuProps}
+								multiple
+								onChange={carColorSelectHandler}
+								renderValue={(selected) => selected.join(', ')}
 							>
-								{propertySquare.map((square: number) => (
+								{carColor.map((color: string) => (
 									<MenuItem
-										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.start || 0) > square}
-										key={square}
+										value={color}
+										disabled={searchFilter?.search?.colorList?.includes(color as CarColor)}
+										key={color}
 									>
-										{square}
+										{color}
 									</MenuItem>
 								))}
 							</Select>
@@ -819,19 +1352,19 @@ const Filter = (props: FilterType) => {
 				<Stack>
 					<Stack className={'find-your-home'} mb={'30px'}>
 						<Typography className={'title'}>Transmission</Typography>
-						{propertyType.map((type: string) => (
-							<Stack className={'input-box'} key={type}>
+						{carTrans.map((trans: string) => (
+							<Stack className={'input-box'} key={trans}>
 								<Checkbox
-									id={type}
+									id={trans}
 									className="property-checkbox"
 									color="default"
 									size="small"
-									value={type}
-									onChange={propertyTypeSelectHandler}
-									checked={(searchFilter?.search?.typeList || []).includes(type as PropertyType)}
+									value={trans}
+									onChange={carTransSelectHandler}
+									checked={(searchFilter?.search?.transmissionList || []).includes(trans as CarTransmission)}
 								/>
 								<label style={{ cursor: 'pointer' }}>
-									<Typography className="property_type">{type}</Typography>
+									<Typography className="property_type">{trans}</Typography>
 								</label>
 							</Stack>
 						))}
@@ -845,9 +1378,9 @@ const Filter = (props: FilterType) => {
 								className="property-checkbox"
 								color="default"
 								size="small"
-								value={'propertyBarter'}
-								checked={(searchFilter?.search?.options || []).includes('propertyBarter')}
-								onChange={propertyOptionSelectHandler}
+								value={'carBarter'}
+								checked={(searchFilter?.search?.options || []).includes('carBarter')}
+								onChange={carOptionSelectHandler}
 							/>
 							<label htmlFor={'Barter'} style={{ cursor: 'pointer' }}>
 								<Typography className="propert-type">Barter</Typography>
@@ -859,9 +1392,9 @@ const Filter = (props: FilterType) => {
 								className="property-checkbox"
 								color="default"
 								size="small"
-								value={'propertyRent'}
-								checked={(searchFilter?.search?.options || []).includes('propertyRent')}
-								onChange={propertyOptionSelectHandler}
+								value={'carRent'}
+								checked={(searchFilter?.search?.options || []).includes('carRent')}
+								onChange={carOptionSelectHandler}
 							/>
 							<label htmlFor={'Rent'} style={{ cursor: 'pointer' }}>
 								<Typography className="propert-type">Rent</Typography>
@@ -878,15 +1411,15 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.start ?? 0}
+								value={searchFilter?.search?.yearRange?.start ?? 0}
 								label="Min"
-								onChange={(e: any) => propertySquareHandler(e, 'start')}
+								onChange={(e: any) => carYearHandler(e, 'start')}
 								MenuProps={MenuProps}
 							>
 								{propertySquare.map((square: number) => (
 									<MenuItem
 										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
+										disabled={searchFilter?.search?.yearRange}
 										key={square}
 									>
 										{square}
@@ -900,15 +1433,15 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.end ?? 500}
+								value={searchFilter?.search?.yearRange?.end ?? 500}
 								label="Max"
-								onChange={(e: any) => propertySquareHandler(e, 'end')}
+								onChange={(e: any) => carYearHandler(e, 'end')}
 								MenuProps={MenuProps}
 							>
 								{propertySquare.map((square: number) => (
 									<MenuItem
 										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.start || 0) > square}
+										disabled={searchFilter?.search?.yearRange?.end}
 										key={square}
 									>
 										{square}
@@ -926,15 +1459,15 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.start ?? 0}
+								value={searchFilter?.search?.mileageRange?.min ?? 0}
 								label="Min"
-								onChange={(e: any) => propertySquareHandler(e, 'start')}
+								onChange={(e: any) => carMileageHandler(e, 'min')}
 								MenuProps={MenuProps}
 							>
 								{propertySquare.map((square: number) => (
 									<MenuItem
 										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.end || 0) < square}
+										disabled={searchFilter?.search?.mileageRange?.max}
 										key={square}
 									>
 										{square}
@@ -948,15 +1481,15 @@ const Filter = (props: FilterType) => {
 							<Select
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
-								value={searchFilter?.search?.squaresRange?.end ?? 500}
+								value={searchFilter?.search?.mileageRange?.max ?? 500}
 								label="Max"
-								onChange={(e: any) => propertySquareHandler(e, 'end')}
+								onChange={(e: any) => carMileageHandler(e, 'max')}
 								MenuProps={MenuProps}
 							>
 								{propertySquare.map((square: number) => (
 									<MenuItem
 										value={square}
-										disabled={(searchFilter?.search?.squaresRange?.start || 0) > square}
+										disabled={(searchFilter?.search?.mileageRange?.max || 0) > square}
 										key={square}
 									>
 										{square}
@@ -973,10 +1506,10 @@ const Filter = (props: FilterType) => {
 							type="number"
 							placeholder="$ min"
 							min={0}
-							value={searchFilter?.search?.pricesRange?.start ?? 0}
+							value={searchFilter?.search?.priceRange?.min ?? 0}
 							onChange={(e: any) => {
 								if (e.target.value >= 0) {
-									propertyPriceHandler(e.target.value, 'start');
+									carPriceHandler(e.target.value, 'min');
 								}
 							}}
 						/>
@@ -984,10 +1517,10 @@ const Filter = (props: FilterType) => {
 						<input
 							type="number"
 							placeholder="$ max"
-							value={searchFilter?.search?.pricesRange?.end ?? 0}
+							value={searchFilter?.search?.priceRange?.max ?? 0}
 							onChange={(e: any) => {
 								if (e.target.value >= 0) {
-									propertyPriceHandler(e.target.value, 'end');
+									carPriceHandler(e.target.value, 'max');
 								}
 							}}
 						/>
@@ -1008,7 +1541,7 @@ const Filter = (props: FilterType) => {
 							}
 						}}
 					>
-						{propertyLocation.map((location: string) => {
+						{carLocation.map((location: string) => {
 							return (
 								<Stack className={'input-box'} key={location}>
 									<Checkbox
@@ -1017,8 +1550,8 @@ const Filter = (props: FilterType) => {
 										color="default"
 										size="small"
 										value={location}
-										checked={(searchFilter?.search?.locationList || []).includes(location as PropertyLocation)}
-										onChange={propertyLocationSelectHandler}
+										checked={(searchFilter?.search?.locationList || []).includes(location as CarLocation)}
+										onChange={carLocationSelectHandler}
 									/>
 									<label htmlFor={location} style={{ cursor: 'pointer' }}>
 										<Typography className="property-type">{location}</Typography>

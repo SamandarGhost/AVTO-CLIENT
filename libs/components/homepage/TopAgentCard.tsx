@@ -11,8 +11,8 @@ const TopAgentCard = (props: TopAgentProps) => {
 	const { agent } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const agentImage = agent?.memberImage
-		? `${process.env.REACT_APP_API_URL}/${agent?.memberImage}`
+	const agentImage = agent?.image
+		? `${process.env.REACT_APP_API_URL}/${agent?.image}`
 		: '/img/profile/defaultUser.svg';
 
 	/** HANDLERS **/
@@ -22,21 +22,21 @@ const TopAgentCard = (props: TopAgentProps) => {
 			<Stack className="top-agent-card">
 				<img src={agentImage} alt="" />
 
-				<strong>{agent?.memberNick}</strong>
-				<span>{agent?.memberType}</span>
+				<strong>{agent?.titleNick}</strong>
+				<span>{agent?.type}</span>
 			</Stack>
 		);
 	} else {
 		return (
 			<Stack className="top-agent-card">
 				<div>
-					<div className={'email'}>Rakhmatillaev0303@gmail.com</div>
-					<div className={'phone'}>+821048675455</div>
+					<div className={'email'}>{agent.email}</div>
+					<div className={'phone'}>{agent.phone}</div>
 					<img src={agentImage} alt="" />
 				</div>
 
-				<strong>{agent?.memberNick}</strong>
-				<span>{agent?.memberType}</span>
+				<strong>{agent?.titleNick}</strong>
+				<span>{agent?.type}</span>
 			</Stack>
 		);
 	}

@@ -7,63 +7,49 @@ import TopPropertyCard from './FindingCarCard';
 import { PropertiesInquiry } from '../../types/property/property.input';
 import { Property } from '../../types/property/property';
 import { useMutation, useQuery } from '@apollo/client';
-import { GET_CARS } from '../../../apollo/user/query';
+import { GET_ARTICLES, GET_CARS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 import { Message } from '../../enums/common.enum';
 import { sweetMixinErrorAlert } from '../../sweetAlert';
 import FeedbackCard from './FeedbackCard';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { LIKE_CAR } from '../../../apollo/user/mutation';
+import { ArticlesInquiry } from '../../types/article/article.input';
+import { ArticleCategory } from '../../enums/article.enum';
+import { Article } from '../../types/article/article';
 
 interface TopPropertiesProps {
-    initialInput: PropertiesInquiry;
+    initialInput: ArticlesInquiry;
 }
 
 const Feedback = (props: TopPropertiesProps) => {
     const { initialInput } = props;
     const device = useDeviceDetect();
-    const [topProperties, setTopProperties] = useState<Property[]>([]);
+    const [topArticle, setTopArticle] = useState<Article[]>([]);
 
 
     /** APOLLO REQUESTS **/
-    const [likeTargetProperty] = useMutation(LIKE_CAR);
 
     const {
-        loading: getPropertiesLoading,
-        data: getPropertiesData,
-        error: getPropertiesError,
-        refetch: getPropertiesRefetch
-    } = useQuery(GET_CARS, {
+        loading: getArticlesLoading,
+        data: getArticlesData,
+        error: getArticlesError,
+        refetch: getArticlesRefetch
+    } = useQuery(GET_ARTICLES, {
         fetchPolicy: 'cache-and-network',
         variables: { input: initialInput },
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
-            setTopProperties(data?.getProperties?.list);
+            setTopArticle(data?.getArticles?.list);
         },
     });
-    /** HANDLERS **/
-    const likePropertyHandler = async (user: T, id: string) => {
-        try {
-            if (!id) return;
-            if (!user._id) throw new Error(Message.SOMETHING_WENT_WRONG);
-
-            await likeTargetProperty({
-                variables: { input: id },
-            });
-            await getPropertiesRefetch({ input: initialInput });
-        } catch (err: any) {
-            console.log('Error, likePropertyHandler:', err.message);
-            sweetMixinErrorAlert(err.message).then();
-        }
-    }
 
     if (device === 'mobile') {
         return (
             <Stack className={'top-properties'}>
                 <Stack className={'container'}>
                     <Stack className={'info-box'}>
-                        <span>Top properties</span>
+                        <span>Top Articles</span>
                     </Stack>
                     <Stack className={'card-box'}>
                         <Swiper
@@ -73,10 +59,10 @@ const Feedback = (props: TopPropertiesProps) => {
                             spaceBetween={15}
                             modules={[Autoplay]}
                         >
-                            {topProperties.map((property: Property) => {
+                            {topArticle.map((article: Article) => {
                                 return (
-                                    <SwiperSlide className={'top-property-slide'} key={property?._id}>
-                                        <TopPropertyCard property={property} likePropertyHandler={likePropertyHandler} />
+                                    <SwiperSlide className={'top-property-slide'} key={article?._id}>
+                                        <FeedbackCard article={article} />
                                     </SwiperSlide>
                                 );
                             })}
@@ -116,10 +102,10 @@ const Feedback = (props: TopPropertiesProps) => {
                                 el: '.swiper-top-pagination',
                             }}
                         >
-                            {topProperties.map((property: Property) => {
+                            {topArticle.map((article: Article) => {
                                 return (
-                                    <SwiperSlide className={'top-property-slide'} key={property?._id}>
-                                        <FeedbackCard property={property} />
+                                    <SwiperSlide className={'top-property-slide'} key={article?._id}>
+                                        <FeedbackCard article={article} />
                                     </SwiperSlide>
                                 );
                             })}
@@ -142,9 +128,10 @@ Feedback.defaultProps = {
     initialInput: {
         page: 1,
         limit: 10,
-        sort: 'propertyRank',
         direction: 'DESC',
-        search: {},
+        search: {
+            articleCategory: ArticleCategory.FORWEB
+        },
     },
 };
 

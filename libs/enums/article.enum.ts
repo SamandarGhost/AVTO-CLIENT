@@ -6,6 +6,7 @@ export enum ArticleCategory {
 	OVERVIEW = 'OVERVIEW',
 	HELPFUL = 'HELPFUL',
 	EVENT = 'EVENT',
+	FORWEB = 'FORWEB'
 }
 
 export enum ArticleStatus {

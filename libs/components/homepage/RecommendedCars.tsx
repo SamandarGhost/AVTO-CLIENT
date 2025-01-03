@@ -14,6 +14,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { CarsInquiry } from '../../types/car/car.input';
 import { Car } from '../../types/car/car';
 import { LIKE_CAR } from '../../../apollo/user/mutation';
+import RecommendedCarCard from './ReccomendedCarsCard';
 
 interface RecommendedCarsProps {
 	initialInput: CarsInquiry;
@@ -128,7 +129,7 @@ const RecommendedCars = (props: RecommendedCarsProps) => {
 								{recomCars?.map((car: Car) => {
 									return (
 										<SwiperSlide key={car._id} className={'trend-property-slide'}>
-											<TrendPropertyCard car={car} likeCarHandler={likeCarHandler} />
+											<RecommendedCarCard car={car} likeCarHandler={likeCarHandler} />
 										</SwiperSlide>
 									);
 								})}

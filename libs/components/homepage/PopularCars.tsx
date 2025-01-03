@@ -5,40 +5,43 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import WestIcon from '@mui/icons-material/West';
 import EastIcon from '@mui/icons-material/East';
-import PopularPropertyCard from './PopularPropertyCard';
+import PopularPropertyCard from './PopularCarCard';
 import { Property } from '../../types/property/property';
 import Link from 'next/link';
 import { PropertiesInquiry } from '../../types/property/property.input';
 import { GET_CARS } from '../../../apollo/user/query';
 import { useQuery } from '@apollo/client';
 import { T } from '../../types/common';
+import { CarsInquiry } from '../../types/car/car.input';
+import { Car } from '../../types/car/car';
+import PopularCarCard from './PopularCarCard';
 
-interface PopularPropertiesProps {
-	initialInput: PropertiesInquiry;
+interface PopularCarsProps {
+	initialInput: CarsInquiry;
 }
 
-const PopularProperties = (props: PopularPropertiesProps) => {
+const PopularCars = (props: PopularCarsProps) => {
 	const { initialInput } = props;
 	const device = useDeviceDetect();
-	const [popularProperties, setPopularProperties] = useState<Property[]>([]);
+	const [popularCars, setPopularCars] = useState<Car[]>([]);
 
 	/** APOLLO REQUESTS **/
 	const {
-		loading: getPropertiesLoading,
-		data: getPropertiesData,
-		error: getPropertiesError,
-		refetch: getPropertiesRefetch
+		loading: getCarsLoading,
+		data: getCarsData,
+		error: getCarsError,
+		refetch: getCarsRefetch
 	} = useQuery(GET_CARS, {
 		fetchPolicy: 'cache-and-network',
 		variables: { input: initialInput },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setPopularProperties(data?.getProperties?.list);
+			setPopularCars(data?.getCars?.list);
 		},
 	});
 	/** HANDLERS **/
 
-	if (!popularProperties) return null;
+	if (!popularCars) return null;
 
 	if (device === 'mobile') {
 		return (
@@ -55,10 +58,10 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 							spaceBetween={25}
 							modules={[Autoplay]}
 						>
-							{popularProperties.map((property: Property) => {
+							{popularCars.map((car: Car) => {
 								return (
-									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularPropertyCard property={property} />
+									<SwiperSlide key={car._id} className={'popular-property-slide'}>
+										<PopularCarCard car={car} />
 									</SwiperSlide>
 								);
 							})}
@@ -99,10 +102,10 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 								el: '.swiper-popular-pagination',
 							}}
 						>
-							{popularProperties.map((property: Property) => {
+							{popularCars.map((car: Car) => {
 								return (
-									<SwiperSlide key={property._id} className={'popular-property-slide'}>
-										<PopularPropertyCard property={property} />
+									<SwiperSlide key={car._id} className={'popular-property-slide'}>
+										<PopularCarCard car={car} />
 									</SwiperSlide>
 								);
 							})}
@@ -119,14 +122,14 @@ const PopularProperties = (props: PopularPropertiesProps) => {
 	}
 };
 
-PopularProperties.defaultProps = {
+PopularCars.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 20,
-		sort: 'propertyViews',
+		sort: 'carViews',
 		direction: 'DESC',
 		search: {},
 	},
 };
 
-export default PopularProperties;
+export default PopularCars;
