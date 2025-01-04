@@ -26,7 +26,7 @@ const FeedbackCard = (props: TopArticleCardProps) => {
     /** HANDLERS **/
     const pushDetailhandler = async (articleId: string) => {
         console.log("articleId:", articleId);
-        await router.push({ pathname: '/community/detail', query: { id: articleId } })
+        await router.push({ pathname: '/article/detail', query: { id: articleId } })
     };
 
     if (device === 'mobile') {

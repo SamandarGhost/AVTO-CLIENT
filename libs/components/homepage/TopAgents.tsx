@@ -7,13 +7,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper';
 import TopAgentCard from './TopAgentCard';
 import { Member } from '../../types/member/member';
-import { MembersInquiry } from '../../types/member/member.input';
+import { ADSInquiry, MembersInquiry } from '../../types/member/member.input';
 import { useQuery } from '@apollo/client';
 import { GET_AGENTS } from '../../../apollo/user/query';
 import { T } from '../../types/common';
 
 interface TopAgentsProps {
-	initialInput: MembersInquiry;
+	initialInput: ADSInquiry;
 }
 
 const TopAgents = (props: TopAgentsProps) => {
@@ -118,7 +118,6 @@ TopAgents.defaultProps = {
 	initialInput: {
 		page: 1,
 		limit: 10,
-		sort: 'rank',
 		direction: 'DESC',
 		search: {},
 	},

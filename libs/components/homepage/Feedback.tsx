@@ -37,7 +37,17 @@ const Feedback = (props: TopPropertiesProps) => {
         refetch: getArticlesRefetch
     } = useQuery(GET_ARTICLES, {
         fetchPolicy: 'cache-and-network',
-        variables: { input: initialInput },
+        variables: {
+            input:
+            {
+                page: 1,
+                limit: 10,
+                direction: 'DESC',
+                search: {
+                    articleCategory: ArticleCategory.FORWEB
+                },
+            }
+        },
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
             setTopArticle(data?.getArticles?.list);
@@ -46,30 +56,7 @@ const Feedback = (props: TopPropertiesProps) => {
 
     if (device === 'mobile') {
         return (
-            <Stack className={'top-properties'}>
-                <Stack className={'container'}>
-                    <Stack className={'info-box'}>
-                        <span>Top Articles</span>
-                    </Stack>
-                    <Stack className={'card-box'}>
-                        <Swiper
-                            className={'top-property-swiper'}
-                            slidesPerView={'auto'}
-                            centeredSlides={true}
-                            spaceBetween={15}
-                            modules={[Autoplay]}
-                        >
-                            {topArticle.map((article: Article) => {
-                                return (
-                                    <SwiperSlide className={'top-property-slide'} key={article?._id}>
-                                        <FeedbackCard article={article} />
-                                    </SwiperSlide>
-                                );
-                            })}
-                        </Swiper>
-                    </Stack>
-                </Stack>
-            </Stack>
+            null
         );
     } else {
         return (
@@ -122,17 +109,6 @@ const Feedback = (props: TopPropertiesProps) => {
             </Stack>
         );
     }
-};
-
-Feedback.defaultProps = {
-    initialInput: {
-        page: 1,
-        limit: 10,
-        direction: 'DESC',
-        search: {
-            articleCategory: ArticleCategory.FORWEB
-        },
-    },
 };
 
 export default Feedback;
