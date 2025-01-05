@@ -77,21 +77,21 @@ const AddCar = ({ initialValues, ...props }: any) => {
 			carTransmission: getCarData?.getCar ? getCarData?.getCar?.carTransmission : '',
 			carEngineSize: getCarData?.getCar ? getCarData?.getCar?.carEngineSize : '',
 			carColor: getCarData?.getCar ? getCarData?.getCar?.carColor : '',
-			carFullFuel: getCarData?.getCar ? getCarData?.getCar?.carFullFuel : 0,
+			carFullFuel: getCarData?.getCar ? getCarData?.getCar?.carFullFuel : '',
 			carMpgHw: getCarData?.getCar ? getCarData?.getCar?.carMpgHw : 0,
 			carMpgCity: getCarData?.getCar ? getCarData?.getCar?.carMpgCity : 0,
-			carDoor: getCarData?.getCar ? getCarData?.getCar?.carDoor : 0,
-			carCylinders: getCarData?.getCar ? getCarData?.getCar?.carCylinders : 0,
-			carMaxSpeed: getCarData?.getCar ? getCarData?.getCar?.carMaxSpeed : 0,
-			carHorsePower: getCarData?.getCar ? getCarData?.getCar?.carHorsePower : 0,
+			carDoor: getCarData?.getCar ? getCarData?.getCar?.carDoor : '',
+			carCylinders: getCarData?.getCar ? getCarData?.getCar?.carCylinders : '',
+			carMaxSpeed: getCarData?.getCar ? getCarData?.getCar?.carMaxSpeed : '',
+			carHorsePower: getCarData?.getCar ? getCarData?.getCar?.carHorsePower : '',
 			carHundredSpeed: getCarData?.getCar ? getCarData?.getCar?.carHundredSpeed : '',
 			carTorque: getCarData?.getCar ? getCarData?.getCar?.carTorque : '',
 			carLength: getCarData?.getCar ? getCarData?.getCar?.carLength : '',
 			carHeigth: getCarData?.getCar ? getCarData?.getCar?.carHeigth : '',
 			carWidth: getCarData?.getCar ? getCarData?.getCar?.carWidth : '',
-			carSeatsUp: getCarData?.getCar ? getCarData?.getCar?.carSeatsUp : 0,
-			carWeigth: getCarData?.getCar ? getCarData?.getCar?.carWeigth : 0,
-			carLoadWeight: getCarData?.getCar ? getCarData?.getCar?.carLoadWeight : 0,
+			carSeatsUp: getCarData?.getCar ? getCarData?.getCar?.carSeatsUp : '',
+			carWeigth: getCarData?.getCar ? getCarData?.getCar?.carWeigth : '',
+			carLoadWeight: getCarData?.getCar ? getCarData?.getCar?.carLoadWeight : '',
 			carTireSize: getCarData?.getCar ? getCarData?.getCar?.carTireSize : '',
 			carWheelBase: getCarData?.getCar ? getCarData?.getCar?.carWheelBase : '',
 			carAutoBrake: getCarData?.getCar ? getCarData?.getCar?.carAutoBrake : false,
@@ -200,27 +200,27 @@ const AddCar = ({ initialValues, ...props }: any) => {
 		}
 	}
 
-	// const doDisabledCheck = () => {
-	// 	if (
-	// 		insertCarData.carTitle === '' ||
-	// 		insertCarData.carPrice === 0 || // @ts-ignore
-	// 		insertCarData.carLocation === '' || // @ts-ignore
-	// 		insertCarData.carAddress === '' || // @ts-ignore
-	// 		insertCarData.carMadeIn === '' || // @ts-ignore
-	// 		insertCarData.carBrand === '' || // @ts-ignore
-	// 		insertCarData.carFuelType === '' || // @ts-ignore
-	// 		insertCarData.carDriveType === '' || // @ts-ignore
-	// 		insertCarData.carTransmission === '' || // @ts-ignore
-	// 		insertCarData.carBody === '' || // @ts-ignore
-	// 		insertCarData.carYear === '' || // @ts-ignore
-	// 		insertCarData.carMileage === '' || // @ts-ignore
-	// 		insertCarData.carMpgHw === '' || // @ts-ignore
-	// 		insertCarData.carMpgCity === '' || // @ts-ignore
-	// 		insertCarData.carImages.length === 0
-	// 	) {
-	// 		return true;
-	// 	}
-	// };
+	const doDisabledCheck = () => {
+		if (
+			insertCarData.carTitle === '' ||
+			insertCarData.carPrice === 0 || // @ts-ignore
+			insertCarData.carLocation === '' || // @ts-ignore
+			insertCarData.carAddress === '' || // @ts-ignore
+			insertCarData.carMadeIn === '' || // @ts-ignore
+			insertCarData.carBrand === '' || // @ts-ignore
+			insertCarData.carFuelType === '' || // @ts-ignore
+			insertCarData.carDriveType === '' || // @ts-ignore
+			insertCarData.carTransmission === '' || // @ts-ignore
+			insertCarData.carBody === '' || // @ts-ignore
+			insertCarData.carYear === '' || // @ts-ignore
+			insertCarData.carMileage === '' || // @ts-ignore
+			insertCarData.carMpgHw === '' || // @ts-ignore
+			insertCarData.carMpgCity === '' || // @ts-ignore
+			insertCarData.carImages.length === 0
+		) {
+			return true;
+		}
+	};
 
 	const insertCarHandler = useCallback(async () => {
 		try {
@@ -270,7 +270,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 
 
 	if (device === 'mobile') {
-		return <div>ADD NEW PROPERTY MOBILE PAGE</div>;
+		return <div>ADD NEW CAR MOBILE PAGE</div>;
 	} else {
 		return (
 			<div id="add-property-page">
@@ -748,12 +748,12 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Full Feul</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Full Fuel'}
 										value={insertCarData?.carFullFuel}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carFullFuel: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carFullFuel: value })
 
 										}
 									/>
@@ -787,36 +787,36 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Doors</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Doors'}
 										value={insertCarData?.carDoor}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carDoor: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carDoor: value })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Cylinders</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Cylinders'}
 										value={insertCarData?.carCylinders}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carCylinders: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carCylinders: value })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Max Speed</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Max Speed'}
 										value={insertCarData?.carMaxSpeed}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carMaxSpeed: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carMaxSpeed: value })
 										}
 									/>
 								</Stack>
@@ -838,12 +838,12 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Horse Power</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Horse Power'}
 										value={insertCarData?.carHorsePower}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carHorsePower: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carHorsePower: value })
 										}
 									/>
 								</Stack>
@@ -925,12 +925,12 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Weigth</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Weigth'}
 										value={insertCarData?.carWeigth}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carWeigth: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carWeigth: value })
 										}
 									/>
 								</Stack>
@@ -939,24 +939,24 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Load Weight</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Load Weight'}
 										value={insertCarData?.carLoadWeight}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carLoadWeight: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carLoadWeight: value })
 										}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
 									<Typography className="title">Seats Up</Typography>
 									<input
-										type="number"
+										type="text"
 										className="description-input"
 										placeholder={'Seats Up'}
 										value={insertCarData?.carSeatsUp}
 										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carSeatsUp: parseInt(value) })
+											setInsertCarData({ ...insertCarData, carSeatsUp: value })
 										}
 									/>
 								</Stack>
