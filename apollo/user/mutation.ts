@@ -446,7 +446,6 @@ mutation CreateCar($input: CarInput!) {
         carTitle
         carBody
         carStatus
-        carSort
         carGroup
         carMadeIn
         carBrand
@@ -460,8 +459,6 @@ mutation CreateCar($input: CarInput!) {
         carBarter
         carRent
         carYear
-        carTuning
-        carTuningType
         carMileage
         carFuelType
         carDriveType
@@ -588,7 +585,6 @@ mutation UpdateCar($input: CarUpdate!) {
         carTitle
         carBody
         carStatus
-        carSort
         carGroup
         carMadeIn
         carBrand
@@ -602,8 +598,6 @@ mutation UpdateCar($input: CarUpdate!) {
         carBarter
         carRent
         carYear
-        carTuning
-        carTuningType
         carMileage
         carFuelType
         carDriveType
@@ -731,7 +725,7 @@ mutation LikeTargetCar($input: String!) {
         carTitle
         carBody
         carStatus
-        carSort
+        
         carGroup
         carMadeIn
         carBrand
@@ -745,8 +739,6 @@ mutation LikeTargetCar($input: String!) {
         carBarter
         carRent
         carYear
-        carTuning
-        carTuningType
         carMileage
         carFuelType
         carDriveType
@@ -873,7 +865,6 @@ mutation SaveTargetCar($input: String!) {
         carTitle
         carBody
         carStatus
-        carSort
         carGroup
         carMadeIn
         carBrand
@@ -887,8 +878,6 @@ mutation SaveTargetCar($input: String!) {
         carBarter
         carRent
         carYear
-        carTuning
-        carTuningType
         carMileage
         carFuelType
         carDriveType

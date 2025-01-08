@@ -1,4 +1,4 @@
-import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarStatus, CarTransmission, CarTuningType, CarType } from "../../enums/car.enum";
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarStatus, CarTransmission, CarType } from "../../enums/car.enum";
 import { MeLiked } from "../like/like";
 import { Member, TotalCounter } from "../member/member";
 import { MeSaved } from "../save/save";
@@ -9,7 +9,6 @@ export interface Car {
     carTitle: string;
     carBody: CarBody;
     carStatus: CarStatus;
-    carSort: CarSort;
     carGroup: CarGroup;
     carMadeIn: CarMadeIn;
     carBrand: CarBrand;
@@ -23,8 +22,6 @@ export interface Car {
     carBarter: boolean;
     carRent: boolean;
     carYear: number;
-    carTuning: boolean;
-    carTuningType?: CarTuningType;
     carMileage: number;
     carFuelType: CarFuelType;
     carDriveType: CarDriveType;

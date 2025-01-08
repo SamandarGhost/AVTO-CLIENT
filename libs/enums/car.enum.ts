@@ -23,22 +23,6 @@ export enum CarColor {
     Other = 'Other',
 }
 
-export enum CarTuningType {
-    Exterior = 'Exterior',
-    Performance = 'Performance',
-    Suspension = 'Suspension',
-    Interior = 'Interior',
-    Safety = 'Safety',
-    Personalization = 'Personalization',
-    Utility = 'Utility',
-}
-
-export enum CarSort {
-    Electric = 'Electric',
-    Fuel = 'Fuel',
-    Hybrid = 'Hybrid',
-}
-
 export enum CarFuelType {
     Gasoline = 'Gasoline',
     Diesel = 'Diesel',

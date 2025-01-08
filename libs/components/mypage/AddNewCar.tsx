@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { REACT_APP_API_URL } from '../../config';
-import axios from 'axios';
+import { CarInput } from '../../types/car/car.input';
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarTransmission, CarType } from '../../enums/car.enum';
 import { getJwtToken } from '../../auth';
-import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
 import { userVar } from '../../../apollo/store';
 import { CREATE_CAR, UPDATE_CAR } from '../../../apollo/user/mutation';
 import { GET_CAR } from '../../../apollo/user/query';
-import { CarInput } from '../../types/car/car.input';
-import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarTransmission, CarTuningType, CarType } from '../../enums/car.enum';
+import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
+import axios from 'axios';
+import { REACT_APP_API_URL } from '../../config';
 
 const AddCar = ({ initialValues, ...props }: any) => {
 	const device = useDeviceDetect();
@@ -20,8 +20,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 	const [insertCarData, setInsertCarData] = useState<CarInput>(initialValues);
 	const [carType, setCarType] = useState<CarType[]>(Object.values(CarType));
 	const [carColor, setCarColor] = useState<CarColor[]>(Object.values(CarColor));
-	const [carTuningType, setCarTuningType] = useState<CarTuningType[]>(Object.values(CarTuningType));
-	const [carSort, setCarSort] = useState<CarSort[]>(Object.values(CarSort));
 	const [carFuelType, setCarFuelType] = useState<CarFuelType[]>(Object.values(CarFuelType));
 	const [carTransmission, setCarTransmission] = useState<CarTransmission[]>(Object.values(CarTransmission));
 	const [carDriveType, setCarDriveType] = useState<CarDriveType[]>(Object.values(CarDriveType));
@@ -53,47 +51,45 @@ const AddCar = ({ initialValues, ...props }: any) => {
 	useEffect(() => {
 		setInsertCarData({
 			...insertCarData,
-			carType: getCarData?.getCar ? getCarData?.getCar?.carType : '',
-			carTitle: getCarData?.getCar ? getCarData?.getCar?.carTitle : '',
-			carBody: getCarData?.getCar ? getCarData?.getCar?.carBody : '',
-			carSort: getCarData?.getCar ? getCarData?.getCar?.carSort : '',
-			carGroup: getCarData?.getCar ? getCarData?.getCar?.carGroup : '',
-			carMadeIn: getCarData?.getCar ? getCarData?.getCar?.carMadeIn : '',
-			carBrand: getCarData?.getCar ? getCarData?.getCar?.carBrand : '',
+			carType: getCarData?.getCar ? getCarData?.getCar?.carType : "",
+			carTitle: getCarData?.getCar ? getCarData?.getCar?.carTitle : "",
+			carBody: getCarData?.getCar ? getCarData?.getCar?.carBody : "",
+			carGroup: getCarData?.getCar ? getCarData?.getCar?.carGroup : "",
+			carMadeIn: getCarData?.getCar ? getCarData?.getCar?.carMadeIn : "",
+			carBrand: getCarData?.getCar ? getCarData?.getCar?.carBrand : "",
+			carModel: getCarData?.getCar ? getCarData?.getCar?.carModel : "",
 			carPrice: getCarData?.getCar ? getCarData?.getCar?.carPrice : 0,
 			carImages: getCarData?.getCar ? getCarData?.getCar?.carImages : [],
-			carVideo: getCarData?.getCar ? getCarData?.getCar?.carVideo : '',
-			carLocation: getCarData?.getCar ? getCarData?.getCar?.carLocation : '',
-			carAddress: getCarData?.getCar ? getCarData?.getCar?.carAddress : '',
-			carDesc: getCarData?.getCar ? getCarData?.getCar?.carDesc : '',
+			carVideo: getCarData?.getCar ? getCarData?.getCar?.carVideo : "",
+			carLocation: getCarData?.getCar ? getCarData?.getCar?.carLocation : "",
+			carAddress: getCarData?.getCar ? getCarData?.getCar?.carAddress : "",
+			carDesc: getCarData?.getCar ? getCarData?.getCar?.carDesc : "",
 			carBarter: getCarData?.getCar ? getCarData?.getCar?.carBarter : false,
 			carRent: getCarData?.getCar ? getCarData?.getCar?.carRent : false,
 			carYear: getCarData?.getCar ? getCarData?.getCar?.carYear : 0,
-			carTuning: getCarData?.getCar ? getCarData?.getCar?.carTuning : false,
-			carTuningType: getCarData?.getCar ? getCarData?.getCar?.carTuningType : '',
 			carMileage: getCarData?.getCar ? getCarData?.getCar?.carMileage : 0,
-			carFuelType: getCarData?.getCar ? getCarData?.getCar?.carFuelType : '',
-			carDriveType: getCarData?.getCar ? getCarData?.getCar?.carDriveType : '',
-			carTransmission: getCarData?.getCar ? getCarData?.getCar?.carTransmission : '',
-			carEngineSize: getCarData?.getCar ? getCarData?.getCar?.carEngineSize : '',
-			carColor: getCarData?.getCar ? getCarData?.getCar?.carColor : '',
-			carFullFuel: getCarData?.getCar ? getCarData?.getCar?.carFullFuel : '',
+			carFuelType: getCarData?.getCar ? getCarData?.getCar?.carFuelType : "",
+			carDriveType: getCarData?.getCar ? getCarData?.getCar?.carDriveType : "",
+			carTransmission: getCarData?.getCar ? getCarData?.getCar?.carTransmission : "",
+			carEngineSize: getCarData?.getCar ? getCarData?.getCar?.carEngineSize : "",
+			carColor: getCarData?.getCar ? getCarData?.getCar?.carColor : "",
+			carFullFuel: getCarData?.getCar ? getCarData?.getCar?.carFullFuel : "",
 			carMpgHw: getCarData?.getCar ? getCarData?.getCar?.carMpgHw : 0,
 			carMpgCity: getCarData?.getCar ? getCarData?.getCar?.carMpgCity : 0,
-			carDoor: getCarData?.getCar ? getCarData?.getCar?.carDoor : '',
-			carCylinders: getCarData?.getCar ? getCarData?.getCar?.carCylinders : '',
-			carMaxSpeed: getCarData?.getCar ? getCarData?.getCar?.carMaxSpeed : '',
-			carHorsePower: getCarData?.getCar ? getCarData?.getCar?.carHorsePower : '',
-			carHundredSpeed: getCarData?.getCar ? getCarData?.getCar?.carHundredSpeed : '',
-			carTorque: getCarData?.getCar ? getCarData?.getCar?.carTorque : '',
-			carLength: getCarData?.getCar ? getCarData?.getCar?.carLength : '',
-			carHeigth: getCarData?.getCar ? getCarData?.getCar?.carHeigth : '',
-			carWidth: getCarData?.getCar ? getCarData?.getCar?.carWidth : '',
-			carSeatsUp: getCarData?.getCar ? getCarData?.getCar?.carSeatsUp : '',
-			carWeigth: getCarData?.getCar ? getCarData?.getCar?.carWeigth : '',
-			carLoadWeight: getCarData?.getCar ? getCarData?.getCar?.carLoadWeight : '',
-			carTireSize: getCarData?.getCar ? getCarData?.getCar?.carTireSize : '',
-			carWheelBase: getCarData?.getCar ? getCarData?.getCar?.carWheelBase : '',
+			carDoor: getCarData?.getCar ? getCarData?.getCar?.carDoor : "",
+			carCylinders: getCarData?.getCar ? getCarData?.getCar?.carCylinders : "",
+			carMaxSpeed: getCarData?.getCar ? getCarData?.getCar?.carMaxSpeed : "",
+			carHundredSpeed: getCarData?.getCar ? getCarData?.getCar?.carHundredSpeed : "",
+			carHorsePower: getCarData?.getCar ? getCarData?.getCar?.carHorsePower : "",
+			carTorque: getCarData?.getCar ? getCarData?.getCar?.carTorque : "",
+			carLength: getCarData?.getCar ? getCarData?.getCar?.carLength : "",
+			carHeigth: getCarData?.getCar ? getCarData?.getCar?.carHeigth : "",
+			carWidth: getCarData?.getCar ? getCarData?.getCar?.carWidth : "",
+			carSeatsUp: getCarData?.getCar ? getCarData?.getCar?.carSeatsUp : "",
+			carWeigth: getCarData?.getCar ? getCarData?.getCar?.carWeigth : "",
+			carLoadWeight: getCarData?.getCar ? getCarData?.getCar?.carLoadWeight : "",
+			carTireSize: getCarData?.getCar ? getCarData?.getCar?.carTireSize : "",
+			carWheelBase: getCarData?.getCar ? getCarData?.getCar?.carWheelBase : "",
 			carAutoBrake: getCarData?.getCar ? getCarData?.getCar?.carAutoBrake : false,
 			carCruiseControl: getCarData?.getCar ? getCarData?.getCar?.carCruiseControl : false,
 			carESC: getCarData?.getCar ? getCarData?.getCar?.carESC : false,
@@ -141,6 +137,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 			carRightFrontWing: getCarData?.getCar ? getCarData?.getCar?.carRightFrontWing : false,
 			carLeftFrontWing: getCarData?.getCar ? getCarData?.getCar?.carLeftFrontWing : false,
 			carRightBackWing: getCarData?.getCar ? getCarData?.getCar?.carRightBackWing : false,
+			carLeftBackWing: getCarData?.getCar ? getCarData?.getCar?.carLeftBackWing : false,
 			carRoof: getCarData?.getCar ? getCarData?.getCar?.carRoof : false,
 			carRightFrontDoor: getCarData?.getCar ? getCarData?.getCar?.carRightFrontDoor : false,
 			carLeftFrontDoor: getCarData?.getCar ? getCarData?.getCar?.carLeftFrontDoor : false,
@@ -193,7 +190,6 @@ const AddCar = ({ initialValues, ...props }: any) => {
 			});
 
 			const responseImages = response.data.data.imagesUploader;
-
 			setInsertCarData({ ...insertCarData, carImages: responseImages });
 		} catch (err: any) {
 			await sweetMixinErrorAlert(err.message);
@@ -202,21 +198,26 @@ const AddCar = ({ initialValues, ...props }: any) => {
 
 	const doDisabledCheck = () => {
 		if (
-			insertCarData.carTitle === '' ||
-			insertCarData.carPrice === 0 || // @ts-ignore
-			insertCarData.carLocation === '' || // @ts-ignore
+			insertCarData.carTitle === '' || // @ts-ignore
+			insertCarData.carType === '' || // @ts-ignore
+			insertCarData.carModel === '' || // @ts-ignore
+			insertCarData.carBody === '' || // @ts-ignore
+			insertCarData.carGroup === '' || // @ts-ignore
+			insertCarData.carMadeIn === '' ||
+			insertCarData.carPrice === 0 ||
+			insertCarData.carMileage === 0 ||
+			insertCarData.carYear === 0 ||
+			insertCarData.carImages.length === 0 || // @ts-ignore
+			insertCarData.carLocation === '' ||
 			insertCarData.carAddress === '' || // @ts-ignore
-			insertCarData.carMadeIn === '' || // @ts-ignore
-			insertCarData.carBrand === '' || // @ts-ignore
 			insertCarData.carFuelType === '' || // @ts-ignore
 			insertCarData.carDriveType === '' || // @ts-ignore
 			insertCarData.carTransmission === '' || // @ts-ignore
-			insertCarData.carBody === '' || // @ts-ignore
-			insertCarData.carYear === '' || // @ts-ignore
-			insertCarData.carMileage === '' || // @ts-ignore
-			insertCarData.carMpgHw === '' || // @ts-ignore
-			insertCarData.carMpgCity === '' || // @ts-ignore
-			insertCarData.carImages.length === 0
+			insertCarData.carColor === '' ||
+			insertCarData.carFullFuel === '' ||
+			insertCarData.carMpgCity === 0 ||
+			insertCarData.carMpgHw === 0 ||
+			insertCarData.carEngineSize === ''
 		) {
 			return true;
 		}
@@ -232,7 +233,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 
 			await sweetMixinSuccessAlert('This car has been created sucessfully');
 			await router.push({
-				pathname: '/my-page',
+				pathname: '/mypage',
 				query: {
 					category: 'myCars',
 				},
@@ -288,7 +289,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									type="text"
 									className="description-input"
 									placeholder={'Car Title'}
-									value={insertCarData?.carTitle}
+									value={insertCarData.carTitle}
 									onChange={({ target: { value } }) =>
 										setInsertCarData({ ...insertCarData, carTitle: value })
 									}
@@ -300,7 +301,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									type="text"
 									className="description-input"
 									placeholder={'Model'}
-									value={insertCarData?.carModel}
+									value={insertCarData.carModel}
 									onChange={({ target: { value } }) =>
 										setInsertCarData({ ...insertCarData, carModel: value })
 									}
@@ -314,12 +315,10 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Year'}
-										value={insertCarData?.carYear}
+										value={insertCarData.carYear}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carYear: parseInt(value) })
 										}
-										min={1886}
-										max={new Date().getFullYear()}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
@@ -328,12 +327,10 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Mileage'}
-										value={insertCarData?.carMileage}
+										value={insertCarData.carMileage}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carMileage: parseInt(value) })
 										}
-										min={0}
-										max={1000000}
 									/>
 								</Stack>
 								<Stack className="price-year-after-price">
@@ -342,12 +339,10 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Price'}
-										value={insertCarData?.carPrice}
+										value={insertCarData.carPrice}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carPrice: parseInt(value) })
 										}
-										min={500}
-										max={1000000000}
 									/>
 								</Stack>
 							</Stack>
@@ -357,7 +352,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<select
 										className={'select-description'}
 										defaultValue={insertCarData?.carType || 'select'}
-										value={insertCarData?.carType || 'select'}
+										value={insertCarData.carType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carType: value })
@@ -367,8 +362,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carType?.length > 0 &&
-												carType?.map((type: any) => (
+											{carType.length > 0 &&
+												carType.map((type: any) => (
 													<option value={`${type}`} key={type}>
 														{type}
 													</option>
@@ -380,7 +375,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Made In</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carMadeIn || 'select'}
+										defaultValue={insertCarData.carMadeIn || 'select'}
 										value={insertCarData?.carMadeIn || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
@@ -391,8 +386,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carMadeIn?.length > 0 &&
-												carMadeIn?.map((madeIn: any) => (
+											{carMadeIn.length > 0 &&
+												carMadeIn.map((madeIn: any) => (
 													<option value={`${madeIn}`} key={madeIn}>
 														{madeIn}
 													</option>
@@ -404,8 +399,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Brand</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carBrand || 'select'}
-										value={insertCarData?.carBrand || 'select'}
+										defaultValue={insertCarData.carBrand || 'select'}
+										value={insertCarData.carBrand || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carBrand: value })
@@ -415,7 +410,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carBrand?.length > 0 &&
+											{carBrand.length > 0 &&
 												carBrand.map((location: any) => (
 													<option value={`${location}`} key={location}>
 														{location}
@@ -431,8 +426,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Group</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carGroup || 'select'}
-										value={insertCarData?.carGroup || 'select'}
+										defaultValue={insertCarData.carGroup || 'select'}
+										value={insertCarData.carGroup || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carGroup: value })
@@ -443,7 +438,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 												Select
 											</option>
 											{carGroup.length > 0 &&
-												carGroup?.map((group: any) => (
+												carGroup.map((group: any) => (
 													<option value={`${group}`} key={group}>
 														{group}
 													</option>
@@ -455,8 +450,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Body</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carBody || 'select'}
-										value={insertCarData?.carBody || 'select'}
+										defaultValue={insertCarData.carBody || 'select'}
+										value={insertCarData.carBody || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carBody: value })
@@ -466,8 +461,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carBody?.length > 0 &&
-												carBody?.map((body: any) => (
+											{carBody.length > 0 &&
+												carBody.map((body: any) => (
 													<option value={`${body}`} key={body}>
 														{body}
 													</option>
@@ -479,8 +474,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Fuel</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carFuelType || 'select'}
-										value={insertCarData?.carFuelType || 'select'}
+										defaultValue={insertCarData.carFuelType || 'select'}
+										value={insertCarData.carFuelType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carFuelType: value })
@@ -490,8 +485,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carFuelType?.length > 0 &&
-												carFuelType?.map((fuel: any) => (
+											{carFuelType.length > 0 &&
+												carFuelType.map((fuel: any) => (
 													<option value={`${fuel}`} key={fuel}>
 														{fuel}
 													</option>
@@ -506,8 +501,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Color</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carColor || 'select'}
-										value={insertCarData?.carColor || 'select'}
+										defaultValue={insertCarData.carColor || 'select'}
+										value={insertCarData.carColor || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carColor: value })
@@ -517,8 +512,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carColor?.length > 0 &&
-												carColor?.map((color: any) => (
+											{carColor.length > 0 &&
+												carColor.map((color: any) => (
 													<option value={`${color}`} key={color}>
 														{color}
 													</option>
@@ -530,8 +525,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Drive Type</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carDriveType || 'select'}
-										value={insertCarData?.carDriveType || 'select'}
+										defaultValue={insertCarData.carDriveType || 'select'}
+										value={insertCarData.carDriveType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carDriveType: value })
@@ -541,8 +536,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carDriveType?.length > 0 &&
-												carDriveType?.map((drive: any) => (
+											{carDriveType.length > 0 &&
+												carDriveType.map((drive: any) => (
 													<option value={`${drive}`} key={drive}>
 														{drive}
 													</option>
@@ -554,8 +549,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Transmission</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carTransmission || 'select'}
-										value={insertCarData?.carTransmission || 'select'}
+										defaultValue={insertCarData.carTransmission || 'select'}
+										value={insertCarData.carTransmission || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carTransmission: value })
@@ -565,8 +560,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carTransmission?.length > 0 &&
-												carTransmission?.map((transmission: any) => (
+											{carTransmission.length > 0 &&
+												carTransmission.map((transmission: any) => (
 													<option value={`${transmission}`} key={transmission}>
 														{transmission}
 													</option>
@@ -581,8 +576,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Barter</Typography>
 									<select
 										className={'select-description'}
-										value={insertCarData?.carBarter ? 'yes' : 'no'}
-										defaultValue={insertCarData?.carBarter ? 'yes' : 'no'}
+										value={insertCarData.carBarter ? 'yes' : 'no'}
+										defaultValue={insertCarData.carBarter ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carBarter: value === 'yes' })
 										}
@@ -598,28 +593,10 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Rent</Typography>
 									<select
 										className={'select-description'}
-										value={insertCarData?.carRent ? 'yes' : 'no'}
-										defaultValue={insertCarData?.carRent ? 'yes' : 'no'}
+										value={insertCarData.carRent ? 'yes' : 'no'}
+										defaultValue={insertCarData.carRent ? 'yes' : 'no'}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carRent: value === 'yes' })
-										}
-									>
-										<option disabled={true} selected={true}>
-											Select
-										</option>
-										<option value={'yes'}>Yes</option>
-										<option value={'no'}>No</option>
-									</select>
-								</Stack>
-
-								<Stack className="price-year-after-price">
-									<Typography className="title">Tuning</Typography>
-									<select
-										className={'select-description'}
-										value={insertCarData?.carTuning ? 'yes' : 'no'}
-										defaultValue={insertCarData?.carTuning ? 'yes' : 'no'}
-										onChange={({ target: { value } }) =>
-											setInsertCarData({ ...insertCarData, carTuning: value === 'yes' })
 										}
 									>
 										<option disabled={true} selected={true}>
@@ -635,8 +612,8 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<Typography className="title">Location</Typography>
 									<select
 										className={'select-description'}
-										defaultValue={insertCarData?.carLocation || 'select'}
-										value={insertCarData?.carLocation || 'select'}
+										defaultValue={insertCarData.carLocation || 'select'}
+										value={insertCarData.carLocation || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
 											setInsertCarData({ ...insertCarData, carLocation: value })
@@ -646,60 +623,10 @@ const AddCar = ({ initialValues, ...props }: any) => {
 											<option selected={true} disabled={true} value={'select'}>
 												Select
 											</option>
-											{carLocation?.length > 0 &&
-												carLocation?.map((location: any) => (
+											{carLocation.length > 0 &&
+												carLocation.map((location: any) => (
 													<option value={`${location}`} key={location}>
 														{location}
-													</option>
-												))}
-										</>
-									</select>
-								</Stack>
-
-								<Stack className="price-year-after-price">
-									<Typography className="title">Sort</Typography>
-									<select
-										className={'select-description'}
-										defaultValue={insertCarData?.carSort || 'select'}
-										value={insertCarData?.carSort || 'select'}
-										onChange={({ target: { value } }) =>
-											// @ts-ignore
-											setInsertCarData({ ...insertCarData, carSort: value })
-										}
-									>
-										<>
-											<option selected={true} disabled={true} value={'select'}>
-												Select
-											</option>
-											{carSort?.length > 0 &&
-												carSort?.map((sort: any) => (
-													<option value={`${sort}`} key={sort}>
-														{sort}
-													</option>
-												))}
-										</>
-									</select>
-								</Stack>
-
-								<Stack className="price-year-after-price">
-									<Typography className="title">Tuning Type</Typography>
-									<select
-										className={'select-description'}
-										defaultValue={insertCarData?.carTuningType || 'select'}
-										value={insertCarData?.carTuningType || 'select'}
-										onChange={({ target: { value } }) =>
-											// @ts-ignore
-											setInsertCarData({ ...insertCarData, carTuningType: value })
-										}
-									>
-										<>
-											<option selected={true} disabled={true} value={'select'}>
-												Select
-											</option>
-											{carTuningType?.length > 0 &&
-												carTuningType?.map((tuningType: any) => (
-													<option value={`${tuningType}`} key={tuningType}>
-														{tuningType}
 													</option>
 												))}
 										</>
@@ -712,7 +639,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Address'}
-										value={insertCarData?.carAddress}
+										value={insertCarData.carAddress}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carAddress: value })
 										}
@@ -725,7 +652,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									name=""
 									id=""
 									className="description-text"
-									value={insertCarData?.carDesc}
+									value={insertCarData.carDesc}
 									onChange={({ target: { value } }) =>
 										setInsertCarData({ ...insertCarData, carDesc: value })
 									}
@@ -739,7 +666,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Engine Size'}
-										value={insertCarData?.carEngineSize}
+										value={insertCarData.carEngineSize}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carEngineSize: value })
 										}
@@ -751,7 +678,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Full Fuel'}
-										value={insertCarData?.carFullFuel}
+										value={insertCarData.carFullFuel}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carFullFuel: value })
 
@@ -764,7 +691,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Mpg City'}
-										value={insertCarData?.carMpgCity}
+										value={insertCarData.carMpgCity}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carMpgCity: parseInt(value) })
 										}
@@ -776,7 +703,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Mpg Hw'}
-										value={insertCarData?.carMpgHw}
+										value={insertCarData.carMpgHw}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carMpgHw: parseInt(value) })
 										}
@@ -790,7 +717,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Doors'}
-										value={insertCarData?.carDoor}
+										value={insertCarData.carDoor}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carDoor: value })
 										}
@@ -802,7 +729,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Cylinders'}
-										value={insertCarData?.carCylinders}
+										value={insertCarData.carCylinders}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carCylinders: value })
 										}
@@ -814,7 +741,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Max Speed'}
-										value={insertCarData?.carMaxSpeed}
+										value={insertCarData.carMaxSpeed}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carMaxSpeed: value })
 										}
@@ -826,7 +753,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Hundred Speed'}
-										value={insertCarData?.carHundredSpeed}
+										value={insertCarData.carHundredSpeed}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carHundredSpeed: value })
 										}
@@ -841,7 +768,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Horse Power'}
-										value={insertCarData?.carHorsePower}
+										value={insertCarData.carHorsePower}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carHorsePower: value })
 										}
@@ -853,7 +780,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Torque'}
-										value={insertCarData?.carTorque}
+										value={insertCarData.carTorque}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carTorque: value })
 										}
@@ -865,7 +792,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Wheel Base'}
-										value={insertCarData?.carWheelBase}
+										value={insertCarData.carWheelBase}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carWheelBase: value })
 										}
@@ -877,7 +804,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Tire Size'}
-										value={insertCarData?.carTireSize}
+										value={insertCarData.carTireSize}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carTireSize: value })
 										}
@@ -892,7 +819,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Length'}
-										value={insertCarData?.carLength}
+										value={insertCarData.carLength}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carLength: value })
 										}
@@ -904,7 +831,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Width'}
-										value={insertCarData?.carWidth}
+										value={insertCarData.carWidth}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carWidth: value })
 										}
@@ -916,7 +843,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Height'}
-										value={insertCarData?.carHeigth}
+										value={insertCarData.carHeigth}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carHeigth: value })
 										}
@@ -928,7 +855,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Weigth'}
-										value={insertCarData?.carWeigth}
+										value={insertCarData.carWeigth}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carWeigth: value })
 										}
@@ -942,7 +869,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Load Weight'}
-										value={insertCarData?.carLoadWeight}
+										value={insertCarData.carLoadWeight}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carLoadWeight: value })
 										}
@@ -954,7 +881,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="text"
 										className="description-input"
 										placeholder={'Seats Up'}
-										value={insertCarData?.carSeatsUp}
+										value={insertCarData.carSeatsUp}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carSeatsUp: value })
 										}
@@ -966,7 +893,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Crushes'}
-										value={insertCarData?.carCrush}
+										value={insertCarData.carCrush}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carCrush: parseInt(value) })
 										}
@@ -978,7 +905,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 										type="number"
 										className="description-input"
 										placeholder={'Repairs'}
-										value={insertCarData?.carRepair}
+										value={insertCarData.carRepair}
 										onChange={({ target: { value } }) =>
 											setInsertCarData({ ...insertCarData, carRepair: parseInt(value) })
 										}
@@ -992,7 +919,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carAutoBrake}
+										checked={!!insertCarData.carAutoBrake}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carAutoBrake: checked })
 										}
@@ -1003,7 +930,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carCruiseControl}
+										checked={!!insertCarData.carCruiseControl}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carCruiseControl: checked })
 										}
@@ -1014,7 +941,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carESC}
+										checked={!!insertCarData.carESC}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carESC: checked })
 										}
@@ -1025,7 +952,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carAutonomuosDrive}
+										checked={!!insertCarData.carAutonomuosDrive}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carAutonomuosDrive: checked })
 										}
@@ -1037,7 +964,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carExteriorLight}
+										checked={!!insertCarData.carExteriorLight}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carExteriorLight: checked })
 										}
@@ -1049,7 +976,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carPanoramicSunroof}
+										checked={!!insertCarData.carPanoramicSunroof}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carPanoramicSunroof: checked })
 										}
@@ -1062,7 +989,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carHeatedSeats}
+										checked={!!insertCarData.carHeatedSeats}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carHeatedSeats: checked })
 										}
@@ -1073,7 +1000,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carCooledSeats}
+										checked={!!insertCarData.carCooledSeats}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carCooledSeats: checked })
 										}
@@ -1084,7 +1011,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carTouchscreenDisplay}
+										checked={!!insertCarData.carTouchscreenDisplay}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carTouchscreenDisplay: checked })
 										}
@@ -1095,7 +1022,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carAutoHeadLight}
+										checked={!!insertCarData.carAutoHeadLight}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carAutoHeadLight: checked })
 										}
@@ -1107,7 +1034,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carStarStop}
+										checked={!!insertCarData.carStarStop}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carStarStop: checked })
 										}
@@ -1119,7 +1046,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carNoiseCancellation}
+										checked={!!insertCarData.carNoiseCancellation}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carNoiseCancellation: checked })
 										}
@@ -1132,7 +1059,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRemoteKeyless}
+										checked={!!insertCarData.carRemoteKeyless}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRemoteKeyless: checked })
 										}
@@ -1143,7 +1070,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carLaneDW}
+										checked={!!insertCarData.carLaneDW}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carLaneDW: checked })
 										}
@@ -1154,7 +1081,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carBlindSpotMonitoring}
+										checked={!!insertCarData.carBlindSpotMonitoring}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carBlindSpotMonitoring: checked })
 										}
@@ -1165,7 +1092,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRearCrossTrafficAlert}
+										checked={!!insertCarData.carRearCrossTrafficAlert}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRearCrossTrafficAlert: checked })
 										}
@@ -1177,7 +1104,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carApplePlay}
+										checked={!!insertCarData.carApplePlay}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carApplePlay: checked })
 										}
@@ -1189,7 +1116,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carAndroidAuto}
+										checked={!!insertCarData.carAndroidAuto}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carAndroidAuto: checked })
 										}
@@ -1202,7 +1129,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carVoiceControl}
+										checked={!!insertCarData.carVoiceControl}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carVoiceControl: checked })
 										}
@@ -1213,7 +1140,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carBluetoothConnectivity}
+										checked={!!insertCarData.carBluetoothConnectivity}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carBluetoothConnectivity: checked })
 										}
@@ -1224,7 +1151,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carWirelessCharging}
+										checked={!!insertCarData.carWirelessCharging}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carWirelessCharging: checked })
 										}
@@ -1235,7 +1162,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carParkingAssist}
+										checked={!!insertCarData.carParkingAssist}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carParkingAssist: checked })
 										}
@@ -1247,7 +1174,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carSurroundViewCamera}
+										checked={!!insertCarData.carSurroundViewCamera}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carSurroundViewCamera: checked })
 										}
@@ -1259,7 +1186,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carFrontSensors}
+										checked={!!insertCarData.carFrontSensors}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carFrontSensors: checked })
 										}
@@ -1272,7 +1199,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRearSensors}
+										checked={!!insertCarData.carRearSensors}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRearSensors: checked })
 										}
@@ -1283,7 +1210,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carFrontRecordCamera}
+										checked={!!insertCarData.carFrontRecordCamera}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carFrontRecordCamera: checked })
 										}
@@ -1294,7 +1221,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRearRecordCamera}
+										checked={!!insertCarData.carRearRecordCamera}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRearRecordCamera: checked })
 										}
@@ -1305,7 +1232,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carHeadsUpDisplay}
+										checked={!!insertCarData.carHeadsUpDisplay}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carHeadsUpDisplay: checked })
 										}
@@ -1317,7 +1244,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carClimateControl}
+										checked={!!insertCarData.carClimateControl}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carClimateControl: checked })
 										}
@@ -1329,7 +1256,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carAdjustableSeats}
+										checked={!!insertCarData.carAdjustableSeats}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carAdjustableSeats: checked })
 										}
@@ -1342,7 +1269,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carMemorySeats}
+										checked={!!insertCarData.carMemorySeats}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carMemorySeats: checked })
 										}
@@ -1353,7 +1280,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carPowerTrain}
+										checked={!!insertCarData.carPowerTrain}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carPowerTrain: checked })
 										}
@@ -1364,7 +1291,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRegenerativeBraking}
+										checked={!!insertCarData.carRegenerativeBraking}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRegenerativeBraking: checked })
 										}
@@ -1375,7 +1302,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carTractionControl}
+										checked={!!insertCarData.carTractionControl}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carTractionControl: checked })
 										}
@@ -1387,7 +1314,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carStabilityControl}
+										checked={!!insertCarData.carStabilityControl}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carStabilityControl: checked })
 										}
@@ -1399,7 +1326,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carHillStartAssist}
+										checked={!!insertCarData.carHillStartAssist}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carHillStartAssist: checked })
 										}
@@ -1412,7 +1339,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carTirePressureSystem}
+										checked={!!insertCarData.carTirePressureSystem}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carTirePressureSystem: checked })
 										}
@@ -1423,7 +1350,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carPushButton}
+										checked={!!insertCarData.carPushButton}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carPushButton: checked })
 										}
@@ -1437,7 +1364,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carFrontBumper}
+										checked={!!insertCarData.carFrontBumper}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carFrontBumper: checked })
 										}
@@ -1448,7 +1375,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carBackBumper}
+										checked={!!insertCarData.carBackBumper}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carBackBumper: checked })
 										}
@@ -1459,7 +1386,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carBonnet}
+										checked={!!insertCarData.carBonnet}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carBonnet: checked })
 										}
@@ -1470,7 +1397,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carTailgate}
+										checked={!!insertCarData.carTailgate}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carTailgate: checked })
 										}
@@ -1482,7 +1409,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRoof}
+										checked={!!insertCarData.carRoof}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRoof: checked })
 										}
@@ -1495,7 +1422,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRightFrontWing}
+										checked={!!insertCarData.carRightFrontWing}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRightFrontWing: checked })
 										}
@@ -1506,7 +1433,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carLeftFrontWing}
+										checked={!!insertCarData.carLeftFrontWing}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carLeftFrontWing: checked })
 										}
@@ -1517,7 +1444,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRightBackWing}
+										checked={!!insertCarData.carRightBackWing}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRightBackWing: checked })
 										}
@@ -1528,7 +1455,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carLeftBackWing}
+										checked={!!insertCarData.carLeftBackWing}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carLeftBackWing: checked })
 										}
@@ -1541,7 +1468,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRightFrontDoor}
+										checked={!!insertCarData.carRightFrontDoor}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRightFrontDoor: checked })
 										}
@@ -1552,7 +1479,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carLeftFrontDoor}
+										checked={!!insertCarData.carLeftFrontDoor}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carLeftFrontDoor: checked })
 										}
@@ -1563,7 +1490,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carRightBackDoor}
+										checked={!!insertCarData.carRightBackDoor}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carRightBackDoor: checked })
 										}
@@ -1574,7 +1501,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 									<input
 										type="checkbox"
 										className="description-input"
-										checked={!!insertCarData?.carLeftBackDoor}
+										checked={!!insertCarData.carLeftBackDoor}
 										onChange={({ target: { checked } }) =>
 											setInsertCarData({ ...insertCarData, carLeftBackDoor: checked })
 										}
@@ -1664,7 +1591,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 								</Button>
 							</Stack>
 							<Stack className="gallery-box">
-								{insertCarData?.carImages?.map((image: string) => {
+								{insertCarData.carImages.map((image: string) => {
 									const imagePath: string = `${REACT_APP_API_URL}/${image}`;
 									return (
 										<Stack className="image-box">
@@ -1784,22 +1711,27 @@ const AddCar = ({ initialValues, ...props }: any) => {
 
 AddCar.defaultProps = {
 	initialValues: {
-		carTitle: '',
-		carPrice: 0,
 		carType: '',
-		carLocation: '',
-		carAddress: '',
-		carBarter: false,
-		carRent: false,
-		carMileage: 0,
-		carYear: 0,
+		carTitle: '',
+		carModel: '',
+		carBody: '',
+		carGroup: '',
 		carMadeIn: '',
 		carBrand: '',
-		carTransmission: '',
-		carDriveType: '',
-		carFuelType: '',
-		carDesc: '',
+		carPrice: 0,
+		carMileage: 0,
+		carYear: 0,
 		carImages: [],
+		carLocation: '',
+		carAddress: '',
+		carFuelType: '',
+		carDriveType: '',
+		carTransmission: '',
+		carColor: '',
+		carFullFuel: '',
+		carMpgCity: 0,
+		carMpgHw: 0,
+		carEngineSize: '',
 	},
 };
 

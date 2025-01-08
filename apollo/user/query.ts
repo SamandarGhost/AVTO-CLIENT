@@ -743,7 +743,6 @@ query GetCar($input: String!) {
         carTitle
         carBody
         carStatus
-        carSort
         carGroup
         carMadeIn
         carBrand
@@ -757,8 +756,6 @@ query GetCar($input: String!) {
         carBarter
         carRent
         carYear
-        carTuning
-        carTuningType
         carMileage
         carFuelType
         carDriveType
@@ -1019,7 +1016,6 @@ query GetCars($input: CarsInquiry!) {
             carTitle
             carBody
             carStatus
-            carSort
             carGroup
             carMadeIn
             carBrand
@@ -1033,8 +1029,6 @@ query GetCars($input: CarsInquiry!) {
             carBarter
             carRent
             carYear
-            carTuning
-            carTuningType
             carMileage
             carFuelType
             carDriveType
@@ -1303,7 +1297,6 @@ query GetAgentDealerCars($input: AgentDealerCarsInquiry!) {
             carTitle
             carBody
             carStatus
-            carSort
             carGroup
             carMadeIn
             carBrand
@@ -1317,8 +1310,6 @@ query GetAgentDealerCars($input: AgentDealerCarsInquiry!) {
             carBarter
             carRent
             carYear
-            carTuning
-            carTuningType
             carMileage
             carFuelType
             carDriveType
@@ -1559,7 +1550,6 @@ query GetLiked($input: OrdinaryInquiry!) {
             carTitle
             carBody
             carStatus
-            carSort
             carGroup
             carMadeIn
             carBrand
@@ -1573,8 +1563,6 @@ query GetLiked($input: OrdinaryInquiry!) {
             carBarter
             carRent
             carYear
-            carTuning
-            carTuningType
             carMileage
             carFuelType
             carDriveType
@@ -1781,7 +1769,6 @@ query GetSaved($input: OrdinaryInquiry!) {
             carTitle
             carBody
             carStatus
-            carSort
             carGroup
             carMadeIn
             carBrand
@@ -1795,8 +1782,6 @@ query GetSaved($input: OrdinaryInquiry!) {
             carBarter
             carRent
             carYear
-            carTuning
-            carTuningType
             carMileage
             carFuelType
             carDriveType
@@ -2066,7 +2051,6 @@ query GetVisited($input: OrdinaryInquiry!) {
             carTitle
             carBody
             carStatus
-            carSort
             carGroup
             carMadeIn
             carBrand
@@ -2080,8 +2064,6 @@ query GetVisited($input: OrdinaryInquiry!) {
             carBarter
             carRent
             carYear
-            carTuning
-            carTuningType
             carMileage
             carFuelType
             carDriveType

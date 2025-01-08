@@ -1,4 +1,4 @@
-import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarLocation, CarMadeIn, CarSort, CarStatus, CarTransmission, CarTuningType, CarType } from "../../enums/car.enum";
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarLocation, CarMadeIn, CarStatus, CarTransmission, CarType } from "../../enums/car.enum";
 
 export interface CarUpdate {
     _id: string;
@@ -6,7 +6,6 @@ export interface CarUpdate {
     carType?: CarType;
     carTitle?: string;
     carBody?: CarBody;
-    carSort?: CarSort;
     carMadeIn?: CarMadeIn;
     carBrand?: CarBrand;
     carModel?: string;
@@ -19,8 +18,6 @@ export interface CarUpdate {
     carBarter?: boolean;
     carRent?: boolean;
     carYear?: number;
-    carTuning?: boolean;
-    carTuningType?: CarTuningType;
     carMileage?: number;
     carFuelType?: CarFuelType;
     carDriveType?: CarDriveType;

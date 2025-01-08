@@ -21,7 +21,7 @@ import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import { propertySquare } from '../../config';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { CarsInquiry } from '../../types/car/car.input';
-import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarTransmission, CarTuningType, CarType } from '../../enums/car.enum';
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarTransmission, CarType } from '../../enums/car.enum';
 import { group } from 'console';
 
 const MenuProps = {
@@ -45,11 +45,9 @@ const Filter = (props: FilterType) => {
 	const [carLocation, setCarLocation] = useState<CarLocation[]>(Object.values(CarLocation));
 	const [carType, setCarType] = useState<CarType[]>(Object.values(CarType));
 	const [carBody, setCarBody] = useState<CarBody[]>(Object.values(CarBody));
-	const [carSort, setCarSort] = useState<CarSort[]>(Object.values(CarSort));
 	const [carGroup, setCarGroup] = useState<CarGroup[]>(Object.values(CarGroup));
 	const [carMadeIn, setCarMadeIn] = useState<CarMadeIn[]>(Object.values(CarMadeIn));
 	const [carBrand, setCarBrand] = useState<CarBrand[]>(Object.values(CarBrand));
-	const [carTuning, setCarTuning] = useState<CarTuningType[]>(Object.values(CarTuningType));
 	const [carFuel, setCarFuel] = useState<CarFuelType[]>(Object.values(CarFuelType));
 	const [carDrive, setCarDrive] = useState<CarDriveType[]>(Object.values(CarDriveType));
 	const [carTrans, setCarTrans] = useState<CarTransmission[]>(Object.values(CarTransmission));
@@ -105,21 +103,6 @@ const Filter = (props: FilterType) => {
 			})}`, { scroll: false }).then();
 		}
 
-		if (searchFilter?.search?.sortList?.length == 0) {
-			delete searchFilter.search.sortList;
-			router.push(`/cars?input=${JSON.stringify({
-				...searchFilter,
-				search: {
-					...searchFilter.search,
-				},
-			})}`, `/cars?input=${JSON.stringify({
-				...searchFilter,
-				search: {
-					...searchFilter.search,
-				},
-			})}`, { scroll: false }).then();
-		}
-
 		if (searchFilter?.search?.groupList?.length == 0) {
 			delete searchFilter.search.groupList;
 			router.push(`/cars?input=${JSON.stringify({
@@ -152,21 +135,6 @@ const Filter = (props: FilterType) => {
 
 		if (searchFilter?.search?.brandList?.length == 0) {
 			delete searchFilter.search.brandList;
-			router.push(`/cars?input=${JSON.stringify({
-				...searchFilter,
-				search: {
-					...searchFilter.search,
-				},
-			})}`, `/cars?input=${JSON.stringify({
-				...searchFilter,
-				search: {
-					...searchFilter.search,
-				},
-			})}`, { scroll: false }).then();
-		}
-
-		if (searchFilter?.search?.tuningTypeList?.length == 0) {
-			delete searchFilter.search.tuningTypeList;
 			router.push(`/cars?input=${JSON.stringify({
 				...searchFilter,
 				search: {
@@ -262,9 +230,8 @@ const Filter = (props: FilterType) => {
 	const carLocationSelectHandler = useCallback(
 		async (e: any) => {
 			try {
-				const isChecked = e.target.checked;
 				const value = e.target.value;
-				if (isChecked) {
+				if (value) {
 					await router.push(
 						`/cars?input=${JSON.stringify({
 							...searchFilter,
@@ -311,9 +278,8 @@ const Filter = (props: FilterType) => {
 	const carTypeSelectHandler = useCallback(
 		async (e: any) => {
 			try {
-				const isChecked = e.target.checked;
 				const value = e.target.value;
-				if (isChecked) {
+				if (value) {
 					await router.push(
 						`/cars?input=${JSON.stringify({
 							...searchFilter,
@@ -360,9 +326,8 @@ const Filter = (props: FilterType) => {
 	const carBodySelectHandler = useCallback(
 		async (e: any) => {
 			try {
-				const isChecked = e.target.checked;
 				const value = e.target.value;
-				if (isChecked) {
+				if (value) {
 					await router.push(
 						`/cars?input=${JSON.stringify({
 							...searchFilter,
@@ -406,61 +371,11 @@ const Filter = (props: FilterType) => {
 		[searchFilter],
 	);
 
-	const carSortSelectHandler = useCallback(
-		async (e: any) => {
-			try {
-				const isChecked = e.target.checked;
-				const value = e.target.value;
-				if (isChecked) {
-					await router.push(
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: { ...searchFilter.search, sortList: [...(searchFilter?.search?.sortList || []), value] },
-						})}`,
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: { ...searchFilter.search, sortList: [...(searchFilter?.search?.sortList || []), value] },
-						})}`,
-						{ scroll: false },
-					);
-				} else if (searchFilter?.search?.sortList?.includes(value)) {
-					await router.push(
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-								sortList: searchFilter?.search?.sortList?.filter((item: string) => item !== value),
-							},
-						})}`,
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-								sortList: searchFilter?.search?.sortList?.filter((item: string) => item !== value),
-							},
-						})}`,
-						{ scroll: false },
-					);
-				}
-
-				if (searchFilter?.search?.sortList?.length == 0) {
-					alert('error');
-				}
-
-				console.log('propertyTypeSelectHandler:', e.target.value);
-			} catch (err: any) {
-				console.log('ERROR, propertyTypeSelectHandler:', err);
-			}
-		},
-		[searchFilter],
-	);
-
 	const carGroupSelectHandler = useCallback(
 		async (e: any) => {
 			try {
-				const isChecked = e.target.checked;
 				const value = e.target.value;
-				if (isChecked) {
+				if (value) {
 					await router.push(
 						`/cars?input=${JSON.stringify({
 							...searchFilter,
@@ -591,55 +506,6 @@ const Filter = (props: FilterType) => {
 				}
 
 				if (searchFilter?.search?.brandList?.length == 0) {
-					alert('error');
-				}
-
-				console.log('propertyTypeSelectHandler:', e.target.value);
-			} catch (err: any) {
-				console.log('ERROR, propertyTypeSelectHandler:', err);
-			}
-		},
-		[searchFilter],
-	);
-
-	const carTuningSelectHandler = useCallback(
-		async (e: any) => {
-			try {
-				const isChecked = e.target.checked;
-				const value = e.target.value;
-				if (isChecked) {
-					await router.push(
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: { ...searchFilter.search, tuningTypeList: [...(searchFilter?.search?.tuningTypeList || []), value] },
-						})}`,
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: { ...searchFilter.search, tuningTypeList: [...(searchFilter?.search?.tuningTypeList || []), value] },
-						})}`,
-						{ scroll: false },
-					);
-				} else if (searchFilter?.search?.tuningTypeList?.includes(value)) {
-					await router.push(
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-								tuningTypeList: searchFilter?.search?.tuningTypeList?.filter((item: string) => item !== value),
-							},
-						})}`,
-						`/cars?input=${JSON.stringify({
-							...searchFilter,
-							search: {
-								...searchFilter.search,
-								tuningTypeList: searchFilter?.search?.tuningTypeList?.filter((item: string) => item !== value),
-							},
-						})}`,
-						{ scroll: false },
-					);
-				}
-
-				if (searchFilter?.search?.tuningTypeList?.length == 0) {
 					alert('error');
 				}
 
@@ -894,7 +760,7 @@ const Filter = (props: FilterType) => {
 
 	const carPriceHandler = useCallback(
 		async (value: number, type: string) => {
-			if (type == 'start') {
+			if (type == 'min') {
 				await router.push(
 					`/cars?input=${JSON.stringify({
 						...searchFilter,
@@ -980,7 +846,7 @@ const Filter = (props: FilterType) => {
 
 	const carMileageHandler = useCallback(
 		async (value: number, type: string) => {
-			if (type == 'start') {
+			if (type == 'min') {
 				await router.push(
 					`/cars?input=${JSON.stringify({
 						...searchFilter,
@@ -1167,31 +1033,6 @@ const Filter = (props: FilterType) => {
 					))}
 				</Stack>
 				<div className={'divider'}></div>
-				<Stack>
-					<FormControl>
-						<InputLabel id="demo-simple-select-label">Recommended</InputLabel>
-						<Select
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={searchFilter?.search?.sortList || []}
-							label="Recommended"
-							multiple
-							onChange={carSortSelectHandler}
-							renderValue={(selected) => selected.join(', ')}
-						>
-							{carSort.map((sort: string) => (
-								<MenuItem
-									value={sort}
-									disabled={searchFilter?.search?.sortList?.includes(sort as CarSort)}
-									key={sort}
-								>
-									{sort}
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
-				</Stack>
-				<div className={'divider'}></div>
 				<Stack className={'find-your-home'} mb={'30px'}>
 					<Stack className="group-input">
 						<FormControl>
@@ -1273,31 +1114,6 @@ const Filter = (props: FilterType) => {
 							);
 						})}
 					</Stack>
-				</Stack>
-				<div className={'divider'}></div>
-				<Stack>
-					<FormControl>
-						<InputLabel id="demo-simple-select-label">Tuning</InputLabel>
-						<Select
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={searchFilter?.search?.tuningTypeList || []}
-							label="Min"
-							multiple
-							onChange={carTuningSelectHandler}
-							renderValue={(selected) => selected.join(', ')}
-						>
-							{carTuning.map((tuning: string) => (
-								<MenuItem
-									value={tuning}
-									disabled={searchFilter?.search?.tuningTypeList?.includes(tuning as CarTuningType)}
-									key={tuning}
-								>
-									{tuning}
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
 				</Stack>
 				<div className={'divider'}></div>
 				<Stack className={'find-your-home'} mb={'30px'}>

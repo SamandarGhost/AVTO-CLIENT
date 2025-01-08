@@ -1,11 +1,10 @@
-import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarSort, CarStatus, CarTransmission, CarTuningType, CarType } from "../../enums/car.enum";
+import { CarBody, CarBrand, CarColor, CarDriveType, CarFuelType, CarGroup, CarLocation, CarMadeIn, CarStatus, CarTransmission, CarType } from "../../enums/car.enum";
 import { Direction } from "../../enums/common.enum";
 
 export interface CarInput {
     carType: CarType;
     carTitle: string;
     carBody: CarBody;
-    carSort: CarSort;
     carGroup: CarGroup;
     carMadeIn: CarMadeIn;
     carBrand: CarBrand;
@@ -19,8 +18,6 @@ export interface CarInput {
     carBarter?: boolean;
     carRent?: boolean;
     carYear: number;
-    carTuning?: boolean;
-    carTuningType?: CarTuningType;
     carMileage: number;
     carFuelType: CarFuelType;
     carDriveType: CarDriveType;
@@ -113,12 +110,10 @@ interface CISearch {
     dealerId?: string;
     typeList?: CarType[];
     bodyList?: CarBody[];
-    sortList?: CarSort[];
     groupList?: CarGroup[];
     madeInList?: CarMadeIn[];
     brandList?: CarBrand[];
     locationList?: CarLocation[];
-    tuningTypeList?: CarTuningType[];
     fuelTypeList?: CarFuelType[];
     driveTypeList?: CarDriveType[];
     transmissionList?: CarTransmission[];
@@ -165,12 +160,10 @@ export interface DealerCarsInquiry {
 interface ALCISearch {
     carStatus?: CarStatus;
     bodyList?: CarBody[];
-    sortList?: CarSort[];
     groupList?: CarGroup[];
     madeInList?: CarMadeIn[];
     brandList?: CarBrand[];
     locationList?: CarLocation[];
-    tuningTypeList?: CarTuningType[];
     fuelTypeList?: CarFuelType[];
     text?: string;
 }
