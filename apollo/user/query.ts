@@ -1286,7 +1286,7 @@ query GetCars($input: CarsInquiry!) {
 // `;
 
 export const GET_ADCARS = gql`
-query GetAgentDealerCars($input: AgentDealerCarsInquiry!) {
+query GetAgentDealerCars($input: ADCarsInquiry!) {
     getAgentDealerCars(input: $input) {
         metaCounter {
             total
@@ -1396,16 +1396,6 @@ query GetAgentDealerCars($input: AgentDealerCarsInquiry!) {
             deletedAt
             createdAt
             updatedAt
-            meSaved {
-                memberId
-                saveRefId
-                mySaved
-            }
-            meLiked {
-                memberId
-                likeRefId
-                myFavorite
-            }
             creatorData {
                 _id
                 type
@@ -1489,16 +1479,6 @@ query GetAgentDealerCars($input: AgentDealerCarsInquiry!) {
                 createdAt
                 updatedAt
                 accessToken
-                meFollowed {
-                    followingId
-                    followerId
-                    myFollowing
-                }
-                meLiked {
-                    memberId
-                    likeRefId
-                    myFavorite
-                }
             }
         }
     }

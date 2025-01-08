@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { CarCard } from './CarCard';
+import { ADCarsInquiry } from '../../types/car/car.input';
+import { Car } from '../../types/car/car';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { T } from '../../types/common';
 import { userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
-import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
-import { GET_ADCARS } from '../../../apollo/user/query';
 import { UPDATE_CAR } from '../../../apollo/user/mutation';
-import { Car } from '../../types/car/car';
-import { AgentCarsInquiry } from '../../types/car/car.input';
+import { GET_ADCARS } from '../../../apollo/user/query';
+import { T } from '../../types/common';
 import { CarStatus } from '../../enums/car.enum';
+import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
+import { CarCard } from './CarCard';
 
 const MyCars: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
-	const [searchFilter, setSearchFilter] = useState<AgentCarsInquiry>(initialInput);
+	const [searchFilter, setSearchFilter] = useState<ADCarsInquiry>(initialInput);
 	const [cars, setCars] = useState<Car[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const user = useReactiveVar(userVar);
@@ -26,19 +26,20 @@ const MyCars: NextPage = ({ initialInput, ...props }: any) => {
 	const [updateCar] = useMutation(UPDATE_CAR);
 
 	const {
-		loading: getCarsLoading,
-		data: getCarsData,
-		error: getCarsError,
-		refetch: getCarsRefetch,
+		loading: getAgentDealerCarsLoading,
+		data: getAgentDealerCarsData,
+		error: getAgentDealerCarsError,
+		refetch: getAgentDealerCarsRefetch,
 	} = useQuery(GET_ADCARS, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setCars(data?.getCars?.list);
-			setTotal(data?.getCars?.metaCounter?.[0]?.total ?? 0);
+			setCars(data?.getAgentDealerCars?.list);
+			setTotal(data?.getAgentDealerCars?.metaCounter?.[0]?.total ?? 0);
+			console.log("data:", data)
 		}
-	});
+	})
 
 	/** HANDLERS **/
 	const paginationHandler = (e: T, value: number) => {
@@ -61,7 +62,7 @@ const MyCars: NextPage = ({ initialInput, ...props }: any) => {
 					},
 				});
 
-				await getCarsRefetch({ input: searchFilter });
+				await getAgentDealerCarsRefetch({ input: searchFilter });
 			}
 		} catch (err: any) {
 			await sweetErrorHandling(err);
@@ -80,7 +81,7 @@ const MyCars: NextPage = ({ initialInput, ...props }: any) => {
 					},
 				});
 
-				await getCarsRefetch({ input: searchFilter });
+				await getAgentDealerCarsRefetch({ input: searchFilter });
 			}
 		} catch (err: any) {
 			await sweetErrorHandling(err);

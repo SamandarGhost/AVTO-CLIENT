@@ -133,28 +133,16 @@ export interface CarsInquiry {
     search: CISearch;
 }
 
-interface ACISearch {
+interface ADCISearch {
     carStatus?: CarStatus;
 }
 
-export interface AgentCarsInquiry {
+export interface ADCarsInquiry {
     page: number;
     limit: number;
     sort?: string;
     direction?: Direction;
-    search: ACISearch;
-}
-
-interface DCISearch {
-    carStatus?: CarStatus;
-}
-
-export interface DealerCarsInquiry {
-    page: number;
-    limit: number;
-    sort?: string;
-    direction?: Direction;
-    search: DCISearch;
+    search: ADCISearch;
 }
 
 interface ALCISearch {

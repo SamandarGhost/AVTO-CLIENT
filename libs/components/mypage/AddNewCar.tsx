@@ -255,7 +255,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 
 			await sweetMixinSuccessAlert('This car has been updated sucessfully');
 			await router.push({
-				pathname: '/my-page',
+				pathname: '/mypage',
 				query: {
 					category: 'myCars',
 				},
