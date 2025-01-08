@@ -1722,16 +1722,6 @@ query GetLiked($input: OrdinaryInquiry!) {
                 createdAt
                 updatedAt
                 accessToken
-                meFollowed {
-                    followingId
-                    followerId
-                    myFollowing
-                }
-                meLiked {
-                    memberId
-                    likeRefId
-                    myFavorite
-                }
             }
         }
     }
@@ -1941,16 +1931,6 @@ query GetSaved($input: OrdinaryInquiry!) {
                 createdAt
                 updatedAt
                 accessToken
-                meFollowed {
-                    followingId
-                    followerId
-                    myFollowing
-                }
-                meLiked {
-                    memberId
-                    likeRefId
-                    myFavorite
-                }
             }
         }
     }

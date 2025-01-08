@@ -31,7 +31,7 @@ const RecentlyVisited: NextPage = () => {
 		},
 		onCompleted: (data: T) => {
 			setRecentlyVisited(data?.getVisited?.list);
-			setTotal(data?.getVisited?.metaCounter?.[0].total || 0);
+			setTotal(data?.getVisited?.metaCounter?.[0]?.total ?? 0);
 		},
 	});
 

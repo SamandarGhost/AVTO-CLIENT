@@ -135,9 +135,9 @@ const FindingCarCard = (props: FinndingCarCardProps) => {
 							<Typography className="view-cnt">{car?.carViews}</Typography>
 							<IconButton color={'default'} onClick={() => likeCarHandler(user, car?._id)}>
 								{car?.meLiked && car?.meLiked[0]?.myFavorite ? (
-									<FavoriteIcon style={{ color: 'red' }} />
+									<FavoriteIcon color="primary" />
 								) : (
-									<FavoriteIcon style={{ color: 'white' }} />
+									<FavoriteIcon style={{ color: 'red' }} />
 								)}
 							</IconButton>
 							<Typography className="view-cnt">{car?.carLikes}</Typography>

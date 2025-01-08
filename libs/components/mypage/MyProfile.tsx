@@ -980,10 +980,10 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 MyProfile.defaultProps = {
 	initialValues: {
 		_id: '',
-		memberImage: '',
-		memberNick: '',
-		memberPhone: '',
-		memberAddress: '',
+		image: '',
+		titleNick: '',
+		phone: '',
+		address: '',
 	},
 };
 

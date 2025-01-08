@@ -21,17 +21,17 @@ const MyLiked: NextPage = () => {
 	const [likeTargetCar] = useMutation(LIKE_CAR);
 
 	const {
-		loading: getFavoritesLoading,
-		data: getFavoritesData,
-		error: getFavoritesError,
-		refetch: getFavoritesRefetch,
+		loading: getLikedLoading,
+		data: getLikedData,
+		error: getLikedError,
+		refetch: getLikedRefetch,
 	} = useQuery(GET_LIKED, {
 		fetchPolicy: 'network-only',
 		variables: { input: searchFavorites },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setMyLiked(data?.getFavorites?.list);
-			setTotal(data?.getFavorites?.metaCounter?.[0]?.total ?? 0);
+			setMyLiked(data?.getLiked?.list);
+			setTotal(data?.getLiked?.metaCounter?.[0]?.total ?? 0);
 		},
 	});
 
@@ -46,7 +46,7 @@ const MyLiked: NextPage = () => {
 				variables: { input: id },
 			});
 
-			getFavoritesRefetch({ input: searchFavorites });
+			getLikedRefetch({ input: searchFavorites });
 		} catch (err: any) {
 			sweetMixinErrorAlert(err.message).then();
 		}
