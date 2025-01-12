@@ -1,8 +1,8 @@
-import { makeVar } from '@apollo/client';
+import { makeVar } from "@apollo/client";
+import { CustomJwtPayload } from "../libs/types/customJwtPayload";
 
-import { CustomJwtPayload } from '../libs/types/customJwtPayload';
+
 export const themeVar = makeVar({});
-
 export const userVar = makeVar<CustomJwtPayload>({
 	_id: '',
 	type: '',
@@ -12,8 +12,7 @@ export const userVar = makeVar<CustomJwtPayload>({
 	password: '',
 	fullName: '',
 	image: '',
-	images: [],
-	location: '',
+	viewImage: '',
 	address: '',
 	shortDesc: '',
 	longDesc: '',
@@ -31,17 +30,16 @@ export const userVar = makeVar<CustomJwtPayload>({
 	followings: 0,
 	likes: 0,
 	views: 0,
+	comments: 0,
 	warnings: 0,
 	articles: 0,
 	blocks: 0,
-	comments: 0,
 	memberCars: 0,
 	usedCars: 0,
 	newCars: 0,
 	rank: 0,
 	points: 0,
 	sellerProducts: 0,
-	dealerBrand: '',
 	dealerFinancing: false,
 	dealerCarService: false,
 	dealerTradeIn: false,
@@ -53,8 +51,6 @@ export const userVar = makeVar<CustomJwtPayload>({
 	dealerCarWash: false,
 	dealerCarTestDrive: false,
 	dealerCarDelivery: false,
-	dealerPlusService: '',
-	carServiceType: '',
 	carOilChange: false,
 	carAlignment: false,
 	carTireChange: false,
@@ -82,8 +78,8 @@ export const userVar = makeVar<CustomJwtPayload>({
 	closeSunday: '',
 	openSaturday: '',
 	closeSaturday: '',
-	publicHolidays: false
+	publicHolidays: false,
 });
 
 // @ts-ignore
-export const socketVar = makeVar<WebSocket>();
+export const socketVar = makeVar<WebSocket>()

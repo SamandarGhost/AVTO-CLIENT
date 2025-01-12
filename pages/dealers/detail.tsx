@@ -77,7 +77,7 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
             setDealer(data?.getMember);
-            setSlideImage(data?.getMember?.images[0]);
+            setSlideImage(data?.getMember?.viewImage);
         },
     });
 
@@ -418,14 +418,14 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
                             </Stack>
                             <Stack className={'images'}>
                                 <Stack className={'sub-images'}>
-                                    {dealer?.images?.slice(0, 4).map((subImg: string) => {
+                                    {/* {dealer?.viewImage?.slice(0, 4).map((subImg: string) => {
                                         const imagePath: string = `${REACT_APP_API_URL}/${subImg}`;
                                         return (
                                             <Stack className={'sub-img-box'} onClick={() => changeImageHandler(subImg)} key={subImg}>
                                                 <img src={''} alt={'sub-image'} />
                                             </Stack>
                                         );
-                                    })}
+                                    })} */}
                                 </Stack>
                                 <Stack className={'main-image'}>
                                     <img
@@ -517,14 +517,6 @@ const DealerDetail: NextPage = ({ initialComment, ...props }: any) => {
                                                         <img src="/img/icons/delb.svg" alt="" />
                                                         <Typography className={'data'}>Delivery</Typography>
                                                     </Box>
-                                                )}
-                                                {dealer?.dealerPlusService !== '' ? (
-                                                    <Box component={'div'} className={'info'}>
-                                                        <img src="/img/icons/plus.svg" alt="" />
-                                                        <Typography className={'data'}>Plus Service</Typography>
-                                                    </Box>
-                                                ) : (
-                                                    null
                                                 )}
                                             </Stack>
                                         </Stack>

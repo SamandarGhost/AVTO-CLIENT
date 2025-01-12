@@ -18,8 +18,7 @@ query GetAgents($input: ADSInquiry!) {
             titleNick
             fullName
             image
-            images
-            location
+            viewImage
             address
             shortDesc
             longDesc
@@ -47,7 +46,6 @@ query GetAgents($input: ADSInquiry!) {
             rank
             points
             sellerProducts
-            dealerBrand
             dealerFinancing
             dealerCarService
             dealerTradeIn
@@ -59,8 +57,6 @@ query GetAgents($input: ADSInquiry!) {
             dealerCarWash
             dealerCarTestDrive
             dealerCarDelivery
-            dealerPlusService
-            carServiceType
             carOilChange
             carAlignment
             carTireChange
@@ -111,9 +107,7 @@ query GetDealers($input: ADSInquiry!) {
             titleNick
             fullName
             image
-            images
-            location
-            address
+            viewImage
             shortDesc
             longDesc
             phone
@@ -140,7 +134,6 @@ query GetDealers($input: ADSInquiry!) {
             rank
             points
             sellerProducts
-            dealerBrand
             dealerFinancing
             dealerCarService
             dealerTradeIn
@@ -152,8 +145,6 @@ query GetDealers($input: ADSInquiry!) {
             dealerCarWash
             dealerCarTestDrive
             dealerCarDelivery
-            dealerPlusService
-            carServiceType
             carOilChange
             carAlignment
             carTireChange
@@ -214,8 +205,7 @@ query GetServices($input: ADSInquiry!) {
             titleNick
             fullName
             image
-            images
-            location
+            viewImage
             address
             shortDesc
             longDesc
@@ -243,7 +233,6 @@ query GetServices($input: ADSInquiry!) {
             rank
             points
             sellerProducts
-            dealerBrand
             dealerFinancing
             dealerCarService
             dealerTradeIn
@@ -255,8 +244,6 @@ query GetServices($input: ADSInquiry!) {
             dealerCarWash
             dealerCarTestDrive
             dealerCarDelivery
-            dealerPlusService
-            carServiceType
             carOilChange
             carAlignment
             carTireChange
@@ -351,8 +338,8 @@ query GetMember($input: String!) {
         titleNick
         fullName
         image
-        images
-        location
+        viewImage
+        
         address
         shortDesc
         longDesc
@@ -380,7 +367,6 @@ query GetMember($input: String!) {
         rank
         points
         sellerProducts
-        dealerBrand
         dealerFinancing
         dealerCarService
         dealerTradeIn
@@ -392,8 +378,6 @@ query GetMember($input: String!) {
         dealerCarWash
         dealerCarTestDrive
         dealerCarDelivery
-        dealerPlusService
-        carServiceType
         carOilChange
         carAlignment
         carTireChange
@@ -488,7 +472,7 @@ query GetProduct($input: String!) {
         productTitle
         productPrice
         productQuantity
-        productImages
+        product
         productShortDesc
         productDesc
         productViews
@@ -513,8 +497,7 @@ query GetProduct($input: String!) {
             titleNick
             fullName
             image
-            images
-            location
+            viewImage
             address
             shortDesc
             longDesc
@@ -542,7 +525,6 @@ query GetProduct($input: String!) {
             rank
             points
             sellerProducts
-            dealerBrand
             dealerFinancing
             dealerCarService
             dealerTradeIn
@@ -554,8 +536,6 @@ query GetProduct($input: String!) {
             dealerCarWash
             dealerCarTestDrive
             dealerCarDelivery
-            dealerPlusService
-            carServiceType
             carOilChange
             carAlignment
             carTireChange
@@ -640,8 +620,7 @@ query GetProducts($input: ProductsInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -669,7 +648,6 @@ query GetProducts($input: ProductsInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -681,8 +659,6 @@ query GetProducts($input: ProductsInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -860,8 +836,7 @@ query GetCar($input: String!) {
             titleNick
             fullName
             image
-            images
-            location
+            viewImage
             address
             shortDesc
             longDesc
@@ -889,7 +864,6 @@ query GetCar($input: String!) {
             rank
             points
             sellerProducts
-            dealerBrand
             dealerFinancing
             dealerCarService
             dealerTradeIn
@@ -901,8 +875,6 @@ query GetCar($input: String!) {
             dealerCarWash
             dealerCarTestDrive
             dealerCarDelivery
-            dealerPlusService
-            carServiceType
             carOilChange
             carAlignment
             carTireChange
@@ -1133,8 +1105,7 @@ query GetCars($input: CarsInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -1162,7 +1133,7 @@ query GetCars($input: CarsInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
+                
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -1174,8 +1145,6 @@ query GetCars($input: CarsInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -1404,8 +1373,7 @@ query GetAgentDealerCars($input: ADCarsInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -1433,7 +1401,6 @@ query GetAgentDealerCars($input: ADCarsInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -1445,8 +1412,6 @@ query GetAgentDealerCars($input: ADCarsInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -1647,8 +1612,7 @@ query GetLiked($input: OrdinaryInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -1676,7 +1640,6 @@ query GetLiked($input: OrdinaryInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -1688,8 +1651,6 @@ query GetLiked($input: OrdinaryInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -1856,8 +1817,7 @@ query GetSaved($input: OrdinaryInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -1885,7 +1845,6 @@ query GetSaved($input: OrdinaryInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -1897,8 +1856,6 @@ query GetSaved($input: OrdinaryInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -2128,8 +2085,7 @@ query GetVisited($input: OrdinaryInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -2157,7 +2113,6 @@ query GetVisited($input: OrdinaryInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -2169,8 +2124,6 @@ query GetVisited($input: OrdinaryInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -2353,8 +2306,7 @@ query GetArticles($input: ArticlesInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -2382,7 +2334,6 @@ query GetArticles($input: ArticlesInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -2394,8 +2345,6 @@ query GetArticles($input: ArticlesInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -2521,8 +2470,7 @@ query GetComments($input: CommentsInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -2550,7 +2498,6 @@ query GetComments($input: CommentsInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -2562,8 +2509,6 @@ query GetComments($input: CommentsInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -2673,8 +2618,7 @@ query GetMemberFollowers($input: FollowInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -2702,7 +2646,6 @@ query GetMemberFollowers($input: FollowInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -2714,8 +2657,6 @@ query GetMemberFollowers($input: FollowInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange
@@ -2846,8 +2787,7 @@ query GetMemberFollowings($input: FollowInquiry!) {
                 titleNick
                 fullName
                 image
-                images
-                location
+                viewImage
                 address
                 shortDesc
                 longDesc
@@ -2875,7 +2815,6 @@ query GetMemberFollowings($input: FollowInquiry!) {
                 rank
                 points
                 sellerProducts
-                dealerBrand
                 dealerFinancing
                 dealerCarService
                 dealerTradeIn
@@ -2887,8 +2826,6 @@ query GetMemberFollowings($input: FollowInquiry!) {
                 dealerCarWash
                 dealerCarTestDrive
                 dealerCarDelivery
-                dealerPlusService
-                carServiceType
                 carOilChange
                 carAlignment
                 carTireChange

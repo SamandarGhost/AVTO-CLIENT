@@ -8,8 +8,7 @@ export interface MemberInput {
     password: string;
     fullName?: string;
     image?: string;
-    images?: string[];
-    location?: Location;
+    viewImage?: string;
     address?: string;
     shortDesc?: string;
     longDesc?: string;
@@ -24,7 +23,6 @@ export interface MemberInput {
     naverBlog?: string;
     xcom?: string;
     sellerProducts?: number;
-    dealerBrand?: Brand;
     dealerFinancing?: boolean;
     dealerCarService?: boolean;
     dealerTradeIn?: boolean;
@@ -36,8 +34,6 @@ export interface MemberInput {
     dealerCarWash?: boolean;
     dealerCarTestDrive?: boolean;
     dealerCarDelivery?: boolean;
-    dealerPlusService?: string;
-    carServiceType?: CarServiceType;
     carOilChange?: boolean;
     carAlignment?: boolean;
     carTireChange?: boolean;

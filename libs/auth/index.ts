@@ -1,8 +1,8 @@
 import decodeJWT from 'jwt-decode';
 import { initializeApollo } from '../../apollo/client';
-import { userVar } from '../../apollo/store';
-import { CustomJwtPayload } from '../types/customJwtPayload';
 import { sweetMixinErrorAlert } from '../sweetAlert';
+import { CustomJwtPayload } from '../types/customJwtPayload';
+import { userVar } from '../../apollo/store';
 import { LOGIN, SIGN_UP } from '../../apollo/user/mutation';
 
 export function getJwtToken(): any {
@@ -128,12 +128,12 @@ export const updateUserInfo = (jwtToken: any) => {
 		titleNick: claims.titleNick ?? '',
 		password: claims.password ?? '',
 		fullName: claims.fullName ?? '',
-		image:
-			claims.image === null || claims.image === undefined
-				? '/img/profile/defaultUser.svg'
-				: `${claims.image}`,
-		images: claims.images ?? [],
-		location: claims.location ?? '',
+		image: claims.image === null || claims.image === undefined
+			? '/img/profile/defaultUser.svg'
+			: `${claims.image}`,
+		viewImage: claims.viewImage === null || claims.viewImage === undefined
+			? '/img/profile/defaultUser.svg'
+			: `${claims.viewImage}`,
 		address: claims.address ?? '',
 		shortDesc: claims.shortDesc ?? '',
 		longDesc: claims.longDesc ?? '',
@@ -161,7 +161,6 @@ export const updateUserInfo = (jwtToken: any) => {
 		rank: claims.rank ?? 0,
 		points: claims.points ?? 0,
 		sellerProducts: claims.sellerProducts ?? 0,
-		dealerBrand: claims.dealerBrand ?? '',
 		dealerFinancing: claims.dealerFinancing ?? false,
 		dealerCarService: claims.dealerCarService ?? false,
 		dealerTradeIn: claims.dealerTradeIn ?? false,
@@ -173,8 +172,6 @@ export const updateUserInfo = (jwtToken: any) => {
 		dealerCarWash: claims.dealerCarWash ?? false,
 		dealerCarTestDrive: claims.dealerCarTestDrive ?? false,
 		dealerCarDelivery: claims.dealerCarDelivery ?? false,
-		dealerPlusService: claims.dealerPlusService ?? '',
-		carServiceType: claims.carServiceType ?? '',
 		carOilChange: claims.carOilChange ?? false,
 		carAlignment: claims.carAlignment ?? false,
 		carTireChange: claims.carTireChange ?? false,
@@ -227,8 +224,7 @@ const deleteUserInfo = () => {
 		password: '',
 		fullName: '',
 		image: '',
-		images: [],
-		location: '',
+		viewImage: '',
 		address: '',
 		shortDesc: '',
 		longDesc: '',
@@ -246,17 +242,16 @@ const deleteUserInfo = () => {
 		followings: 0,
 		likes: 0,
 		views: 0,
+		comments: 0,
 		warnings: 0,
 		articles: 0,
 		blocks: 0,
-		comments: 0,
 		memberCars: 0,
 		usedCars: 0,
 		newCars: 0,
 		rank: 0,
 		points: 0,
 		sellerProducts: 0,
-		dealerBrand: '',
 		dealerFinancing: false,
 		dealerCarService: false,
 		dealerTradeIn: false,
@@ -268,8 +263,6 @@ const deleteUserInfo = () => {
 		dealerCarWash: false,
 		dealerCarTestDrive: false,
 		dealerCarDelivery: false,
-		dealerPlusService: '',
-		carServiceType: '',
 		carOilChange: false,
 		carAlignment: false,
 		carTireChange: false,
@@ -297,6 +290,6 @@ const deleteUserInfo = () => {
 		closeSunday: '',
 		openSaturday: '',
 		closeSaturday: '',
-		publicHolidays: false
+		publicHolidays: false,
 	});
 };

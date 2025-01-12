@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { NextPage } from 'next';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Stack } from '@mui/material';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
+import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import { logIn, signUp } from '../../libs/auth';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Stack } from '@mui/material';
+import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {

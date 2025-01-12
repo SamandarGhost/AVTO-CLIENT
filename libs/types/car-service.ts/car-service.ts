@@ -1,15 +1,13 @@
-import { CarServiceLocation, CarServiceStatus, CarServiceType } from "../../enums/car-service.enum";
+import { Status } from "../../enums/member.enum";
 import { MeLiked } from "../like/like";
 import { TotalCounter } from "../member/member";
 
 export interface CarService {
     _id: string;
-    carServiceType: CarServiceType;
     carServiceTitle: string;
     carServicePassword?: string;
-    carServiceLocation: CarServiceLocation;
     carServiceAddress: string;
-    carServiceStatus: CarServiceStatus;
+    carServiceStatus: Status;
     carServicePhone: string;
     carServicePhone2: string;
     carServcieEmail: string;

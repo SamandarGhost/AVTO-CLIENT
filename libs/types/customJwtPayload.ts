@@ -1,4 +1,4 @@
-import { JwtPayload } from 'jwt-decode';
+import { JwtPayload } from "jwt-decode";
 
 export interface CustomJwtPayload extends JwtPayload {
 	_id: string;
@@ -9,8 +9,7 @@ export interface CustomJwtPayload extends JwtPayload {
 	password?: string;
 	fullName?: string;
 	image?: string;
-	images?: string[];
-	location?: string;
+	viewImage?: string;
 	address?: string;
 	shortDesc?: string;
 	longDesc?: string;
@@ -38,7 +37,6 @@ export interface CustomJwtPayload extends JwtPayload {
 	rank: number;
 	points: number;
 	sellerProducts: number;
-	dealerBrand?: string;
 	dealerFinancing: boolean;
 	dealerCarService: boolean;
 	dealerTradeIn: boolean;
@@ -50,8 +48,6 @@ export interface CustomJwtPayload extends JwtPayload {
 	dealerCarWash: boolean;
 	dealerCarTestDrive: boolean;
 	dealerCarDelivery: boolean;
-	dealerPlusService?: string;
-	carServiceType?: string;
 	carOilChange: boolean;
 	carAlignment: boolean;
 	carTireChange: boolean;
@@ -80,4 +76,4 @@ export interface CustomJwtPayload extends JwtPayload {
 	openSaturday?: string;
 	closeSaturday?: string;
 	publicHolidays: boolean;
-}
+};

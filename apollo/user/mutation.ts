@@ -14,8 +14,7 @@ mutation Signup($input: MemberInput!) {
         titleNick
         fullName
         image
-        images
-        location
+        viewImage
         address
         shortDesc
         longDesc
@@ -43,7 +42,6 @@ mutation Signup($input: MemberInput!) {
         rank
         points
         sellerProducts
-        dealerBrand
         dealerFinancing
         dealerCarService
         dealerTradeIn
@@ -55,8 +53,6 @@ mutation Signup($input: MemberInput!) {
         dealerCarWash
         dealerCarTestDrive
         dealerCarDelivery
-        dealerPlusService
-        carServiceType
         carOilChange
         carAlignment
         carTireChange
@@ -131,8 +127,7 @@ mutation Login($input: LoginInput!) {
         titleNick
         fullName
         image
-        images
-        location
+        viewImage
         address
         shortDesc
         longDesc
@@ -160,7 +155,6 @@ mutation Login($input: LoginInput!) {
         rank
         points
         sellerProducts
-        dealerBrand
         dealerFinancing
         dealerCarService
         dealerTradeIn
@@ -172,8 +166,6 @@ mutation Login($input: LoginInput!) {
         dealerCarWash
         dealerCarTestDrive
         dealerCarDelivery
-        dealerPlusService
-        carServiceType
         carOilChange
         carAlignment
         carTireChange
@@ -220,8 +212,7 @@ mutation UpdateMember($input: MemberUpdate!) {
         titleNick
         fullName
         image
-        images
-        location
+        viewImage
         address
         shortDesc
         longDesc
@@ -249,7 +240,6 @@ mutation UpdateMember($input: MemberUpdate!) {
         rank
         points
         sellerProducts
-        dealerBrand
         dealerFinancing
         dealerCarService
         dealerTradeIn
@@ -261,8 +251,6 @@ mutation UpdateMember($input: MemberUpdate!) {
         dealerCarWash
         dealerCarTestDrive
         dealerCarDelivery
-        dealerPlusService
-        carServiceType
         carOilChange
         carAlignment
         carTireChange
@@ -337,8 +325,7 @@ mutation LikeTargetMember($input: String!) {
         titleNick
         fullName
         image
-        images
-        location
+        viewImage
         address
         shortDesc
         longDesc
@@ -366,7 +353,6 @@ mutation LikeTargetMember($input: String!) {
         rank
         points
         sellerProducts
-        dealerBrand
         dealerFinancing
         dealerCarService
         dealerTradeIn
@@ -378,8 +364,6 @@ mutation LikeTargetMember($input: String!) {
         dealerCarWash
         dealerCarTestDrive
         dealerCarDelivery
-        dealerPlusService
-        carServiceType
         carOilChange
         carAlignment
         carTireChange

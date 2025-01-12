@@ -113,7 +113,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
                                 <Stack className={'right'}>
                                     <Stack className={'config'}>
                                         <Stack className={'right'}>
-                                            <Typography className={'main-title'}>{service?.carServiceType}</Typography>
+                                            <Typography className={'main-title'}>service type</Typography>
                                             <Typography className={'small-title'}>
                                                 {service?.shortDesc}
                                             </Typography>

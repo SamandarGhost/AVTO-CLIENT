@@ -1,11 +1,10 @@
-import { CarServiceLocation, CarServiceStatus, CarServiceType } from "../../enums/car-service.enum";
 import { Direction } from "../../enums/common.enum";
+import { Status } from "../../enums/member.enum";
 
 export interface CarServiceInput {
-    carServiceType: CarServiceType;
     carServiceTitle: string;
     carServicePassword: string;
-    carServiceLocation: CarServiceLocation;
+    carServiceLocation: CarServiceLogin;
     carServiceAddress: string;
     carServicePhone: string;
     carServicePhone2: string;
@@ -43,13 +42,10 @@ export interface CarServiceInput {
 export interface CarServiceLogin {
     carServiceTitle: string;
     carServicePassword: string;
-    carServiceLocation: CarServiceLocation;
 }
 
 interface CSISearch {
     memberId?: string;
-    carServiceTypeList?: CarServiceType[];
-    carServiceLocationList?: CarServiceLocation[];
     text?: string;
 }
 
@@ -62,8 +58,7 @@ export interface CarServicesInquiry {
 }
 
 interface ALCSISearch {
-    carServiceStatus?: CarServiceStatus;
-    carServiceLocationList?: CarServiceLocation[];
+    carServiceStatus?: Status;
 }
 
 export interface AllCarservicesInquiry {
