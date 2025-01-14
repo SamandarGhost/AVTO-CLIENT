@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { REACT_APP_API_URL, propertySquare } from '../../config';
+import { REACT_APP_API_URL } from '../../config';
 import axios from 'axios';
 import { getJwtToken } from '../../auth';
 import { sweetErrorHandling, sweetMixinErrorAlert, sweetMixinSuccessAlert } from '../../sweetAlert';
@@ -194,7 +194,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Price</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
 										placeholder={'Price'}
 										value={insertProductData.productPrice}
@@ -211,7 +211,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 										value={insertProductData.productType || 'select'}
 										onChange={({ target: { value } }) =>
 											// @ts-ignore
-											setinsertProductData({ ...insertProductData, productType: value })
+											setInsertProductData({ ...insertProductData, productType: value })
 										}
 									>
 										<>
@@ -246,7 +246,7 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 								<Stack className="price-year-after-price">
 									<Typography className="title">Quantity</Typography>
 									<input
-										type="text"
+										type="number"
 										className="description-input"
 										placeholder={'Quantity'}
 										value={insertProductData.productQuantity}
@@ -363,11 +363,11 @@ const AddProduct = ({ initialValues, ...props }: any) => {
 
 						<Stack className="buttons-row">
 							{router.query.propertyId ? (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={updateProductHandler}>
+								<Button className="next-button" onClick={updateProductHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							) : (
-								<Button className="next-button" disabled={doDisabledCheck()} onClick={insertProductHandler}>
+								<Button className="next-button" onClick={insertProductHandler}>
 									<Typography className="next-button-text">Save</Typography>
 								</Button>
 							)}

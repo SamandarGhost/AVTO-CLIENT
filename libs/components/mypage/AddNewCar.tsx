@@ -265,7 +265,7 @@ const AddCar = ({ initialValues, ...props }: any) => {
 		}
 	}, [insertCarData]);
 
-	if (user?.type !== 'AGENT') {
+	if (user?.type !== 'AGENT' && user?.type !== 'DEALER') {
 		router.back();
 	}
 

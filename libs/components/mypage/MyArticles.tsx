@@ -19,7 +19,7 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 		...initialInput,
 		search: { memberId: user?._id },
 	});
-	const [articles, setarticles] = useState<Article[]>([]);
+	const [articles, setArticles] = useState<Article[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 
 	/** APOLLO REQUESTS **/
@@ -35,7 +35,9 @@ const MyArticles: NextPage = ({ initialInput, ...props }: T) => {
 		variables: { input: searchCommunity },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setarticles(data?.getArticles?.list);
+			console.log("data", data);
+
+			setArticles(data?.getArticles?.list);
 			setTotalCount(data?.getArticles?.metaCounter[0]?.total ?? 0);
 		},
 	});

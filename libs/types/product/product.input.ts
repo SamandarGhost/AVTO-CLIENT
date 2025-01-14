@@ -22,6 +22,7 @@ interface PISearch {
     typeList?: ProductType[];
     priceRange?: PriceRange;
     text?: string;
+    productStatus?: ProductStatus;
 }
 
 export interface ProductsInquiry {

@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Pagination, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
-import { CarCard } from './CarCard';
 import { useMutation, useQuery, useReactiveVar } from '@apollo/client';
-import { Property } from '../../types/property/property';
-import { AgentPropertiesInquiry } from '../../types/property/property.input';
 import { T } from '../../types/common';
-import { PropertyStatus } from '../../enums/property.enum';
 import { userVar } from '../../../apollo/store';
 import { useRouter } from 'next/router';
 import { sweetConfirmAlert, sweetErrorHandling } from '../../sweetAlert';
@@ -16,11 +12,12 @@ import { SellerProductsInquiry } from '../../types/product/product.input';
 import { Product } from '../../types/product/product';
 import { ProductStatus } from '../../enums/product.enum';
 import { GET_PRODUCTS } from '../../../apollo/user/query';
+import ProductCard from '../shop/ProductCard';
 
 const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 	const device = useDeviceDetect();
 	const [searchFilter, setSearchFilter] = useState<SellerProductsInquiry>(initialInput);
-	const [products, setproducts] = useState<Product[]>([]);
+	const [products, setProducts] = useState<Product[]>([]);
 	const [total, setTotal] = useState<number>(0);
 	const user = useReactiveVar(userVar);
 	const router = useRouter();
@@ -38,7 +35,9 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 		variables: { input: searchFilter },
 		notifyOnNetworkStatusChange: true,
 		onCompleted: (data: T) => {
-			setproducts(data?.getProducts?.list);
+			console.log("data", data);
+
+			setProducts(data?.getProducts?.list);
 			setTotal(data?.getProducts?.metaCounter?.[0]?.total ?? 0);
 		}
 	});
@@ -90,7 +89,7 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 		}
 	};
 
-	if (user?.type !== 'AGENT') {
+	if (user?.type !== 'SELLER') {
 		router.back();
 	}
 
@@ -137,12 +136,10 @@ const MyProducts: NextPage = ({ initialInput, ...props }: any) => {
 						) : (
 							products?.map((product: Product) => {
 								return (
-									null
-									// <CarCard
-									// 	property={property}
-									// 	deletePropertyHandler={deletePropertyHandler}
-									// 	updatePropertyHandler={updatePropertyHandler}
-									// />
+									<ProductCard
+										product={product}
+										likeProductHandler={undefined}
+									/>
 								);
 							})
 						)}

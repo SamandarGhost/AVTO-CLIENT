@@ -88,7 +88,7 @@ const MyCars: NextPage = ({ initialInput, ...props }: any) => {
 		}
 	};
 
-	if (user?.type !== 'AGENT') {
+	if (!['AGENT', 'DEALER', 'ADMIN'].includes(user?.type)) {
 		router.back();
 	}
 

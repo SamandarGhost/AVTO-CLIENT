@@ -472,7 +472,6 @@ query GetProduct($input: String!) {
         productTitle
         productPrice
         productQuantity
-        product
         productShortDesc
         productDesc
         productViews
@@ -691,16 +690,6 @@ query GetProducts($input: ProductsInquiry!) {
                 createdAt
                 updatedAt
                 accessToken
-                meFollowed {
-                    followingId
-                    followerId
-                    myFollowing
-                }
-                meLiked {
-                    memberId
-                    likeRefId
-                    myFavorite
-                }
             }
         }
     }
