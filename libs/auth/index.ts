@@ -126,7 +126,7 @@ export const updateUserInfo = (jwtToken: any) => {
 		status: claims.status ?? '',
 		authType: claims.authType ?? '',
 		titleNick: claims.titleNick ?? '',
-		password: claims.password ?? '',
+		// password: claims.password ?? '',
 		fullName: claims.fullName ?? '',
 		image: claims.image === null || claims.image === undefined
 			? '/img/profile/defaultUser.svg'

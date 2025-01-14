@@ -1,5 +1,4 @@
 import { ArticleCategory, ArticleStatus } from '../../enums/article.enum';
-import { Dealer } from '../dealer/dealer';
 import { Member } from '../member/member';
 import { MeLiked, TotalCounter } from '../property/property';
 
@@ -16,7 +15,7 @@ export interface Article {
 	memberId: string;
 	createdAt: Date;
 	updatedAt: Date;
-	creatorData?: Member | Dealer;
+	creatorData?: Member;
 	meLiked?: MeLiked[];
 }
 

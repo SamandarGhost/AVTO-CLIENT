@@ -142,6 +142,22 @@ const MyMenu = () => {
 											</div>
 										</Link>
 									</ListItem>
+									<ListItem className={pathname === 'followings' ? 'focus' : ''}>
+										<Link
+											href={{
+												pathname: '/mypage',
+												query: { category: 'followings' },
+											}}
+											scroll={false}
+										>
+											<div className={'flex-box'}>
+												<GroupAddOutlinedIcon className={'icon'} />
+												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
+													Followings
+												</Typography>
+											</div>
+										</Link>
+									</ListItem>
 								</>
 							)}
 							<ListItem className={pathname === 'mySaved' ? 'focus' : ''}>
@@ -194,39 +210,41 @@ const MyMenu = () => {
 									</Link>
 								</ListItem>
 							)}
-							<ListItem className={pathname === 'followers' ? 'focus' : ''}>
-								<Link
-									href={{
-										pathname: '/mypage',
-										query: { category: 'followers' },
-									}}
-									scroll={false}
-								>
-									<div className={'flex-box'}>
-										<PersonAddAlt1OutlinedIcon className={'icon'} />
-										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-											Followers
-										</Typography>
-									</div>
-								</Link>
-							</ListItem>
 							{['DEALER', 'AGENT'].includes(user?.type) && (
-								<ListItem className={pathname === 'followings' ? 'focus' : ''}>
-									<Link
-										href={{
-											pathname: '/mypage',
-											query: { category: 'followings' },
-										}}
-										scroll={false}
-									>
-										<div className={'flex-box'}>
-											<GroupAddOutlinedIcon className={'icon'} />
-											<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
-												Followings
-											</Typography>
-										</div>
-									</Link>
-								</ListItem>
+								<>
+									<ListItem className={pathname === 'followings' ? 'focus' : ''}>
+										<Link
+											href={{
+												pathname: '/mypage',
+												query: { category: 'followings' },
+											}}
+											scroll={false}
+										>
+											<div className={'flex-box'}>
+												<GroupAddOutlinedIcon className={'icon'} />
+												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
+													Followings
+												</Typography>
+											</div>
+										</Link>
+									</ListItem>
+									<ListItem className={pathname === 'followers' ? 'focus' : ''}>
+										<Link
+											href={{
+												pathname: '/mypage',
+												query: { category: 'followers' },
+											}}
+											scroll={false}
+										>
+											<div className={'flex-box'}>
+												<PersonAddAlt1OutlinedIcon className={'icon'} />
+												<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
+													Followers
+												</Typography>
+											</div>
+										</Link>
+									</ListItem>
+								</>
 							)}
 						</List>
 					</Stack>

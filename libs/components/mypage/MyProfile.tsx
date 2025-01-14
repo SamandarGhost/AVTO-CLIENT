@@ -274,6 +274,30 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 							onChange={({ target: { value } }) => setUpdateData({ ...updateData, address: value })}
 						/>
 					</Stack>
+					{['SELLER'].includes(user?.type) && (
+						<>
+							<Stack className="small-input-box">
+								<Stack className="input-box">
+									<Typography className="title">Email</Typography>
+									<input
+										type="text"
+										placeholder="Your email"
+										value={updateData.email}
+										onChange={({ target: { value } }) => setUpdateData({ ...updateData, email: value })}
+									/>
+								</Stack>
+								<Stack className="input-box">
+									<Typography className="title">Phone 2</Typography>
+									<input
+										type="text"
+										placeholder="Your Phone 2"
+										value={updateData.phone2}
+										onChange={({ target: { value } }) => setUpdateData({ ...updateData, phone2: value })}
+									/>
+								</Stack>
+							</Stack>
+						</>
+					)}
 					{['AGENT', 'DEALER', "SERVICE"].includes(user?.type) && (
 						<>
 							<Stack className="small-input-box">
@@ -333,7 +357,8 @@ const MyProfile: NextPage = ({ initialValues, ...props }: any) => {
 										onChange={({ target: { value } }) => setUpdateData({ ...updateData, naverBlog: value })}
 									/>
 								</Stack>
-							</Stack></>
+							</Stack>
+						</>
 					)}
 					{['DEALER', 'AGENT', 'SERVICE'].includes(user?.type) && (
 						<Stack className="small-input-box">

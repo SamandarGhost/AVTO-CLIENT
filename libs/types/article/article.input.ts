@@ -5,7 +5,7 @@ export interface ArticleInput {
 	articleCategory: ArticleCategory;
 	articleTitle: string;
 	articleContent: string;
-	articleImage: string;
+	articleImage?: string;
 	memberId?: string;
 }
 

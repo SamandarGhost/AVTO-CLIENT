@@ -1,6 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Box, Button, FormControl, MenuItem, Stack, Typography, Select, TextField } from '@mui/material';
-import { ArticleCategory } from '../../enums/article.enum';
 import { Editor } from '@toast-ui/react-editor';
 import { getJwtToken } from '../../auth';
 import { REACT_APP_API_URL } from '../../config';
@@ -11,6 +10,8 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { useMutation } from '@apollo/client';
 import { sweetErrorHandling, sweetTopSuccessAlert } from '../../sweetAlert';
 import { Message } from '../../enums/common.enum';
+import { Category } from '@mui/icons-material';
+import { ArticleCategory } from '../../enums/article.enum';
 import { CREATE_ARTICLE } from '../../../apollo/user/mutation';
 
 const TuiEditor = () => {
@@ -20,7 +21,7 @@ const TuiEditor = () => {
 	const [articleCategory, setArticleCategory] = useState<ArticleCategory>(ArticleCategory.FREE);
 
 	/** APOLLO REQUESTS **/
-	const [createArticle] = useMutation(CREATE_ARTICLE);
+	const [createBoardArticle] = useMutation(CREATE_ARTICLE);
 
 	const memoizedValues = useMemo(() => {
 		const articleTitle = '',
@@ -91,7 +92,7 @@ const TuiEditor = () => {
 				throw new Error(Message.INSERT_ALL_INPUTS);
 			}
 
-			await createArticle({
+			await createBoardArticle({
 				variables: {
 					input: { ...memoizedValues, articleCategory },
 				},
@@ -119,7 +120,7 @@ const TuiEditor = () => {
 		<Stack>
 			<Stack direction="row" style={{ margin: '40px' }} justifyContent="space-evenly">
 				<Box component={'div'} className={'form_row'} style={{ width: '300px' }}>
-					<Typography style={{ color: '#fff', margin: '10px' }} variant="h3">
+					<Typography style={{ color: '#7f838d', margin: '10px' }} variant="h3">
 						Category
 					</Typography>
 					<FormControl sx={{ width: '100%', background: 'white' }}>
@@ -135,11 +136,15 @@ const TuiEditor = () => {
 							<MenuItem value={ArticleCategory.HUMOR}>Humor</MenuItem>
 							<MenuItem value={ArticleCategory.NEWS}>News</MenuItem>
 							<MenuItem value={ArticleCategory.RECOMMEND}>Recommendation</MenuItem>
+							<MenuItem value={ArticleCategory.OVERVIEW}>OverView</MenuItem>
+							<MenuItem value={ArticleCategory.HELPFUL}>Helpful</MenuItem>
+							<MenuItem value={ArticleCategory.EVENT}>Event</MenuItem>
+							<MenuItem value={ArticleCategory.FORWEB}>For WebSite</MenuItem>
 						</Select>
 					</FormControl>
 				</Box>
 				<Box component={'div'} style={{ width: '300px', flexDirection: 'column' }}>
-					<Typography style={{ color: '#fff', margin: '10px' }} variant="h3">
+					<Typography style={{ color: '#7f838d', margin: '10px' }} variant="h3">
 						Title
 					</Typography>
 					<TextField
