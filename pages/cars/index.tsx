@@ -12,11 +12,10 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_CARS } from '../../apollo/user/query';
 import { T } from '../../libs/types/common';
 import { sweetMixinErrorAlert } from '../../libs/sweetAlert';
-import { LIKE_CAR, SAVE_CAR } from '../../apollo/user/mutation';
 import { Car } from '../../libs/types/car/car';
 import { CarsInquiry } from '../../libs/types/car/car.input';
-import { CarCard } from '../../libs/components/mypage/CarCard';
 import MainCarCard from '../../libs/components/car/MainCarCard';
+import { LIKE_CAR, SAVE_CAR } from '../../apollo/user/mutation';
 
 export const getStaticProps = async ({ locale }: any) => ({
     props: {
@@ -50,6 +49,8 @@ const CarList: NextPage = ({ initialInput, ...props }: any) => {
         variables: { input: searchFilter },
         notifyOnNetworkStatusChange: true,
         onCompleted: (data: T) => {
+            console.log("data", data);
+
             setCars(data?.getCars?.list);
             setTotal(data?.getCars?.metaCounter[0]?.total);
         },
@@ -232,14 +233,6 @@ CarList.defaultProps = {
         sort: 'createdAt',
         direction: 'DESC',
         search: {
-            mileageRange: {
-                min: 0,
-                max: 1000000,
-            },
-            priceRange: {
-                min: 0,
-                max: 1000000000,
-            },
         },
     },
 };

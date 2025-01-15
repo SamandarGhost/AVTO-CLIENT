@@ -10,6 +10,7 @@ import { userVar } from '../../../apollo/store';
 import IconButton from '@mui/material/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { Car } from '../../types/car/car';
 import { useRouter } from 'next/router';
 
@@ -72,7 +73,7 @@ const MainCarCard = (props: CarCardType) => {
 						</Stack>
 						<Stack className="address">
 							<Typography>
-								{car?.carAddress}, {car?.carLocation}
+								City: {car?.carLocation}
 							</Typography>
 						</Stack>
 					</Stack>
@@ -136,7 +137,7 @@ const MainCarCard = (props: CarCardType) => {
 								<BookmarkIcon color="secondary" />
 
 							) : (
-								<BookmarkIcon />
+								<BookmarkBorderIcon />
 							)}
 						</div>
 					</Box>
